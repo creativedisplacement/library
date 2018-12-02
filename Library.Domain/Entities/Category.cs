@@ -1,6 +1,6 @@
 ﻿namespace Library.Domain.Entities
 {
-    public class Category : IEntity
+    public class Category : BaseEntity
     {
         public Category(string name)
         {

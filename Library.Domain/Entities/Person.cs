@@ -1,6 +1,6 @@
 ﻿namespace Library.Domain.Entities
 {
-    public class Person : IEntity
+    public class Person : BaseEntity
     {
 
         public Person(string name, string email, bool isAdmin)

@@ -2,7 +2,7 @@
 
 namespace Library.Domain.Entities
 {
-    public class Book : IEntity
+    public class Book : BaseEntity
     {
         public Book()
         {
