@@ -2,6 +2,7 @@ using Library.Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Library.Domain.Tests
 {
@@ -9,7 +10,7 @@ namespace Library.Domain.Tests
     public class BookTests
     {
         private string _title;
-        private List<Category> _categories;
+        private ICollection<Category> _categories;
         private Person _lender;
 
         [TestInitialize]
@@ -26,7 +27,7 @@ namespace Library.Domain.Tests
             var book = new Book(_title, _categories);
 
             Assert.AreEqual(_title, book.Title); 
-            CollectionAssert.AreEqual(_categories, book.Categories);
+            CollectionAssert.AreEqual(_categories.ToList(), book.Categories.ToList());
             Assert.IsTrue(book.IsAvailable);
         }
 
@@ -36,7 +37,7 @@ namespace Library.Domain.Tests
             var book = new Book(_title, _categories, _lender);
 
             Assert.AreEqual(_title, book.Title);
-            CollectionAssert.AreEqual(_categories, book.Categories);
+            CollectionAssert.AreEqual(_categories.ToList(), book.Categories.ToList());
             Assert.AreEqual(_lender, book.Lender);
             Assert.IsFalse(book.IsAvailable);
         }
@@ -65,7 +66,7 @@ namespace Library.Domain.Tests
             book.UpdateBook(newTitle, newCategories);
 
             Assert.AreEqual(newTitle, book.Title);
-            CollectionAssert.AreEqual(newCategories, book.Categories);
+            CollectionAssert.AreEqual(newCategories, book.Categories.ToList());
 
         }
 

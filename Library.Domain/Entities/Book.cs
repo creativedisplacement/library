@@ -4,13 +4,18 @@ namespace Library.Domain.Entities
 {
     public class Book : IEntity
     {
-        public Book(string title, List<Category> categories)
+        public Book()
+        {
+            
+        }
+
+        public Book(string title, ICollection<Category> categories)
         {
             Title = title;
             Categories = categories;
         }
 
-        public Book(string title, List<Category> categories, Person lender)
+        public Book(string title, ICollection<Category> categories, Person lender)
         {
             Title = title;
             Categories = categories;
@@ -18,8 +23,8 @@ namespace Library.Domain.Entities
         }
 
         public string Title { get; private set; }
-        public List<Category> Categories { get; private set; }
-        public Person Lender { get; private set; }
+        public virtual ICollection<Category> Categories { get; private set; } = new List<Category>();
+        public virtual Person Lender { get; private set; }
 
         public bool IsAvailable => Lender == null;
 

@@ -2,6 +2,7 @@
 {
     public class Person : IEntity
     {
+
         public Person(string name, string email, bool isAdmin)
         {
             Name = name;
