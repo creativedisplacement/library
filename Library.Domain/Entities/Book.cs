@@ -39,12 +39,12 @@ namespace Library.Domain.Entities
 
         }
 
-        public void LendBookTo(Person lender)
+        public void LendBook(Person lender)
         {
             Lender = lender;
         }
 
-        public void BookReturned()
+        public void ReturnBook()
         {
             Lender = null;
         }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Library.Application.Categories.Queries.GetCategory
 {
-    public class GetCategoryQueryHandler : IRequestHandler<GetCategoryQuery, CategoryModel>
+    public class GetCategoryQueryHandler : IRequestHandler<GetCategoryQuery, GetCategoryModel>
     {
         private readonly LibraryDbContext _context;
 
@@ -17,7 +17,7 @@ namespace Library.Application.Categories.Queries.GetCategory
             _context = context;
         }
 
-        public async Task<CategoryModel> Handle(GetCategoryQuery request, CancellationToken cancellationToken)
+        public async Task<GetCategoryModel> Handle(GetCategoryQuery request, CancellationToken cancellationToken)
         {
             var result = await _context.Categories
                 .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
@@ -27,7 +27,7 @@ namespace Library.Application.Categories.Queries.GetCategory
                 throw new NotFoundException(nameof(Category), request);
             }
 
-            return new CategoryModel { Id = result.Id, Name = result.Name };
+            return new GetCategoryModel { Id = result.Id, Name = result.Name };
         }
     }
 }

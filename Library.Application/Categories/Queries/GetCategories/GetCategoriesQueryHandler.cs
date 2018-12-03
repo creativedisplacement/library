@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Library.Application.Categories.Queries.GetCategories
 {
-    public class GetCategoriesQueryHandler : IRequestHandler<GetCategoriesQuery, CategoriesModel>
+    public class GetCategoriesQueryHandler : IRequestHandler<GetCategoriesQuery, GetCategoriesModel>
     {
         private readonly LibraryDbContext _context;
 
@@ -18,7 +18,7 @@ namespace Library.Application.Categories.Queries.GetCategories
             _context = context;
         }
 
-        public async Task<CategoriesModel> Handle(GetCategoriesQuery request, CancellationToken cancellationToken)
+        public async Task<GetCategoriesModel> Handle(GetCategoriesQuery request, CancellationToken cancellationToken)
         {
             var result = await _context.Categories
                 .OrderBy(c => c.Name)
@@ -29,7 +29,7 @@ namespace Library.Application.Categories.Queries.GetCategories
                 throw new NotFoundException(nameof(Category), request);
             }
 
-            return new CategoriesModel
+            return new GetCategoriesModel
             {
                 Categories = result.Select(c => new CategoryModel { Id = c.Id, Name = c.Name }).AsEnumerable()
             };

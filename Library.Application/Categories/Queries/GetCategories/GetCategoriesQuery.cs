@@ -2,7 +2,7 @@
 
 namespace Library.Application.Categories.Queries.GetCategories
 {
-    public class GetCategoriesQuery : IRequest<CategoriesModel>
+    public class GetCategoriesQuery : IRequest<GetCategoriesModel>
     {
     }
 }

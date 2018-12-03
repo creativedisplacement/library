@@ -80,7 +80,7 @@ namespace Library.Domain.Tests
         public void Check_Lend_Book_To()
         {
             var book = new Book(_title, _categories);
-            book.LendBookTo(_lender);
+            book.LendBook(_lender);
             Assert.AreEqual(_lender, book.Lender);
         }
 
@@ -88,7 +88,7 @@ namespace Library.Domain.Tests
         public void Book_Is_Returned()
         {
             var book = new Book(_title, _categories, _lender);
-            book.BookReturned();
+            book.ReturnBook();
             Assert.AreEqual(null, book.Lender);
         }
     }

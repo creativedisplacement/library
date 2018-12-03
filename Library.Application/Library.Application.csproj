@@ -5,9 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Books\Commands\CreateBook\" />
-    <Folder Include="Books\Commands\DeleteBook\" />
-    <Folder Include="Books\Commands\UpdateBook\" />
     <Folder Include="Books\Queries\GetBooks\" />
     <Folder Include="Books\Queries\GetBook\" />
     <Folder Include="Books\Queries\GetBooksByCategory\" />
