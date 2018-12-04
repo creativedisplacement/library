@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MediatR;
 
 namespace Library.Application.People.Commands.CreatePerson
 {
-    class CreatePersonCommand
+    public class CreatePersonCommand : IRequest
     {
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public bool IsAdmin { get; set; }
     }
 }

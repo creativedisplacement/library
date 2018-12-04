@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MediatR;
+using System;
 
 namespace Library.Application.People.Commands.DeletePerson
 {
-    class DeletePersonCommand
+    public class DeletePersonCommand : IRequest
     {
+        public Guid Id { get; set; }
     }
 }

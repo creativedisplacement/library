@@ -18,7 +18,7 @@ namespace Library.Application.Infrastructure
         {
             var name = typeof(TRequest).Name;
 
-            // TODO: Add User Details
+            // TODO: Wire up to serilog
 
             _logger.LogInformation("Library Request: {Name} {@Request}", name, request);
 

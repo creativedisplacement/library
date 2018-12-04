@@ -1,4 +1,5 @@
-﻿using Library.Application.Exceptions;
+﻿using System.Linq;
+using Library.Application.Exceptions;
 using Library.Domain.Entities;
 using Library.Persistence;
 using MediatR;
@@ -20,14 +21,22 @@ namespace Library.Application.Categories.Queries.GetCategory
         public async Task<GetCategoryModel> Handle(GetCategoryQuery request, CancellationToken cancellationToken)
         {
             var result = await _context.Categories
+                .Include(i => i.BookCategories)
+                .ThenInclude(b => b.Book)
                 .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
 
             if (result == null)
             {
-                throw new NotFoundException(nameof(Category), request);
+                throw new NotFoundException(nameof(Category), request.Id);
             }
 
-            return new GetCategoryModel { Id = result.Id, Name = result.Name };
+            return new GetCategoryModel
+            {
+                Id = result.Id,
+                Name = result.Name,
+                Books = result.BookCategories.Select(b => new GetCategoryBookModel{ Id = b.BookId, Title = b.Book.Title, IsAvailable = b.Book.IsAvailable})
+                    .ToList()
+            };
         }
     }
 }

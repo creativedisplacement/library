@@ -19,20 +19,20 @@ namespace Library.Application.Categories.Commands.DeleteCategory
 
         public async Task<Unit> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.Categories.FindAsync(request.Id);
+            var category = await _context.Categories.FindAsync(request.Id);
 
-            if (entity == null)
+            if (category == null)
             {
                 throw new NotFoundException(nameof(Category), request.Id);
             }
 
-            var categoryInUse = _context.Books.Any(b => b.Categories.Any(c => c.Id == request.Id));
+            var categoryInUse = _context.Books.Any(b => b.BookCategories.Any(c => c.CategoryId == request.Id));
             if (categoryInUse)
             {
                 throw new DeleteFailureException(nameof(Category), request.Id, "There are existing books associated with this category.");
             }
 
-            _context.Categories.Remove(entity);
+            _context.Categories.Remove(category);
 
             await _context.SaveChangesAsync(cancellationToken);
 

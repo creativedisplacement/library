@@ -19,15 +19,15 @@ namespace Library.Application.Categories.Commands.UpdateCategory
 
         public async Task<Unit> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.Categories.SingleAsync(c => c.Id == request.Id, cancellationToken);
+            var category = await _context.Categories.SingleAsync(c => c.Id == request.Id, cancellationToken);
 
-            if (entity == null)
+            if (category == null)
             {
                 throw new NotFoundException(nameof(Category), request.Id);
             }
 
-            entity.UpdateCategory(request.Name);
-            _context.Categories.Update(entity);
+            category.UpdateCategory(request.Name);
+            _context.Categories.Update(category);
 
             await _context.SaveChangesAsync(cancellationToken);
 

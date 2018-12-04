@@ -14,11 +14,16 @@ namespace Library.Persistence
 
         public DbSet<Category> Categories { get; set; }
 
+        public DbSet<BookCategory> BookCategories { get; set; }
+
         public DbSet<Person> Persons { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(LibraryDbContext).Assembly);
+            modelBuilder.Entity<BookCategory>()
+                .HasKey(bc => new { bc.BookId, bc.CategoryId });
+
+            // modelBuilder.ApplyConfigurationsFromAssembly(typeof(LibraryDbContext).Assembly);
         }
     }
 }

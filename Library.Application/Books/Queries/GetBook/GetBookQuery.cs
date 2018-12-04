@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MediatR;
+using System;
 
 namespace Library.Application.Books.Queries.GetBook
 {
-    class GetBookQuery
+    public class GetBookQuery : IRequest<GetBookModel>
     {
+        public Guid Id { get; set; }
     }
 }

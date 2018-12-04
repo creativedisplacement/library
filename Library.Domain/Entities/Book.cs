@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Library.Domain.Entities
 {
@@ -9,29 +10,34 @@ namespace Library.Domain.Entities
             
         }
 
+        public Book(string title)
+        {
+            Title = title;
+        }
+
         public Book(string title, ICollection<Category> categories)
         {
             Title = title;
-            Categories = categories;
+            BookCategories = categories.Select(c => new BookCategory{ CategoryId = c.Id, BookId = Id}).ToList();
         }
 
         public Book(string title, ICollection<Category> categories, Person lender)
         {
             Title = title;
-            Categories = categories;
+            BookCategories = categories.Select(c => new BookCategory { CategoryId = c.Id, BookId = Id }).ToList();
             Lender = lender;
         }
 
         public string Title { get; private set; }
-        public virtual ICollection<Category> Categories { get; private set; } = new List<Category>();
-        public virtual Person Lender { get; private set; }
+        public ICollection<BookCategory> BookCategories { get;  set; } = new List<BookCategory>();
+        public Person Lender { get; private set; }
 
         public bool IsAvailable => Lender == null;
 
         public void UpdateBook(string title, List<Category> categories)
         {
             Title = title;
-            Categories = categories;
+            BookCategories = categories.Select(c => new BookCategory { CategoryId = c.Id, BookId = Id }).ToList();
         }
 
         public void RemoveBook()

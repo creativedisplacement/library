@@ -5,24 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Books\Queries\GetBooks\" />
-    <Folder Include="Books\Queries\GetBook\" />
-    <Folder Include="Books\Queries\GetBooksByCategory\" />
-    <Folder Include="Books\Queries\GetAvailableBooks\" />
-    <Folder Include="Books\Queries\GetUnavailableBooks\" />
-    <Folder Include="Books\Queries\GetBooksByLender\" />
-    <Folder Include="Infrastructure\" />
-    <Folder Include="Interfaces\" />
-    <Folder Include="People\Commands\CreatePerson\" />
-    <Folder Include="People\Commands\DeletePerson\" />
-    <Folder Include="People\Commands\UpdatePerson\" />
-    <Folder Include="People\Queries\GetPeople\" />
-    <Folder Include="People\Queries\GetPerson\" />
-    <Folder Include="People\Queries\GetAdmins\" />
-    <Folder Include="People\Queries\GetNonAdmins\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="8.0.101" />
     <PackageReference Include="MediatR" Version="5.1.0" />
   </ItemGroup>

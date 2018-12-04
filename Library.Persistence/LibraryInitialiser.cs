@@ -1,5 +1,4 @@
 ﻿using Library.Domain.Entities;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Library.Persistence
@@ -22,18 +21,34 @@ namespace Library.Persistence
                 return; // Db has been seeded
             }
 
-            SeedBooks(context);
             SeedCategories(context);
             SeedPeople(context);
+            SeedBooks(context);
+            SeedBookCategories(context);
         }
 
+        public void SeedBookCategories(LibraryDbContext context)
+        {
+            var categories = context.Categories;
+            var books = context.Books;
+
+            context.BookCategories.AddRange(
+            new BookCategory { Book = books.First(), Category = categories.Skip(5).Take(1).First() },
+            new BookCategory { Book = books.Skip(1).Take(1).First(), Category = categories.Skip(1).Take(1).First() },
+            new BookCategory { Book = books.Skip(1).Take(1).First(), Category = categories.Skip(4).Take(1).First() },
+            new BookCategory { Book = books.Skip(2).Take(1).First(), Category = categories.Skip(4).Take(1).First() },
+            new BookCategory { Book = books.Skip(2).Take(1).First(), Category = categories.Skip(1).Take(1).First() },
+            new BookCategory { Book = books.Skip(2).Take(1).First(), Category = categories.First() });
+            context.SaveChanges();
+
+        }
         public void SeedBooks(LibraryDbContext context)
         {
             var books = new[]
             {
-                new Book("Docker on Windows", new List<Category>(){ new Category("Technical")}),
-                new Book("Open", new List<Category>(){ new Category("Biographical") }),
-                new Book("This is going to hurt", new List<Category>(){ new Category("Biographical"), new Category("Humour") }),
+                new Book("Docker on Windows"),
+                new Book("Open"),
+                new Book("This is going to hurt")
             };
             context.Books.AddRange(books);
             context.SaveChanges();

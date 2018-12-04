@@ -17,9 +17,9 @@ namespace Library.Application.Categories.Commands.CreateCategory
 
         public async Task<Unit> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {
-            var entity = new Category(request.Name);
+            var category = new Category(request.Name);
 
-            _context.Categories.Add(entity);
+            _context.Categories.Add(category);
 
             await _context.SaveChangesAsync(cancellationToken);
 

@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using FluentValidation;
+using Library.Application.Categories.Queries.GetCategory;
 
 namespace Library.Application.People.Queries.GetPeople
 {
-    class GetPeopleQueryValidator
+    public class GetPeopleQueryValidator : AbstractValidator<GetCategoryQuery>
     {
+        public GetPeopleQueryValidator()
+        {
+            //RuleFor(v => v.Id).NotEmpty();
+        }
     }
 }

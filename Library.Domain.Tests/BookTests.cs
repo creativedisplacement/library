@@ -27,7 +27,7 @@ namespace Library.Domain.Tests
             var book = new Book(_title, _categories);
 
             Assert.AreEqual(_title, book.Title); 
-            CollectionAssert.AreEqual(_categories.ToList(), book.Categories.ToList());
+            CollectionAssert.AreEqual(_categories.ToList(), book.BookCategories.ToList());
             Assert.IsTrue(book.IsAvailable);
         }
 
@@ -37,7 +37,7 @@ namespace Library.Domain.Tests
             var book = new Book(_title, _categories, _lender);
 
             Assert.AreEqual(_title, book.Title);
-            CollectionAssert.AreEqual(_categories.ToList(), book.Categories.ToList());
+            CollectionAssert.AreEqual(_categories.ToList(), book.BookCategories.ToList());
             Assert.AreEqual(_lender, book.Lender);
             Assert.IsFalse(book.IsAvailable);
         }
@@ -66,7 +66,7 @@ namespace Library.Domain.Tests
             book.UpdateBook(newTitle, newCategories);
 
             Assert.AreEqual(newTitle, book.Title);
-            CollectionAssert.AreEqual(newCategories, book.Categories.ToList());
+            CollectionAssert.AreEqual(newCategories, book.BookCategories.ToList());
 
         }
 

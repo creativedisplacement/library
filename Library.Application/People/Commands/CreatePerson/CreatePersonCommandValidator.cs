@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using FluentValidation;
 
 namespace Library.Application.People.Commands.CreatePerson
 {
-    class CreatePersonCommandValidator
+    public class CreatePersonCommandValidator : AbstractValidator<CreatePersonCommand>
     {
+        public CreatePersonCommandValidator()
+        {
+            RuleFor(x => x.Name).Length(20).NotEmpty();
+            RuleFor(x => x.Email).Length(50).NotEmpty();
+        }
     }
 }

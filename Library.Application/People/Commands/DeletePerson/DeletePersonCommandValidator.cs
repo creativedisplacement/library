@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using FluentValidation;
 
 namespace Library.Application.People.Commands.DeletePerson
 {
-    class DeletePersonCommandValidator
+    public class DeletePersonCommandValidator : AbstractValidator<DeletePersonCommand>
     {
+        public DeletePersonCommandValidator()
+        {
+            RuleFor(x => x.Id).NotEmpty();
+        }
     }
 }

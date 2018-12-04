@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using FluentValidation;
 
 namespace Library.Application.Books.Queries.GetBook
 {
-    class GetBookQueryValidator
+    public class GetBookQueryValidator : AbstractValidator<GetBookQuery>
     {
+        public GetBookQueryValidator()
+        {
+            RuleFor(v => v.Id).NotEmpty();
+        }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Library.Application.Categories.Queries.GetCategories
 {
-    public class CategoriesModel
+    public class GetCategoriesModel
     {
         public IEnumerable<CategoryModel> Categories { get; set; }
     }
