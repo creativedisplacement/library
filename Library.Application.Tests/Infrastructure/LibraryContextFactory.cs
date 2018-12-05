@@ -1,33 +1,33 @@
 ﻿using Library.Domain.Entities;
+using Library.Persistence;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace Library.Persistence
+namespace Library.Application.Tests.Infrastructure
 {
-    public class LibraryInitialiser
+    public class LibraryContextFactory
     {
-
-        public static void Initialise(LibraryDbContext context)
+        public static LibraryDbContext Create()
         {
-            var initialiser = new LibraryInitialiser();
-            initialiser.SeedEverything(context);
-        }
+            var options = new DbContextOptionsBuilder<LibraryDbContext>()
+                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .Options;
 
-        public void SeedEverything(LibraryDbContext context)
-        {
+            var context = new LibraryDbContext(options);
+
             context.Database.EnsureCreated();
-
-            if (context.Books.Any())
-            {
-                return; // Db has been seeded
-            }
 
             SeedCategories(context);
             SeedPeople(context);
             SeedBooks(context);
             SeedBookCategories(context);
+
+            return context;
         }
 
-        public void SeedBookCategories(LibraryDbContext context)
+        public static void SeedBookCategories(LibraryDbContext context)
         {
             var categories = context.Categories;
             var books = context.Books;
@@ -42,11 +42,12 @@ namespace Library.Persistence
             context.SaveChanges();
         }
 
-        public void SeedBooks(LibraryDbContext context)
+        public static void SeedBooks(LibraryDbContext context)
         {
+            var lender = context.Persons.First();
             var books = new[]
             {
-                new Book("Docker on Windows"),
+                new Book("Docker on Windows", new List<BookCategory>(), lender),
                 new Book("Open"),
                 new Book("This is going to hurt")
             };
@@ -54,7 +55,7 @@ namespace Library.Persistence
             context.SaveChanges();
         }
 
-        public void SeedCategories(LibraryDbContext context)
+        public static void SeedCategories(LibraryDbContext context)
         {
             var categories = new[]
             {
@@ -69,7 +70,7 @@ namespace Library.Persistence
             context.SaveChanges();
         }
 
-        public void SeedPeople(LibraryDbContext context)
+        public static void SeedPeople(LibraryDbContext context)
         {
             var people = new[]
             {
@@ -78,6 +79,12 @@ namespace Library.Persistence
             };
             context.Persons.AddRange(people);
             context.SaveChanges();
+        }
+
+        public static void Destroy(LibraryDbContext context)
+        {
+            context.Database.EnsureDeleted();
+            context.Dispose();
         }
     }
 }

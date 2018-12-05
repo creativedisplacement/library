@@ -15,13 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Books\Queries\" />
-    <Folder Include="Categories\Queries\" />
-    <Folder Include="Infrastructure\" />
-    <Folder Include="People\Queries\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Library.Application\Library.Application.csproj" />
     <ProjectReference Include="..\Library.Persistence\Library.Persistence.csproj" />
   </ItemGroup>

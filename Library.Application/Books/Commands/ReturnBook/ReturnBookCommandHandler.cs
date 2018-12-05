@@ -20,7 +20,7 @@ namespace Library.Application.Books.Commands.ReturnBook
 
         public async Task<Unit> Handle(ReturnBookCommand request, CancellationToken cancellationToken)
         {
-            var book = await _context.Books.SingleAsync(c => c.Id == request.Id, cancellationToken);
+            var book = await _context.Books.Include(i => i.Lender).SingleAsync(c => c.Id == request.Id, cancellationToken);
           
             if (book == null)
             {

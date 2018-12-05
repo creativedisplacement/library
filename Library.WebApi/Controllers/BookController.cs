@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Library.Application.Books.Commands.LendBook;
+using Library.Application.Books.Commands.ReturnBook;
 using GetBookModel = Library.Application.Books.Queries.GetBook.GetBookModel;
 
 namespace Library.WebApi.Controllers
@@ -41,6 +43,22 @@ namespace Library.WebApi.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         public async Task<IActionResult> Update(Guid id, [FromBody]UpdateBookCommand command)
+        {
+            await Mediator.Send(command);
+            return NoContent();
+        }
+
+        [HttpPut("lend/{id}")]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        public async Task<IActionResult> LendBook(Guid id, [FromBody]LendBookCommand command)
+        {
+            await Mediator.Send(command);
+            return NoContent();
+        }
+
+        [HttpPut("return/{id}")]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        public async Task<IActionResult> LendBook(Guid id, [FromBody]ReturnBookCommand command)
         {
             await Mediator.Send(command);
             return NoContent();

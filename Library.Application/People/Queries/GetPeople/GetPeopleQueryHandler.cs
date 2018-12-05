@@ -22,11 +22,6 @@ namespace Library.Application.People.Queries.GetPeople
         {
             IQueryable<Person> people = _context.Persons;
 
-            if (request.Id != default(Guid))
-            {
-                people = people.Where(p => p.Id == request.Id);
-            }
-
             if (!string.IsNullOrEmpty(request.Name))
             {
                 people = people.Where(p => p.Name.Contains(request.Name));
@@ -46,6 +41,7 @@ namespace Library.Application.People.Queries.GetPeople
             {
                 People = await people
                     .Select(p => new GetPersonModel() { Id = p.Id, Name = p.Name, Email = p.Email, IsAdmin = p.IsAdmin})
+                    .OrderBy(p => p.Name)
                     .ToListAsync(cancellationToken)
             };
         }
