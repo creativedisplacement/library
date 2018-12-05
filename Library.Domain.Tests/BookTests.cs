@@ -9,23 +9,27 @@ namespace Library.Domain.Tests
     [TestClass]
     public class BookTests
     {
+        private Guid _id;
         private string _title;
-        private ICollection<Category> _categories;
+        private ICollection<BookCategory> _categories;
         private Person _lender;
 
         [TestInitialize]
         public void Initialise()
         {
+            _id = Guid.NewGuid();
             _title = "Book1";
-            _categories = new List<Category>(){ new Category("Category1"), new Category("Category2")};
+            _categories = new List<BookCategory>{ new BookCategory{ BookId = _id, CategoryId = Guid.NewGuid()},
+                new BookCategory { BookId = _id, CategoryId = Guid.NewGuid() } };
             _lender = new Person("John", "john@test.com", true);
         }
 
         [TestMethod]
         public void Create_Book_With_Title_And_Categories()
         {
-            var book = new Book(_title, _categories);
+            var book = new Book(_id, _title, _categories);
 
+            Assert.AreEqual(_id, book.Id);
             Assert.AreEqual(_title, book.Title); 
             CollectionAssert.AreEqual(_categories.ToList(), book.BookCategories.ToList());
             Assert.IsTrue(book.IsAvailable);
@@ -34,8 +38,9 @@ namespace Library.Domain.Tests
         [TestMethod]
         public void Create_Book_With_Title_Categories_And_Lender()
         {
-            var book = new Book(_title, _categories, _lender);
+            var book = new Book(_id, _title, _categories, _lender);
 
+            Assert.AreEqual(_id, book.Id);
             Assert.AreEqual(_title, book.Title);
             CollectionAssert.AreEqual(_categories.ToList(), book.BookCategories.ToList());
             Assert.AreEqual(_lender, book.Lender);
@@ -60,11 +65,13 @@ namespace Library.Domain.Tests
         public void Update_Book_With_Title_And_Categories()
         {
             const string newTitle = "new title";
-            var newCategories = new List<Category>() {new Category("Category3")};
-            var book = new Book(_title, _categories);
+            var newCategories = new List<BookCategory>{ new BookCategory{ BookId = _id, CategoryId = Guid.NewGuid()}};
+            var book = new Book(_id, _title, _categories);
 
+            
             book.UpdateBook(newTitle, newCategories);
 
+                    Assert.AreEqual(_id, book.Id);
             Assert.AreEqual(newTitle, book.Title);
             CollectionAssert.AreEqual(newCategories, book.BookCategories.ToList());
 
