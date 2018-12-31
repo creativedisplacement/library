@@ -2,14 +2,14 @@
 using Library.Domain.Entities;
 using Library.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Library.Application.Tests.People.Commands
 {
-    [TestClass]
+
     public class DeletePersonCommandTest : TestBase, IDisposable
     {
         private readonly LibraryDbContext _context;
@@ -21,7 +21,7 @@ namespace Library.Application.Tests.People.Commands
             _commandHandler = new DeletePersonCommandHandler(_context);
         }
 
-        [TestMethod]
+        [Fact]
         public async Task Delete_Person()
         {
             var command = new DeletePersonCommand
@@ -30,7 +30,7 @@ namespace Library.Application.Tests.People.Commands
             };
 
             await _commandHandler.Handle(command, CancellationToken.None);
-            Assert.IsNull(await _context.Persons.FindAsync(command.Id));
+            Assert.Null(await _context.Persons.FindAsync(command.Id));
         }
 
         private LibraryDbContext InitAndGetDbContext()

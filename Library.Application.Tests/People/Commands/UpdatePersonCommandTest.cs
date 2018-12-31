@@ -2,14 +2,14 @@
 using Library.Domain.Entities;
 using Library.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Library.Application.Tests.People.Commands
 {
-    [TestClass]
+
     public class UpdatePeopleCommandTest : TestBase, IDisposable
     {
         private readonly LibraryDbContext _context;
@@ -21,7 +21,7 @@ namespace Library.Application.Tests.People.Commands
             _commandHandler = new UpdatePersonCommandHandler(_context);
         }
 
-        [TestMethod]
+        [Fact]
         public async Task Update_Person()
         {
             var command = new UpdatePersonCommand
@@ -36,9 +36,9 @@ namespace Library.Application.Tests.People.Commands
 
             var person = await _context.Persons.FindAsync(command.Id);
 
-            Assert.AreEqual(command.Name, person.Name);
-            Assert.AreEqual(command.Email, person.Email);
-            Assert.AreEqual(command.IsAdmin, person.IsAdmin);
+            Assert.Equal(command.Name, person.Name);
+            Assert.Equal(command.Email, person.Email);
+            Assert.Equal(command.IsAdmin, person.IsAdmin);
         }
 
         private LibraryDbContext InitAndGetDbContext()

@@ -2,15 +2,15 @@
 using Library.Domain.Entities;
 using Library.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Library.Application.Tests.Books.Commands
 {
-    [TestClass]
+
     public class DeleteBookCommandTest : TestBase, IDisposable
     {
         private readonly LibraryDbContext _context;
@@ -22,7 +22,7 @@ namespace Library.Application.Tests.Books.Commands
             _commandHandler = new DeleteBookCommandHandler(_context);
         }
 
-        [TestMethod]
+        [Fact]
         public async Task Delete_Book()
         {
             var command = new DeleteBookCommand
@@ -31,7 +31,7 @@ namespace Library.Application.Tests.Books.Commands
             };
 
             await _commandHandler.Handle(command, CancellationToken.None);
-            Assert.IsNull(await _context.Books.FindAsync(command.Id));
+            Assert.Null(await _context.Books.FindAsync(command.Id));
         }
 
         private LibraryDbContext InitAndGetDbContext()

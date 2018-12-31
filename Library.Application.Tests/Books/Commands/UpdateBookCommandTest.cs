@@ -2,16 +2,16 @@
 using Library.Domain.Entities;
 using Library.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Library.Application.Tests.Books.Commands
 {
-    [TestClass]
+
     public class UpdateBookCommandTest : TestBase, IDisposable
     {
         private readonly LibraryDbContext _context;
@@ -23,7 +23,7 @@ namespace Library.Application.Tests.Books.Commands
             _commandHandler = new UpdateBookCommandHandler(_context);
         }
 
-        [TestMethod]
+        [Fact]
         public async Task Update_Book()
         {
             var command = new UpdateBookCommand
@@ -37,8 +37,8 @@ namespace Library.Application.Tests.Books.Commands
 
             var book = await _context.Books.FindAsync(command.Id);
 
-            Assert.AreEqual(command.Title, book.Title);
-            CollectionAssert.AreEqual(command.Categories.ToList(), book.BookCategories.ToList());
+            Assert.Equal(command.Title, book.Title);
+            Assert.Equal(command.Categories.ToList(), book.BookCategories.ToList());
         }
 
         private LibraryDbContext InitAndGetDbContext()

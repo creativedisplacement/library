@@ -2,29 +2,24 @@
 using Library.Application.Tests.Infrastructure;
 using Library.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Library.Application.Tests.Books.Queries
 {
-    [TestClass]
+
     public class GetBookQueryHandlerTests
     {
         private readonly LibraryDbContext _context;
 
-        public GetBookQueryHandlerTests() : this(new QueryTestFixture())
+        public GetBookQueryHandlerTests()
         {
-
+            _context = new QueryTestFixture().Context;
         }
 
-        public GetBookQueryHandlerTests(QueryTestFixture fixture)
-        {
-            _context = fixture.Context;
-        }
-
-        [TestMethod]
+        [Fact]
         public async Task Get_Book()
         {
             var queryHandler = new GetBookQueryHandler(_context);
@@ -32,10 +27,10 @@ namespace Library.Application.Tests.Books.Queries
 
             var result = await queryHandler.Handle(new GetBookQuery {Id = book.Id}, CancellationToken.None);
 
-            Assert.IsInstanceOfType(result, typeof(GetBookModel));
-            Assert.AreEqual(result.Id, book.Id);
-            Assert.AreEqual(result.Title, book.Title);
-            CollectionAssert.AreEqual(result.Categories.Select(c => c.Name).OrderBy(c => c).ToList(),
+            Assert.IsType<GetBookModel>(result);
+            Assert.Equal(result.Id, book.Id);
+            Assert.Equal(result.Title, book.Title);
+            Assert.Equal(result.Categories.Select(c => c.Name).OrderBy(c => c).ToList(),
                 book.BookCategories.Select(c => c.Category.Name).OrderBy(c => c).ToList());
         }
     }

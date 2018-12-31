@@ -2,15 +2,15 @@
 using Library.Domain.Entities;
 using Library.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Library.Application.Tests.Books.Commands
 {
-    [TestClass]
+
     public class LendBookCommandTest : TestBase, IDisposable
     {
         private readonly LibraryDbContext _context;
@@ -22,7 +22,7 @@ namespace Library.Application.Tests.Books.Commands
             _commandHandler = new LendBookCommandHandler(_context);
         }
 
-        [TestMethod]
+        [Fact]
         public async Task Lend_Book()
         {
             var command = new LendBookCommand
@@ -35,7 +35,7 @@ namespace Library.Application.Tests.Books.Commands
 
             var book = await _context.Books.FindAsync(command.Id);
 
-            Assert.IsNotNull(book.Lender);
+            Assert.NotNull(book.Lender);
         }
 
         private LibraryDbContext InitAndGetDbContext()

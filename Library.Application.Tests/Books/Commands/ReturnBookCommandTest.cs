@@ -1,16 +1,16 @@
 ﻿using Library.Application.Books.Commands.ReturnBook;
 using Library.Domain.Entities;
 using Library.Persistence;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Library.Application.Tests.Books.Commands
 {
-    [TestClass]
+
     public class ReturnBookCommandTest : TestBase, IDisposable
     {
         private readonly LibraryDbContext _context;
@@ -22,7 +22,7 @@ namespace Library.Application.Tests.Books.Commands
             _commandHandler = new ReturnBookCommandHandler(_context);
         }
 
-        [TestMethod]
+        [Fact]
         public async Task Return_Book()
         {
             var command = new ReturnBookCommand
@@ -34,7 +34,7 @@ namespace Library.Application.Tests.Books.Commands
 
             var book = await _context.Books.FindAsync(command.Id);
 
-            Assert.IsNull(book.Lender);
+            Assert.Null(book.Lender);
         }
 
         private LibraryDbContext InitAndGetDbContext()

@@ -1,29 +1,24 @@
 ﻿using Library.Application.Categories.Queries.GetCategory;
 using Library.Application.Tests.Infrastructure;
 using Library.Persistence;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Library.Application.Tests.Categories.Queries
 {
-    [TestClass]
+
     public class GetCategoryQueryHandlerTests
     {
         private readonly LibraryDbContext _context;
 
-        public GetCategoryQueryHandlerTests() : this(new QueryTestFixture())
+        public GetCategoryQueryHandlerTests()
         {
-            
+            _context = new QueryTestFixture().Context;
         }
 
-        public GetCategoryQueryHandlerTests(QueryTestFixture fixture)
-        {
-            _context = fixture.Context;
-        }
-
-        [TestMethod]
+        [Fact]
         public async Task Get_Category()
         {
             var queryHandler = new GetCategoryQueryHandler(_context);
@@ -31,9 +26,9 @@ namespace Library.Application.Tests.Categories.Queries
 
             var result = await queryHandler.Handle(new GetCategoryQuery{ Id = category.Id}, CancellationToken.None);
 
-            Assert.IsInstanceOfType(result,typeof(GetCategoryModel));
-            Assert.AreEqual(result.Id, category.Id);
-            Assert.AreEqual(result.Name, category.Name);
+            Assert.IsType<GetCategoryModel>(result);
+            Assert.Equal(result.Id, category.Id);
+            Assert.Equal(result.Name, category.Name);
         }
     }
 }

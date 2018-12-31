@@ -1,21 +1,19 @@
 using Library.Domain.Entities;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Xunit;
 
 namespace Library.Domain.Tests
 {
-    [TestClass]
     public class BookTests
     {
-        private Guid _id;
-        private string _title;
-        private ICollection<BookCategory> _categories;
-        private Person _lender;
+        private readonly Guid _id;
+        private readonly string _title;
+        private readonly ICollection<BookCategory> _categories;
+        private readonly Person _lender;
 
-        [TestInitialize]
-        public void Initialise()
+        public BookTests()
         {
             _id = Guid.NewGuid();
             _title = "Book1";
@@ -24,79 +22,79 @@ namespace Library.Domain.Tests
             _lender = new Person("John", "john@test.com", true);
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_Book_With_Title_And_Categories()
         {
             var book = new Book(_id, _title, _categories);
 
-            Assert.AreEqual(_id, book.Id);
-            Assert.AreEqual(_title, book.Title); 
-            CollectionAssert.AreEqual(_categories.ToList(), book.BookCategories.ToList());
-            Assert.IsTrue(book.IsAvailable);
+            Assert.Equal(_id, book.Id);
+            Assert.Equal(_title, book.Title);
+            Assert.Equal(_categories.ToList(), book.BookCategories.ToList());
+            Assert.True(book.IsAvailable);
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_Book_With_Title_Categories_And_Lender()
         {
             var book = new Book(_id, _title, _categories, _lender);
 
-            Assert.AreEqual(_id, book.Id);
-            Assert.AreEqual(_title, book.Title);
-            CollectionAssert.AreEqual(_categories.ToList(), book.BookCategories.ToList());
-            Assert.AreEqual(_lender, book.Lender);
-            Assert.IsFalse(book.IsAvailable);
+            Assert.Equal(_id, book.Id);
+            Assert.Equal(_title, book.Title);
+            Assert.Equal(_categories.ToList(), book.BookCategories.ToList());
+            Assert.Equal(_lender, book.Lender);
+            Assert.False(book.IsAvailable);
         }
 
-        [TestMethod]
+        [Fact]
         public void Check_Book_Is_Available()
         {
             var book = new Book(_title, _categories);
-            Assert.IsTrue(book.IsAvailable);
+            Assert.True(book.IsAvailable);
         }
 
-        [TestMethod]
+        [Fact]
         public void Check_Book_Is_Not_Available()
         {
             var book = new Book(_title, _categories, _lender);
-            Assert.IsFalse(book.IsAvailable);
+            Assert.False(book.IsAvailable);
         }
 
-        [TestMethod]
+        [Fact]
         public void Update_Book_With_Title_And_Categories()
         {
             const string newTitle = "new title";
-            var newCategories = new List<BookCategory>{ new BookCategory{ BookId = _id, CategoryId = Guid.NewGuid()}};
+            var newCategories = new List<BookCategory> { new BookCategory { BookId = _id, CategoryId = Guid.NewGuid() } };
             var book = new Book(_id, _title, _categories);
 
-            
+
             book.UpdateBook(newTitle, newCategories);
 
-                    Assert.AreEqual(_id, book.Id);
-            Assert.AreEqual(newTitle, book.Title);
-            CollectionAssert.AreEqual(newCategories, book.BookCategories.ToList());
+            Assert.Equal(_id, book.Id);
+            Assert.Equal(newTitle, book.Title);
+            Assert.Equal(newCategories, book.BookCategories.ToList());
 
         }
 
-        [TestMethod]
+        [Fact]
         public void Remove_Book()
         {
             throw new NotImplementedException();
         }
 
-        [TestMethod]
+        [Fact]
         public void Check_Lend_Book_To()
         {
             var book = new Book(_title, _categories);
             book.LendBook(_lender);
-            Assert.AreEqual(_lender, book.Lender);
+            Assert.Equal(_lender, book.Lender);
         }
 
-        [TestMethod]
+        [Fact]
         public void Book_Is_Returned()
         {
             var book = new Book(_title, _categories, _lender);
             book.ReturnBook();
-            Assert.AreEqual(null, book.Lender);
+            Assert.Null(book.Lender);
         }
     }
 }

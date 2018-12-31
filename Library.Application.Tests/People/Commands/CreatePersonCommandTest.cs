@@ -1,14 +1,14 @@
 ﻿using Library.Application.People.Commands.CreatePerson;
 using Library.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Library.Application.Tests.People.Commands
 {
-    [TestClass]
+
     public class CreatePersonCommandTest : TestBase, IDisposable
     {
         private readonly LibraryDbContext _context;
@@ -20,7 +20,7 @@ namespace Library.Application.Tests.People.Commands
             _commandHandler = new CreatePersonCommandHandler(_context);
         }
 
-        [TestMethod]
+        [Fact]
         public async Task Create_New_Person()
         {
             var command = new CreatePersonCommand
@@ -33,9 +33,9 @@ namespace Library.Application.Tests.People.Commands
             await _commandHandler.Handle(command, CancellationToken.None);
             var person = await _context.Persons.SingleOrDefaultAsync(c => c.Name == command.Name);
 
-            Assert.AreEqual(command.Name, person.Name);
-            Assert.AreEqual(command.Email, person.Email);
-            Assert.AreEqual(command.IsAdmin, person.IsAdmin);
+            Assert.Equal(command.Name, person.Name);
+            Assert.Equal(command.Email, person.Email);
+            Assert.Equal(command.IsAdmin, person.IsAdmin);
         }
 
         private LibraryDbContext InitAndGetDbContext()

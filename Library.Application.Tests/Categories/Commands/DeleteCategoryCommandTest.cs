@@ -2,14 +2,14 @@
 using Library.Domain.Entities;
 using Library.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Library.Application.Tests.Categories.Commands
 {
-    [TestClass]
+
     public class DeleteCategoryCommandTest : TestBase, IDisposable
     {
         private readonly LibraryDbContext _context;
@@ -21,7 +21,7 @@ namespace Library.Application.Tests.Categories.Commands
             _commandHandler = new DeleteCategoryCommandHandler(_context);
         }
 
-        [TestMethod]
+        [Fact]
         public async Task Delete_Category()
         {
             var command = new DeleteCategoryCommand
@@ -30,7 +30,7 @@ namespace Library.Application.Tests.Categories.Commands
             };
 
             await _commandHandler.Handle(command, CancellationToken.None);
-            Assert.IsNull(await _context.Categories.FindAsync(command.Id));
+            Assert.Null(await _context.Categories.FindAsync(command.Id));
         }
 
         private LibraryDbContext InitAndGetDbContext()

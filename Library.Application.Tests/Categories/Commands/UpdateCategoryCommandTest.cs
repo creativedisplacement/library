@@ -2,14 +2,14 @@
 using Library.Domain.Entities;
 using Library.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Library.Application.Tests.Categories.Commands
 {
-    [TestClass]
+
     public class UpdateCategoryCommandTest : TestBase, IDisposable
     {
         private readonly LibraryDbContext _context;
@@ -21,7 +21,7 @@ namespace Library.Application.Tests.Categories.Commands
             _commandHandler = new UpdateCategoryCommandHandler(_context);
         }
 
-        [TestMethod]
+        [Fact]
         public async Task Update_Category()
         {
             var command = new UpdateCategoryCommand
@@ -31,7 +31,7 @@ namespace Library.Application.Tests.Categories.Commands
             };
 
             await _commandHandler.Handle(command, CancellationToken.None);
-            Assert.AreEqual(command.Name, (await _context.Categories.FindAsync(command.Id)).Name);
+            Assert.Equal(command.Name, (await _context.Categories.FindAsync(command.Id)).Name);
         }
 
         private LibraryDbContext InitAndGetDbContext()

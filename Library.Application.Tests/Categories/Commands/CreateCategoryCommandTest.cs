@@ -1,14 +1,14 @@
 ﻿using Library.Application.Categories.Commands.CreateCategory;
 using Library.Persistence;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using Xunit;
 
 namespace Library.Application.Tests.Categories.Commands
 {
-    [TestClass]
+
     public class CreateCategoryCommandTest : TestBase, IDisposable
     {
         private readonly LibraryDbContext _context;
@@ -20,7 +20,7 @@ namespace Library.Application.Tests.Categories.Commands
             _commandHandler = new CreateCategoryCommandHandler(_context);
         }
 
-        [TestMethod]
+        [Fact]
         public async Task Create_New_Category()
         {
             var command = new CreateCategoryCommand
@@ -31,7 +31,7 @@ namespace Library.Application.Tests.Categories.Commands
             await _commandHandler.Handle(command, CancellationToken.None);
             var category = await _context.Categories.SingleOrDefaultAsync(c => c.Name == command.Name);
 
-            Assert.AreEqual(command.Name, category.Name);
+            Assert.Equal(command.Name, category.Name);
         }
 
         private LibraryDbContext InitAndGetDbContext()

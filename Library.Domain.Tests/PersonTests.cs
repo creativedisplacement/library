@@ -1,41 +1,39 @@
 ﻿using Library.Domain.Entities;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using Xunit;
 
 namespace Library.Domain.Tests
 {
-    [TestClass]
     public class PersonTests
     {
-        private string _name;
-        private string _email;
-        private bool _isAdmin;
+        private readonly string _name;
+        private readonly string _email;
+        private readonly bool _isAdmin;
 
-        [TestInitialize]
-        public void Initialise()
+        public PersonTests()
         {
             _name = "John";
             _email = "john@test.com";
             _isAdmin = true;
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_Person()
         {
             var person = new Person(_name, _email, _isAdmin);
 
-            Assert.AreEqual(_name, person.Name);
-            Assert.AreEqual(_email, person.Email);
-            Assert.AreEqual(_isAdmin, person.IsAdmin);
+            Assert.Equal(_name, person.Name);
+            Assert.Equal(_email, person.Email);
+            Assert.Equal(_isAdmin, person.IsAdmin);
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_Person_With_Invalid_Email()
         {
             throw new NotImplementedException();
         }
 
-        [TestMethod]
+        [Fact]
         public void Update_Person()
         {
             const string newName = "Trevor";
@@ -45,53 +43,53 @@ namespace Library.Domain.Tests
             var person = new Person(_name, _email, _isAdmin);
             person.UpdatePerson(newName, newEmail, newIsAdmin);
 
-            Assert.AreEqual(newName, person.Name);
-            Assert.AreEqual(newEmail, person.Email);
-            Assert.AreEqual(newIsAdmin, person.IsAdmin);
+            Assert.Equal(newName, person.Name);
+            Assert.Equal(newEmail, person.Email);
+            Assert.Equal(newIsAdmin, person.IsAdmin);
         }
 
-        [TestMethod]
+        [Fact]
         public void Remove_Person()
         {
             throw new NotImplementedException();
         }
 
-        [TestMethod]
+        [Fact]
         public void Update_Person_Name()
         {
             const string newName = "Peter";
             var person = new Person(_name, _email, _isAdmin);
 
             person.UpdateName(newName);
-            Assert.AreEqual(newName, person.Name);
+            Assert.Equal(newName, person.Name);
         }
 
-        [TestMethod]
+        [Fact]
         public void Update_Person_Email()
         {
             const string newEmail = "peter@test.com";
             var person = new Person(_name, _email, _isAdmin);
 
             person.UpdateEmail(newEmail);
-            Assert.AreEqual(newEmail, person.Email);
+            Assert.Equal(newEmail, person.Email);
         }
 
-        [TestMethod]
+        [Fact]
         public void Update_Person_With_Admin_Permissions()
         {
             var person = new Person(_name, _email, false);
             person.GiveAdminPermissions();
 
-            Assert.AreEqual(true, person.IsAdmin);
+            Assert.True(person.IsAdmin);
         }
 
-        [TestMethod]
+        [Fact]
         public void Update_Person_Without_Admin_Permissions()
         {
             var person = new Person(_name, _email, true);
             person.RemoveAdminPermissions();
 
-            Assert.AreEqual(false, person.IsAdmin);
+            Assert.False(person.IsAdmin);
         }
     }
 }
