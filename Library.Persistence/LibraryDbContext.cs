@@ -1,4 +1,7 @@
-﻿using Library.Domain.Entities;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Library.Domain.Entities;
+using Library.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Persistence
@@ -22,8 +25,6 @@ namespace Library.Persistence
         {
             modelBuilder.Entity<BookCategory>()
                 .HasKey(bc => new { bc.BookId, bc.CategoryId });
-
-            // modelBuilder.ApplyConfigurationsFromAssembly(typeof(LibraryDbContext).Assembly);
         }
     }
 }

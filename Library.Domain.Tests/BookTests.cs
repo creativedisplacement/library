@@ -1,4 +1,5 @@
 using Library.Domain.Entities;
+using Library.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,7 @@ namespace Library.Domain.Tests
             Assert.Equal(_title, book.Title);
             Assert.Equal(_categories.ToList(), book.BookCategories.ToList());
             Assert.True(book.IsAvailable);
+            Assert.Equal(Status.Added, book.Status);
         }
 
         [Fact]
@@ -43,6 +45,7 @@ namespace Library.Domain.Tests
             Assert.Equal(_categories.ToList(), book.BookCategories.ToList());
             Assert.Equal(_lender, book.Lender);
             Assert.False(book.IsAvailable);
+            Assert.Equal(Status.Added, book.Status);
         }
 
         [Fact]
@@ -72,13 +75,17 @@ namespace Library.Domain.Tests
             Assert.Equal(_id, book.Id);
             Assert.Equal(newTitle, book.Title);
             Assert.Equal(newCategories, book.BookCategories.ToList());
+            Assert.Equal(Status.Updated, book.Status);
 
         }
 
         [Fact]
         public void Remove_Book()
         {
-            throw new NotImplementedException();
+            var book = new Book(_id, _title, _categories, _lender);
+            book.RemoveBook();
+
+            Assert.Equal(Status.Deleted, book.Status);
         }
 
         [Fact]
@@ -87,6 +94,7 @@ namespace Library.Domain.Tests
             var book = new Book(_title, _categories);
             book.LendBook(_lender);
             Assert.Equal(_lender, book.Lender);
+            Assert.Equal(Status.Updated, book.Status);
         }
 
         [Fact]
@@ -95,6 +103,7 @@ namespace Library.Domain.Tests
             var book = new Book(_title, _categories, _lender);
             book.ReturnBook();
             Assert.Null(book.Lender);
+            Assert.Equal(Status.Updated, book.Status);
         }
     }
 }

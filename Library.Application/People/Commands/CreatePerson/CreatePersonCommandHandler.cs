@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Library.Application.People.Commands.CreatePerson
 {
-    public class CreatePersonCommandHandler : IRequestHandler<CreatePersonCommand, Unit>
+    public class CreatePersonCommandHandler : BaseCommandHandler, IRequestHandler<CreatePersonCommand, Unit>
     {
         private readonly LibraryDbContext _context;
 
-        public CreatePersonCommandHandler(LibraryDbContext context)
+        public CreatePersonCommandHandler(LibraryDbContext context) : base(context)
         {
             _context = context;
         }
@@ -18,9 +18,7 @@ namespace Library.Application.People.Commands.CreatePerson
         public async Task<Unit> Handle(CreatePersonCommand request, CancellationToken cancellationToken)
         {
             var person = new Person(request.Name, request.Email, request.IsAdmin);
-
-            _context.Persons.Add(person);
-
+            SetDomainState(person);
             await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;

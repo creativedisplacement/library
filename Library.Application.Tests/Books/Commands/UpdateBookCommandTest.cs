@@ -1,4 +1,5 @@
-﻿using Library.Application.Books.Commands.UpdateBook;
+﻿using FluentValidation.TestHelper;
+using Library.Application.Books.Commands.UpdateBook;
 using Library.Domain.Entities;
 using Library.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +40,27 @@ namespace Library.Application.Tests.Books.Commands
 
             Assert.Equal(command.Title, book.Title);
             Assert.Equal(command.Categories.ToList(), book.BookCategories.ToList());
+        }
+
+        [Fact]
+        public void Update_Book_With_No_Id_Throws_Exception()
+        {
+            var validator = new UpdateBookCommandValidator();
+            validator.ShouldHaveValidationErrorFor(x => x.Id, Guid.Empty);
+        }
+
+        [Fact]
+        public void Update_Book_With_No_Title_Throws_Exception()
+        {
+            var validator = new UpdateBookCommandValidator();
+            validator.ShouldHaveValidationErrorFor(x => x.Title, string.Empty);
+        }
+
+        [Fact]
+        public void Update_Book_With_No_Categories_Throws_Exception()
+        {
+            var validator = new UpdateBookCommandValidator();
+            validator.ShouldHaveValidationErrorFor(x => x.Categories, new List<BookCategory>());
         }
 
         private LibraryDbContext InitAndGetDbContext()

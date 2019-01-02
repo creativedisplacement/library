@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentValidation.TestHelper;
 using Xunit;
 
 namespace Library.Application.Tests.People.Commands
@@ -39,6 +40,34 @@ namespace Library.Application.Tests.People.Commands
             Assert.Equal(command.Name, person.Name);
             Assert.Equal(command.Email, person.Email);
             Assert.Equal(command.IsAdmin, person.IsAdmin);
+        }
+
+        [Fact]
+        public void Update_Person_With_No_Id_Throws_Exception()
+        {
+            var validator = new UpdatePersonCommandValidator();
+            validator.ShouldHaveValidationErrorFor(x => x.Id, Guid.Empty);
+        }
+
+        [Fact]
+        public void Update_Person_With_No_Name_Throws_Exception()
+        {
+            var validator = new UpdatePersonCommandValidator();
+            validator.ShouldHaveValidationErrorFor(x => x.Name, string.Empty);
+        }
+
+        [Fact]
+        public void Update_Person_With_No_Email_Throws_Exception()
+        {
+            var validator = new UpdatePersonCommandValidator();
+            validator.ShouldHaveValidationErrorFor(x => x.Email, string.Empty);
+        }
+
+        [Fact]
+        public void Update_Person_With_Invalid_Email_Throws_Exception()
+        {
+            var validator = new UpdatePersonCommandValidator();
+            validator.ShouldHaveValidationErrorFor(x => x.Email, "111");
         }
 
         private LibraryDbContext InitAndGetDbContext()

@@ -1,4 +1,5 @@
 ﻿using Library.Domain.Entities;
+using Library.Domain.Enums;
 using System;
 using Xunit;
 
@@ -25,12 +26,7 @@ namespace Library.Domain.Tests
             Assert.Equal(_name, person.Name);
             Assert.Equal(_email, person.Email);
             Assert.Equal(_isAdmin, person.IsAdmin);
-        }
-
-        [Fact]
-        public void Create_Person_With_Invalid_Email()
-        {
-            throw new NotImplementedException();
+            Assert.Equal(Status.Added, person.Status);
         }
 
         [Fact]
@@ -46,12 +42,15 @@ namespace Library.Domain.Tests
             Assert.Equal(newName, person.Name);
             Assert.Equal(newEmail, person.Email);
             Assert.Equal(newIsAdmin, person.IsAdmin);
+            Assert.Equal(Status.Updated, person.Status);
         }
 
         [Fact]
         public void Remove_Person()
         {
-            throw new NotImplementedException();
+            var person = new Person(_name, _email, _isAdmin);
+            person.RemovePerson();
+            Assert.Equal(Status.Deleted, person.Status);
         }
 
         [Fact]
@@ -62,6 +61,7 @@ namespace Library.Domain.Tests
 
             person.UpdateName(newName);
             Assert.Equal(newName, person.Name);
+            Assert.Equal(Status.Updated, person.Status);
         }
 
         [Fact]
@@ -72,6 +72,7 @@ namespace Library.Domain.Tests
 
             person.UpdateEmail(newEmail);
             Assert.Equal(newEmail, person.Email);
+            Assert.Equal(Status.Updated, person.Status);
         }
 
         [Fact]
@@ -81,6 +82,7 @@ namespace Library.Domain.Tests
             person.GiveAdminPermissions();
 
             Assert.True(person.IsAdmin);
+            Assert.Equal(Status.Updated, person.Status);
         }
 
         [Fact]
@@ -90,6 +92,7 @@ namespace Library.Domain.Tests
             person.RemoveAdminPermissions();
 
             Assert.False(person.IsAdmin);
+            Assert.Equal(Status.Updated, person.Status);
         }
     }
 }

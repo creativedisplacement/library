@@ -1,5 +1,5 @@
 ﻿using Library.Domain.Entities;
-using System;
+using Library.Domain.Enums;
 using Xunit;
 
 namespace Library.Domain.Tests
@@ -16,7 +16,9 @@ namespace Library.Domain.Tests
         [Fact]
         public void Create_Category()
         {
-            Assert.Equal(_categoryName, new Category(_categoryName).Name);
+            var category = new Category(_categoryName);
+            Assert.Equal(_categoryName, category.Name);
+            Assert.Equal(Status.Added, category.Status);
         }
 
         [Fact]
@@ -25,13 +27,18 @@ namespace Library.Domain.Tests
             const string newCategoryName = "old";
             var category = new Category(_categoryName);
             category.UpdateCategory(newCategoryName);
+
             Assert.Equal(newCategoryName, category.Name);
+            Assert.Equal(Status.Updated, category.Status);
         }
 
         [Fact]
         public void Remove_Category()
         {
-            throw new NotImplementedException();
+            var category = new Category(_categoryName);
+            category.RemoveCategory();
+
+            Assert.Equal(Status.Deleted, category.Status);
         }
     }
 }

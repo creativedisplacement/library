@@ -1,4 +1,5 @@
-﻿using Library.Application.Categories.Commands.CreateCategory;
+﻿using FluentValidation.TestHelper;
+using Library.Application.Categories.Commands.CreateCategory;
 using Library.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -32,6 +33,13 @@ namespace Library.Application.Tests.Categories.Commands
             var category = await _context.Categories.SingleOrDefaultAsync(c => c.Name == command.Name);
 
             Assert.Equal(command.Name, category.Name);
+        }
+
+        [Fact]
+        public void Create_Category_With_No_Name_Throws_Exception()
+        {
+            var validator = new CreateCategoryCommandValidator();
+            validator.ShouldHaveValidationErrorFor(x => x.Name, string.Empty);
         }
 
         private LibraryDbContext InitAndGetDbContext()

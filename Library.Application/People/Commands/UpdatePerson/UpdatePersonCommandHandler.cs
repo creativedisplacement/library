@@ -1,5 +1,6 @@
 ﻿using Library.Application.Exceptions;
 using Library.Domain.Entities;
+using Library.Domain.Enums;
 using Library.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -8,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Library.Application.People.Commands.UpdatePerson
 {
-    public class UpdatePersonCommandHandler : IRequestHandler<UpdatePersonCommand, Unit>
+    public class UpdatePersonCommandHandler : BaseCommandHandler, IRequestHandler<UpdatePersonCommand, Unit>
     {
         private readonly LibraryDbContext _context;
 
-        public UpdatePersonCommandHandler(LibraryDbContext context)
+        public UpdatePersonCommandHandler(LibraryDbContext context) : base(context)
         {
             _context = context;
         }
@@ -27,7 +28,7 @@ namespace Library.Application.People.Commands.UpdatePerson
             }
 
             person.UpdatePerson(request.Name, request.Email, request.IsAdmin);
-            _context.Persons.Update(person);
+            SetDomainState(person);
 
             await _context.SaveChangesAsync(cancellationToken);
 

@@ -1,4 +1,5 @@
-﻿using Library.Application.Categories.Commands.UpdateCategory;
+﻿using FluentValidation.TestHelper;
+using Library.Application.Categories.Commands.UpdateCategory;
 using Library.Domain.Entities;
 using Library.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,20 @@ namespace Library.Application.Tests.Categories.Commands
 
             await _commandHandler.Handle(command, CancellationToken.None);
             Assert.Equal(command.Name, (await _context.Categories.FindAsync(command.Id)).Name);
+        }
+
+        [Fact]
+        public void Update_Category_With_No_Id_Throws_Exception()
+        {
+            var validator = new UpdateCategoryCommandValidator();
+            validator.ShouldHaveValidationErrorFor(x => x.Id, Guid.Empty);
+        }
+
+        [Fact]
+        public void Update_Category_With_No_Name_Throws_Exception()
+        {
+            var validator = new UpdateCategoryCommandValidator();
+            validator.ShouldHaveValidationErrorFor(x => x.Name, string.Empty);
         }
 
         private LibraryDbContext InitAndGetDbContext()

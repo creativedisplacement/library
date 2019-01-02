@@ -1,4 +1,5 @@
-﻿using Library.Application.Categories.Commands.DeleteCategory;
+﻿using FluentValidation.TestHelper;
+using Library.Application.Categories.Commands.DeleteCategory;
 using Library.Domain.Entities;
 using Library.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,13 @@ namespace Library.Application.Tests.Categories.Commands
 
             await _commandHandler.Handle(command, CancellationToken.None);
             Assert.Null(await _context.Categories.FindAsync(command.Id));
+        }
+
+        [Fact]
+        public void Delete_Category_With_No_Id_Throws_Exception()
+        {
+            var validator = new DeleteCategoryCommandValidator();
+            validator.ShouldHaveValidationErrorFor(x => x.Id, Guid.Empty);
         }
 
         private LibraryDbContext InitAndGetDbContext()

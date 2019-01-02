@@ -1,4 +1,5 @@
-﻿using Library.Application.People.Commands.DeletePerson;
+﻿using FluentValidation.TestHelper;
+using Library.Application.People.Commands.DeletePerson;
 using Library.Domain.Entities;
 using Library.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,13 @@ namespace Library.Application.Tests.People.Commands
 
             await _commandHandler.Handle(command, CancellationToken.None);
             Assert.Null(await _context.Persons.FindAsync(command.Id));
+        }
+
+        [Fact]
+        public void Delete_Person_With_No_Id_Throws_Exception()
+        {
+            var validator = new DeletePersonCommandValidator();
+            validator.ShouldHaveValidationErrorFor(x => x.Id, Guid.Empty);
         }
 
         private LibraryDbContext InitAndGetDbContext()

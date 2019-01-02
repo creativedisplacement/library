@@ -1,5 +1,6 @@
 ﻿using Library.Application.Exceptions;
 using Library.Domain.Entities;
+using Library.Domain.Enums;
 using Library.Persistence;
 using MediatR;
 using System.Linq;
@@ -8,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Library.Application.Categories.Commands.DeleteCategory
 {
-    public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand>
+    public class DeleteCategoryCommandHandler : BaseCommandHandler, IRequestHandler<DeleteCategoryCommand>
     {
         private readonly LibraryDbContext _context;
 
-        public DeleteCategoryCommandHandler(LibraryDbContext context)
+        public DeleteCategoryCommandHandler(LibraryDbContext context) : base(context)
         {
             _context = context;
         }
@@ -31,9 +32,8 @@ namespace Library.Application.Categories.Commands.DeleteCategory
             {
                 throw new DeleteFailureException(nameof(Category), request.Id, "There are existing books associated with this category.");
             }
-
-            _context.Categories.Remove(category);
-
+            category.RemoveCategory();
+            SetDomainState(category);
             await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;

@@ -1,5 +1,6 @@
 ﻿using Library.Application.Exceptions;
 using Library.Domain.Entities;
+using Library.Domain.Enums;
 using Library.Persistence;
 using MediatR;
 using System.Linq;
@@ -8,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Library.Application.People.Commands.DeletePerson
 {
-    public class DeletePersonCommandHandler : IRequestHandler<DeletePersonCommand>
+    public class DeletePersonCommandHandler : BaseCommandHandler, IRequestHandler<DeletePersonCommand>
     {
         private readonly LibraryDbContext _context;
 
-        public DeletePersonCommandHandler(LibraryDbContext context)
+        public DeletePersonCommandHandler(LibraryDbContext context) : base(context)
         {
             _context = context;
         }
@@ -32,7 +33,8 @@ namespace Library.Application.People.Commands.DeletePerson
                 throw new DeleteFailureException(nameof(Person), request.Id, "This person has borrowed books and cannot be deleted.");
             }
 
-            _context.Persons.Remove(person);
+            person.RemovePerson();
+            SetDomainState(person);
 
             await _context.SaveChangesAsync(cancellationToken);
 

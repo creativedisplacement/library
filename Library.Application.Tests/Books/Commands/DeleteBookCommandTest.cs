@@ -1,4 +1,5 @@
-﻿using Library.Application.Books.Commands.DeleteBook;
+﻿using FluentValidation.TestHelper;
+using Library.Application.Books.Commands.DeleteBook;
 using Library.Domain.Entities;
 using Library.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,13 @@ namespace Library.Application.Tests.Books.Commands
 
             await _commandHandler.Handle(command, CancellationToken.None);
             Assert.Null(await _context.Books.FindAsync(command.Id));
+        }
+
+        [Fact]
+        public void Delete_Book_With_No_Id_Throws_Exception()
+        {
+            var validator = new DeleteBookCommandValidator();
+            validator.ShouldHaveValidationErrorFor(x => x.Id, Guid.Empty);
         }
 
         private LibraryDbContext InitAndGetDbContext()

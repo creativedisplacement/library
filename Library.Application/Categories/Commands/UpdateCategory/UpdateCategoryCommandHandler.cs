@@ -1,5 +1,6 @@
 ﻿using Library.Application.Exceptions;
 using Library.Domain.Entities;
+using Library.Domain.Enums;
 using Library.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -8,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Library.Application.Categories.Commands.UpdateCategory
 {
-    public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, Unit>
+    public class UpdateCategoryCommandHandler : BaseCommandHandler, IRequestHandler<UpdateCategoryCommand, Unit>
     {
         private readonly LibraryDbContext _context;
 
-        public UpdateCategoryCommandHandler(LibraryDbContext context)
+        public UpdateCategoryCommandHandler(LibraryDbContext context) : base(context)
         {
             _context = context;
         }
@@ -27,8 +28,7 @@ namespace Library.Application.Categories.Commands.UpdateCategory
             }
 
             category.UpdateCategory(request.Name);
-            _context.Categories.Update(category);
-
+            SetDomainState(category);
             await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Library.Domain.Entities.Abstract;
+using System;
 using System.Collections.Generic;
-using System.Linq;
+using Library.Domain.Enums;
 
 namespace Library.Domain.Entities
 {
-    public class Book : BaseEntity
+    public class Book : BaseEntity, IAggregateRoot
     {
         public Book()
         {
@@ -21,12 +22,14 @@ namespace Library.Domain.Entities
             Id = id;
             Title = title;
             BookCategories = categories;
+            Status = Status.Added;
         }
 
         public Book(string title, ICollection<BookCategory> categories)
         {
             Title = title;
             BookCategories = categories;
+            Status = Status.Added;
         }
 
         public Book(Guid id, string title, ICollection<BookCategory> categories, Person lender)
@@ -35,6 +38,7 @@ namespace Library.Domain.Entities
             Title = title;
             BookCategories = categories;
             Lender = lender;
+            Status = Status.Added;
         }
 
         public Book(string title, ICollection<BookCategory> categories, Person lender)
@@ -42,6 +46,7 @@ namespace Library.Domain.Entities
             Title = title;
             BookCategories = categories;
             Lender = lender;
+            Status = Status.Added;
         }
 
         public string Title { get; private set; }
@@ -54,21 +59,24 @@ namespace Library.Domain.Entities
         {
             Title = title;
             BookCategories = categories;
+            Status = Status.Updated;
         }
 
         public void RemoveBook()
         {
-
+            Status = Status.Deleted;
         }
 
         public void LendBook(Person lender)
         {
             Lender = lender;
+            Status = Status.Updated;
         }
 
         public void ReturnBook()
         {
             Lender = null;
+            Status = Status.Updated;
         }
     }
 }

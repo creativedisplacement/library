@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Library.Application.Books.Commands.UpdateBook;
-using Library.Application.Exceptions;
+﻿using Library.Application.Exceptions;
 using Library.Domain.Entities;
+using Library.Domain.Enums;
 using Library.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Library.Application.Books.Commands.LendBook
 {
-    public class LendBookCommandHandler : IRequestHandler<LendBookCommand, Unit>
+    public class LendBookCommandHandler : BaseCommandHandler, IRequestHandler<LendBookCommand, Unit>
     {
         private readonly LibraryDbContext _context;
 
-        public LendBookCommandHandler(LibraryDbContext context)
+        public LendBookCommandHandler(LibraryDbContext context) : base(context)
         {
             _context = context;
         }
@@ -43,8 +39,7 @@ namespace Library.Application.Books.Commands.LendBook
             }
 
             book.LendBook(lenderTask.Result);
-            _context.Books.Update(book);
-
+            SetDomainState(book);
             await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;

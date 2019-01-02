@@ -1,4 +1,5 @@
-﻿using Library.Application.Books.Commands.ReturnBook;
+﻿using FluentValidation.TestHelper;
+using Library.Application.Books.Commands.ReturnBook;
 using Library.Domain.Entities;
 using Library.Persistence;
 using System;
@@ -35,6 +36,13 @@ namespace Library.Application.Tests.Books.Commands
             var book = await _context.Books.FindAsync(command.Id);
 
             Assert.Null(book.Lender);
+        }
+
+        [Fact]
+        public void Return_Book_With_No_Id_Throws_Exception()
+        {
+            var validator = new ReturnBookCommandValidator();
+            validator.ShouldHaveValidationErrorFor(x => x.Id, Guid.Empty);
         }
 
         private LibraryDbContext InitAndGetDbContext()

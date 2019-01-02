@@ -1,4 +1,5 @@
-﻿using Library.Application.Books.Commands.LendBook;
+﻿using FluentValidation.TestHelper;
+using Library.Application.Books.Commands.LendBook;
 using Library.Domain.Entities;
 using Library.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +37,20 @@ namespace Library.Application.Tests.Books.Commands
             var book = await _context.Books.FindAsync(command.Id);
 
             Assert.NotNull(book.Lender);
+        }
+
+        [Fact]
+        public void Lend_Book_With_No_Id_Throws_Exception()
+        {
+            var validator = new LendBookCommandValidator();
+            validator.ShouldHaveValidationErrorFor(x => x.Id, Guid.Empty);
+        }
+
+        [Fact]
+        public void Lend_Book_With_No_Lender_Id_Throws_Exception()
+        {
+            var validator = new LendBookCommandValidator();
+            validator.ShouldHaveValidationErrorFor(x => x.LenderId, Guid.Empty);
         }
 
         private LibraryDbContext InitAndGetDbContext()
