@@ -303,3 +303,6 @@ $RECYCLE.BIN/
 *.lnk
 
 Library\.WebApi/Logs/
+
+#SQLite3 database
+*.db

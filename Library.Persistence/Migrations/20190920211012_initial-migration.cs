@@ -8,13 +8,28 @@ namespace Library.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    LastUpdated = table.Column<DateTime>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Persons",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     LastUpdated = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(maxLength: 20, nullable: false),
-                    Email = table.Column<string>(maxLength: 50, nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
                     IsAdmin = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -28,7 +43,8 @@ namespace Library.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     LastUpdated = table.Column<DateTime>(nullable: false),
-                    Title = table.Column<string>(maxLength: 50, nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    Title = table.Column<string>(nullable: true),
                     LenderId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
@@ -43,43 +59,50 @@ namespace Library.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Categories",
+                name: "BookCategories",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    LastUpdated = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
-                    BookId = table.Column<Guid>(nullable: true)
+                    BookId = table.Column<Guid>(nullable: false),
+                    CategoryId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
+                    table.PrimaryKey("PK_BookCategories", x => new { x.BookId, x.CategoryId });
                     table.ForeignKey(
-                        name: "FK_Categories_Books_BookId",
+                        name: "FK_BookCategories_Books_BookId",
                         column: x => x.BookId,
                         principalTable: "Books",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BookCategories_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookCategories_CategoryId",
+                table: "BookCategories",
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Books_LenderId",
                 table: "Books",
                 column: "LenderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Categories_BookId",
-                table: "Categories",
-                column: "BookId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "BookCategories");
 
             migrationBuilder.DropTable(
                 name: "Books");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Persons");

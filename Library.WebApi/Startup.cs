@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using FluentValidation.AspNetCore;
 using Library.Application.Books.Commands.CreateBook;
 using Library.Application.Categories.Queries.GetCategories;
@@ -15,7 +11,6 @@ using MediatR.Pipeline;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -48,9 +43,8 @@ namespace Library.WebApi
                 options.SuppressModelStateInvalidFilter = true;
             });
 
-
             services.AddDbContext<LibraryDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("LibraryDB")));
+                options.UseSqlite(Configuration.GetConnectionString("LibraryDB")));
 
             services.Configure<CookiePolicyOptions>(options =>
             {

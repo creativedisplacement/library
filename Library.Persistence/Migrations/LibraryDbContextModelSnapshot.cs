@@ -15,7 +15,7 @@ namespace Library.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -27,6 +27,8 @@ namespace Library.Persistence.Migrations
                     b.Property<DateTime>("LastUpdated");
 
                     b.Property<Guid?>("LenderId");
+
+                    b.Property<int>("Status");
 
                     b.Property<string>("Title");
 
@@ -59,6 +61,8 @@ namespace Library.Persistence.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<int>("Status");
+
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
@@ -76,6 +80,8 @@ namespace Library.Persistence.Migrations
                     b.Property<DateTime>("LastUpdated");
 
                     b.Property<string>("Name");
+
+                    b.Property<int>("Status");
 
                     b.HasKey("Id");
 

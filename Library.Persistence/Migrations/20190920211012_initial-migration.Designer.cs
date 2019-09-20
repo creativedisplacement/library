@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Library.Persistence.Migrations
 {
     [DbContext(typeof(LibraryDbContext))]
-    [Migration("20181202193431_initial-migration")]
+    [Migration("20190920211012_initial-migration")]
     partial class initialmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-preview3-35497")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -30,9 +30,9 @@ namespace Library.Persistence.Migrations
 
                     b.Property<Guid?>("LenderId");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(50);
+                    b.Property<int>("Status");
+
+                    b.Property<string>("Title");
 
                     b.HasKey("Id");
 
@@ -41,22 +41,31 @@ namespace Library.Persistence.Migrations
                     b.ToTable("Books");
                 });
 
+            modelBuilder.Entity("Library.Domain.Entities.BookCategory", b =>
+                {
+                    b.Property<Guid>("BookId");
+
+                    b.Property<Guid>("CategoryId");
+
+                    b.HasKey("BookId", "CategoryId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("BookCategories");
+                });
+
             modelBuilder.Entity("Library.Domain.Entities.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("BookId");
-
                     b.Property<DateTime>("LastUpdated");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50);
+                    b.Property<string>("Name");
+
+                    b.Property<int>("Status");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BookId");
 
                     b.ToTable("Categories");
                 });
@@ -66,17 +75,15 @@ namespace Library.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(50);
+                    b.Property<string>("Email");
 
                     b.Property<bool>("IsAdmin");
 
                     b.Property<DateTime>("LastUpdated");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(20);
+                    b.Property<string>("Name");
+
+                    b.Property<int>("Status");
 
                     b.HasKey("Id");
 
@@ -86,15 +93,21 @@ namespace Library.Persistence.Migrations
             modelBuilder.Entity("Library.Domain.Entities.Book", b =>
                 {
                     b.HasOne("Library.Domain.Entities.Person", "Lender")
-                        .WithMany()
+                        .WithMany("Books")
                         .HasForeignKey("LenderId");
                 });
 
-            modelBuilder.Entity("Library.Domain.Entities.Category", b =>
+            modelBuilder.Entity("Library.Domain.Entities.BookCategory", b =>
                 {
-                    b.HasOne("Library.Domain.Entities.Book")
-                        .WithMany("Categories")
-                        .HasForeignKey("BookId");
+                    b.HasOne("Library.Domain.Entities.Book", "Book")
+                        .WithMany("BookCategories")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Library.Domain.Entities.Category", "Category")
+                        .WithMany("BookCategories")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

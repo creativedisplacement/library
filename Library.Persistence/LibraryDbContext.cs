@@ -1,7 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Library.Domain.Entities;
-using Library.Domain.Enums;
+﻿using Library.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Persistence
