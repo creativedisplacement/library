@@ -6,7 +6,10 @@ namespace Library.Application.Books.Commands.CreateBook
     {
         public CreateBookCommandValidator()
         {
-            RuleFor(x => x.Title).Length(50).NotEmpty();
+            RuleFor(x => x.Title)
+                .MinimumLength(3)
+                .MaximumLength(50)
+                .NotEmpty();
             RuleFor(x => x.Categories).NotEmpty();
         }
     }

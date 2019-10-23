@@ -29,7 +29,7 @@ namespace Library.Application.Books.Queries.GetBooks
                 books = books.Where(b => b.Title.Contains(request.Title));
             }
 
-            if (request.CategoryIds.Any())
+            if (request.CategoryIds != null && request.CategoryIds.Any())
             {
                 books = books.Where(b =>
                     b.BookCategories.Any(bc => request.CategoryIds.Any(c => bc.CategoryId == c)));
@@ -49,7 +49,6 @@ namespace Library.Application.Books.Queries.GetBooks
             {
                 Books = await books
                     .Select(b => new GetBookModel {Id = b.Id, Title = b.Title, Categories = b.BookCategories.Select(c => new GetBookModelCategory{ Id = c.CategoryId, Name = c.Category.Name})})
-                    .Include(i => i.Categories)
                     .OrderBy(b => b.Title)
                     .ToListAsync(cancellationToken)
             };

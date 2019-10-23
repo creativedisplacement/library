@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Library.Application.Books.Commands.UpdateBook
 {
-    public class UpdateBookCommand : IRequest
+    public class UpdateBookCommand : IRequest<UpdateBookModel>
     {
         public Guid Id { get; set; }
         public string Title { get; set; }

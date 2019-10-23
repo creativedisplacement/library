@@ -12,20 +12,20 @@ using GetPersonModel = Library.Application.People.Queries.GetPeople.GetPersonMod
 
 namespace Library.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class PersonController :  BaseController
     {
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<GetPeopleModel>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<GetPeopleModel>> GetAll(string name, string email, bool? isAdmin)
+        public async Task<IActionResult> GetAll(string name, string email, bool? isAdmin)
         {
             return Ok(await Mediator.Send(new GetPeopleQuery{ Name = name, Email = email, IsAdmin = isAdmin}));
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(GetPersonModel), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<GetPersonModel>> GetCategory(Guid id)
+        public async Task<IActionResult> GetCategory(Guid id)
         {
             return Ok(await Mediator.Send(new GetPersonQuery { Id = id }));
         }

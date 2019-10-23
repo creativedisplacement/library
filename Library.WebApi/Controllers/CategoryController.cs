@@ -11,20 +11,20 @@ using System.Threading.Tasks;
 
 namespace Library.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class CategoryController : BaseController
     {
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<GetCategoriesModel>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<GetCategoriesModel>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
             return Ok(await Mediator.Send(new GetCategoriesQuery()));
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(GetCategoryModel), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<GetCategoryModel>> GetCategory(Guid id)
+        public async Task<IActionResult> GetCategory(Guid id)
         {
             return Ok(await Mediator.Send(new GetCategoryQuery { Id = id }));
         }
