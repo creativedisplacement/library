@@ -73,8 +73,8 @@ namespace Library.Persistence
         {
             var people = new[]
             {
-                new Person("Victor","victor@shodimeji.com", true),
-                new Person("Tunde","tunde@ayoola.com", false),
+                new Person("Victor","victor@victor.com", true),
+                new Person("Tunde","tunde@tunde.com", false),
             };
             context.Persons.AddRange(people);
             context.SaveChanges();
