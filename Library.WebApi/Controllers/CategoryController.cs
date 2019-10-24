@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 namespace Library.WebApi.Controllers
 {
     [Route("api/v1/[controller]")]
-    [ApiController]
     public class CategoryController : BaseController
     {
         [HttpGet]
@@ -32,27 +31,34 @@ namespace Library.WebApi.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
         public async Task<IActionResult> Create([FromBody]CreateCategoryCommand command)
         {
             await Mediator.Send(command);
-            return NoContent();
+            return Ok();
         }
 
         [HttpPut("{id}")]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> Update(Guid id, [FromBody]UpdateCategoryCommand command)
         {
             await Mediator.Send(command);
-            return NoContent();
+            return Ok();
         }
 
         [HttpDelete("{id}")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         public async Task<IActionResult> Delete(Guid id)
         {
-            await Mediator.Send(new DeleteCategoryCommand { Id = id });
-            return NoContent();
+            try
+            {
+                await Mediator.Send(new DeleteCategoryCommand { Id = id });
+                return NoContent();
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
+            }
         }
     }
 }

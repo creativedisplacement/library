@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 namespace Library.WebApi.Controllers
 {
     [Route("api/v1/[controller]")]
-    [ApiController]
     public class BookController : BaseController
     {
         [HttpGet]
@@ -25,6 +24,7 @@ namespace Library.WebApi.Controllers
         }
 
         [HttpGet("{id}", Name = "test")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetBook(Guid id)
         {
             var book = await Mediator.Send(new GetBookQuery { Id = id });
@@ -36,6 +36,7 @@ namespace Library.WebApi.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
         public async Task<IActionResult> Create([FromBody]CreateBookCommand command)
         {
             var book = await Mediator.Send(command);
@@ -43,7 +44,7 @@ namespace Library.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> Update(Guid id, [FromBody]UpdateBookCommand command)
         {
             try
@@ -57,27 +58,34 @@ namespace Library.WebApi.Controllers
         }
 
         [HttpPut("lend/{id}")]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> LendBook(Guid id, [FromBody]LendBookCommand command)
         {
             await Mediator.Send(command);
-            return NoContent();
+            return Ok();
         }
 
         [HttpPut("return/{id}")]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> LendBook(Guid id, [FromBody]ReturnBookCommand command)
         {
             await Mediator.Send(command);
-            return NoContent();
+            return Ok();
         }
 
         [HttpDelete("{id}")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         public async Task<IActionResult> Delete(Guid id)
         {
-            await Mediator.Send(new DeleteBookCommand { Id = id });
-            return NoContent();
+            try
+            {
+                await Mediator.Send(new DeleteBookCommand { Id = id });
+                return NoContent();
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
+            }
         }
     }
 }
