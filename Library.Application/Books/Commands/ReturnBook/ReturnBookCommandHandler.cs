@@ -1,5 +1,7 @@
 ﻿using Library.Application.Exceptions;
+using Library.Common.Book.Commands.ReturnBook;
 using Library.Common.Book.Queries.GetBook;
+using Library.Common.People.Queries.GetPerson;
 using Library.Domain.Entities;
 using Library.Persistence;
 using MediatR;
@@ -10,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Library.Application.Books.Commands.ReturnBook
 {
-    public class ReturnBookCommandHandler : BaseCommandHandler, IRequestHandler<ReturnBookCommand, GetBookModel>
+    public class ReturnBookCommandHandler : BaseCommandHandler, IRequestHandler<ReturnBookCommand, ReturnBookModel>
     {
         private readonly LibraryDbContext _context;
 
@@ -19,9 +21,13 @@ namespace Library.Application.Books.Commands.ReturnBook
             _context = context;
         }
 
-        public async Task<GetBookModel> Handle(ReturnBookCommand request, CancellationToken cancellationToken)
+        public async Task<ReturnBookModel> Handle(ReturnBookCommand request, CancellationToken cancellationToken)
         {
-            var book = await _context.Books.Include(i => i.Lender).SingleAsync(c => c.Id == request.Id, cancellationToken);
+            var book = await _context.Books
+                .Include(i => i.Lender)
+                .Include(i => i.BookCategories)
+                .ThenInclude(i => i.Category)
+                .SingleAsync(c => c.Id == request.Id, cancellationToken);
 
             if (book == null)
             {
@@ -32,11 +38,16 @@ namespace Library.Application.Books.Commands.ReturnBook
             SetDomainState(book);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new GetBookModel
+            return new ReturnBookModel
             {
                 Id = book.Id,
                 Title = book.Title,
-                Categories = book.BookCategories.Select(c => new GetBookModelCategory { Id = c.CategoryId, Name = c.Category.Name }).ToList()
+                Categories = book.BookCategories.Select(c => new GetBookModelCategory
+                {
+                    Id = c.CategoryId, 
+                    Name = c.Category.Name
+                }).ToList(),
+                Lender = null
             };
         }
     }

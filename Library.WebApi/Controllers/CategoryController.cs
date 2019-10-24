@@ -11,7 +11,7 @@ namespace Library.WebApi.Controllers
     [Route("api/v1/[controller]")]
     public class CategoryController : BaseController
     {
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetCategory")]
         public async Task<IActionResult> GetCategory(Guid id)
         {
             try

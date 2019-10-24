@@ -11,7 +11,7 @@ namespace Library.WebApi.Controllers
     [Route("api/v1/[controller]")]
     public class BookController : BaseController
     {
-        [HttpGet("{id}", Name = "test")]
+        [HttpGet("{id}", Name = "GetBook")]
         public async Task<IActionResult> GetBook(Guid id)
         {
             var book = await Mediator.Send(new GetBookQuery { Id = id });
@@ -26,7 +26,7 @@ namespace Library.WebApi.Controllers
         public async Task<IActionResult> Create([FromBody]CreateBookCommand command)
         {
             var book = await Mediator.Send(command);
-            return CreatedAtRoute("test", new {id = book.Id}, book);
+            return CreatedAtRoute("GetBook", new {id = book.Id}, book);
         }
 
         [HttpPut("{id}")]

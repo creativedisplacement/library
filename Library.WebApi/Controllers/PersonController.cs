@@ -11,7 +11,7 @@ namespace Library.WebApi.Controllers
     [Route("api/v1/[controller]")]
     public class PersonController :  BaseController
     {
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetPerson")]
         public async Task<IActionResult> GetPerson(Guid id)
         {
             try
