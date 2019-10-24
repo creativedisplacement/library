@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Library.Common.People.Queries.GetPeople;
+using MediatR;
 
 namespace Library.Application.People.Queries.GetPeople
 {

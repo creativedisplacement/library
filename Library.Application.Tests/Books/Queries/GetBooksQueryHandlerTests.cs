@@ -1,5 +1,6 @@
 ﻿using Library.Application.Books.Queries.GetBooks;
 using Library.Application.Tests.Infrastructure;
+using Library.Common.Book.Queries.GetBooks;
 using Library.Persistence;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
-using GetBooksModel = Library.Application.Books.Queries.GetBooks.GetBooksModel;
 
 namespace Library.Application.Tests.Books.Queries
 {

@@ -3,6 +3,8 @@ using Library.Application.Categories.Commands.DeleteCategory;
 using Library.Application.Categories.Commands.UpdateCategory;
 using Library.Application.Categories.Queries.GetCategories;
 using Library.Application.Categories.Queries.GetCategory;
+using Library.Common.Categories.Queries.GetCategories;
+using Library.Common.Categories.Queries.GetCategory;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;

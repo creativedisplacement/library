@@ -1,7 +1,7 @@
-﻿using Library.Domain.Entities;
+﻿using Library.Common.Book.Commands.CreateBook;
+using Library.Common.Book.Queries.GetBook;
 using MediatR;
 using System.Collections.Generic;
-using Library.Application.Books.Queries.GetBook;
 
 namespace Library.Application.Books.Commands.CreateBook
 {

@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
+using Library.Common.Book.Queries.GetBook;
 
 namespace Library.Application.Books.Queries.GetBook
 {

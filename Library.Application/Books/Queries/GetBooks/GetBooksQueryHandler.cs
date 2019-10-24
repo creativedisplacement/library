@@ -1,4 +1,5 @@
-﻿using Library.Domain.Entities;
+﻿using Library.Common.Book.Queries.GetBooks;
+using Library.Domain.Entities;
 using Library.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

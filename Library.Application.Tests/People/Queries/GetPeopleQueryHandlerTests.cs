@@ -1,5 +1,6 @@
 ﻿using Library.Application.People.Queries.GetPeople;
 using Library.Application.Tests.Infrastructure;
+using Library.Common.People.Queries.GetPeople;
 using Library.Persistence;
 using System.Linq;
 using System.Threading;

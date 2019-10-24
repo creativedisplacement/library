@@ -1,11 +1,11 @@
-﻿using Library.Persistence;
+﻿using Library.Common.People.Queries.GetPeople;
+using Library.Domain.Entities;
+using Library.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Library.Domain.Entities;
 
 namespace Library.Application.People.Queries.GetPeople
 {

@@ -1,5 +1,7 @@
 ﻿using Library.Application.Books.Commands.CreateBook;
 using Library.Application.Books.Commands.DeleteBook;
+using Library.Application.Books.Commands.LendBook;
+using Library.Application.Books.Commands.ReturnBook;
 using Library.Application.Books.Commands.UpdateBook;
 using Library.Application.Books.Queries.GetBook;
 using Library.Application.Books.Queries.GetBooks;
@@ -8,10 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using Library.Application.Books.Commands.LendBook;
-using Library.Application.Books.Commands.ReturnBook;
-using Library.Domain.Entities;
-using GetBookModel = Library.Application.Books.Queries.GetBook.GetBookModel;
 
 namespace Library.WebApi.Controllers
 {

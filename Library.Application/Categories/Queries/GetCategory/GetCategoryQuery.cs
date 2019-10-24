@@ -1,5 +1,6 @@
-﻿using System;
+﻿using Library.Common.Categories.Queries.GetCategory;
 using MediatR;
+using System;
 
 namespace Library.Application.Categories.Queries.GetCategory
 {

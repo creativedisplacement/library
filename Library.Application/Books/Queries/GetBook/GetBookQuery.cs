@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Library.Common.Book.Queries.GetBook;
+using MediatR;
 using System;
 
 namespace Library.Application.Books.Queries.GetBook

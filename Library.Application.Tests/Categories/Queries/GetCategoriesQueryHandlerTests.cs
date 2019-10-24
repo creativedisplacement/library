@@ -1,5 +1,6 @@
 ﻿using Library.Application.Categories.Queries.GetCategories;
 using Library.Application.Tests.Infrastructure;
+using Library.Common.Categories.Queries.GetCategories;
 using Library.Persistence;
 using System.Linq;
 using System.Threading;

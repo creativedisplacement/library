@@ -1,9 +1,10 @@
-﻿using System.Linq;
-using Library.Application.Exceptions;
+﻿using Library.Application.Exceptions;
+using Library.Common.Categories.Queries.GetCategory;
 using Library.Domain.Entities;
 using Library.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Library.Application.Categories.Queries.GetCategory
+namespace Library.Common.Categories.Queries.GetCategory
 {
     public class GetCategoryModel
     {

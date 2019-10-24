@@ -1,0 +1,20 @@
+﻿using Library.Common.People.Queries.GetPerson;
+using System.Collections.Generic;
+
+namespace Library.Common.Book.Queries.GetBooks
+{
+    public class GetBooksModel
+    {
+        public IEnumerable<GetBookModel> Books { get; set; }
+    }
+
+    public class GetBookModel : BaseModelTitleItem
+    {
+        public IEnumerable<GetBookModelCategory> Categories { get; set; } = new List<GetBookModelCategory>();
+        public GetPersonBookModel Lender { get; set; }
+    }
+
+    public class GetBookModelCategory : BaseModelNameItem
+    {
+    }
+}

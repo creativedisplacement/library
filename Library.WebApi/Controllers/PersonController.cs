@@ -3,12 +3,12 @@ using Library.Application.People.Commands.DeletePerson;
 using Library.Application.People.Commands.UpdatePerson;
 using Library.Application.People.Queries.GetPeople;
 using Library.Application.People.Queries.GetPerson;
+using Library.Common.People.Queries.GetPeople;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using GetPersonModel = Library.Application.People.Queries.GetPeople.GetPersonModel;
 
 namespace Library.WebApi.Controllers
 {

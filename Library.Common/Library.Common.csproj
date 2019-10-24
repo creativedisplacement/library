@@ -4,4 +4,18 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Book\Commands\DeleteBook\" />
+    <Folder Include="Book\Commands\LendBook\" />
+    <Folder Include="Book\Commands\ReturnBook\" />
+    <Folder Include="Categories\Commands\" />
+    <Folder Include="Categories\Commands\CreateCategory\" />
+    <Folder Include="Categories\Commands\DeleteCategory\" />
+    <Folder Include="Categories\Commands\UpdateCategory\" />
+    <Folder Include="People\Commands\" />
+    <Folder Include="People\Commands\CreatePerson\" />
+    <Folder Include="People\Commands\DeletePerson\" />
+    <Folder Include="People\Commands\UpdatePerson\" />
+  </ItemGroup>
+
 </Project>
