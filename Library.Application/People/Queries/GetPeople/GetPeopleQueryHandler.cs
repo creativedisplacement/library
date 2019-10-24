@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Library.Common.People.Queries.GetPerson;
 
 namespace Library.Application.People.Queries.GetPeople
 {
@@ -40,7 +41,7 @@ namespace Library.Application.People.Queries.GetPeople
             return new GetPeopleModel()
             {
                 People = await people
-                    .Select(p => new GetPersonModel() { Id = p.Id, Name = p.Name, Email = p.Email, IsAdmin = p.IsAdmin})
+                    .Select(p => new GetPersonModel { Id = p.Id, Name = p.Name, Email = p.Email, IsAdmin = p.IsAdmin})
                     .OrderBy(p => p.Name)
                     .ToListAsync(cancellationToken)
             };

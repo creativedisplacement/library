@@ -4,6 +4,7 @@ using Library.Application.People.Commands.UpdatePerson;
 using Library.Application.People.Queries.GetPeople;
 using Library.Application.People.Queries.GetPerson;
 using Library.Common.People.Queries.GetPeople;
+using Library.Common.People.Queries.GetPerson;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;

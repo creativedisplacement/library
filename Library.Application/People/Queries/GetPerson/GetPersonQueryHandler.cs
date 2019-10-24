@@ -36,7 +36,7 @@ namespace Library.Application.People.Queries.GetPerson
                 Name = person.Name,
                 Email = person.Email,
                 IsAdmin = person.IsAdmin,
-                Books = person.Books.Select(b => new GetPersonBookModel { Id = b.Id, Title = b.Title }).ToList()
+                Books = person.Books.Select(b => new GetPersonBookModel { Id = b.Id }).ToList()
             };
         }
     }
