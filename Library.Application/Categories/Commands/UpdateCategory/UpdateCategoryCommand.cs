@@ -1,11 +1,9 @@
-﻿using System;
+﻿using Library.Common;
 using MediatR;
 
 namespace Library.Application.Categories.Commands.UpdateCategory
 {
-    public class UpdateCategoryCommand : IRequest
+    public class UpdateCategoryCommand : BaseNameItem, IRequest
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
     }
 }

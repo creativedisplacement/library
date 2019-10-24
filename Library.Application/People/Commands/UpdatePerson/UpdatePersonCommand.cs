@@ -1,13 +1,9 @@
-﻿using MediatR;
-using System;
+﻿using Library.Common;
+using MediatR;
 
 namespace Library.Application.People.Commands.UpdatePerson
 {
-    public class UpdatePersonCommand : IRequest
+    public class UpdatePersonCommand : BasePersonItem, IRequest
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public bool IsAdmin { get; set; }
     }
 }

@@ -1,10 +1,9 @@
-﻿using MediatR;
-using System;
+﻿using Library.Common;
+using MediatR;
 
 namespace Library.Application.Books.Commands.ReturnBook
 {
-    public class ReturnBookCommand : IRequest
+    public class ReturnBookCommand : BaseItem, IRequest
     {
-        public Guid Id { get; set; }
     }
 }

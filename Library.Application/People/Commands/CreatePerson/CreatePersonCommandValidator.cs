@@ -6,7 +6,10 @@ namespace Library.Application.People.Commands.CreatePerson
     {
         public CreatePersonCommandValidator()
         {
-            RuleFor(x => x.Name).Length(20).NotEmpty();
+            RuleFor(x => x.Name)
+                .MinimumLength(3)
+                .MaximumLength(20)
+                .NotEmpty();
             RuleFor(x => x.Email)
                 .NotEmpty()
                 .WithMessage("Email address cannot be empty")

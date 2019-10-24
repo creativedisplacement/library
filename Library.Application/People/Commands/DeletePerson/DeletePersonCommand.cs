@@ -1,10 +1,9 @@
-﻿using MediatR;
-using System;
+﻿using Library.Common;
+using MediatR;
 
 namespace Library.Application.People.Commands.DeletePerson
 {
-    public class DeletePersonCommand : IRequest
+    public class DeletePersonCommand : BaseItem, IRequest
     {
-        public Guid Id { get; set; }
     }
 }

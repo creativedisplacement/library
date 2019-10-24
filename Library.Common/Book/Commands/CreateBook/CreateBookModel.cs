@@ -2,12 +2,12 @@
 
 namespace Library.Common.Book.Commands.CreateBook
 {
-    public class CreateBookModel : BaseModelTitleItem
+    public class CreateBookModel : BaseTitleItem
     {
         public virtual ICollection<CreateBookModelCategory> Categories { get; set; } = new List<CreateBookModelCategory>();
     }
 
-    public class CreateBookModelCategory : BaseModelNameItem
+    public class CreateBookModelCategory : BaseNameItem
     {
     }
 }

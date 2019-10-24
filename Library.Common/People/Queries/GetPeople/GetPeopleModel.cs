@@ -7,7 +7,8 @@ namespace Library.Common.People.Queries.GetPeople
         public IEnumerable<GetPersonModel> People { get; set; }
     }
 
-    public class GetPersonModel : BaseModelPersonItem
+    public class GetPersonModel : BasePersonItem
     {
+        public new bool? IsAdmin { get; set; }
     }
 }

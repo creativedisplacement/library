@@ -7,7 +7,7 @@ namespace Library.Domain.Entities
     public class Person : BaseEntity, IAggregateRoot
     {
 
-        public Person(string name, string email, bool isAdmin)
+        public Person(string name, string email, bool? isAdmin)
         {
             Name = name;
             Email = email;
@@ -18,10 +18,10 @@ namespace Library.Domain.Entities
 
         public string Name { get; private set; }
         public string Email { get; private set; }
-        public bool IsAdmin { get; private set; }
+        public bool? IsAdmin { get; private set; }
         public ICollection<Book> Books { get; set; }
 
-        public void UpdatePerson(string name, string email, bool isAdmin)
+        public void UpdatePerson(string name, string email, bool? isAdmin)
         {
             Name = name;
             Email = email;

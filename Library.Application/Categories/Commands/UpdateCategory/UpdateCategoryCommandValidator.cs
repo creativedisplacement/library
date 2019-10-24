@@ -7,7 +7,10 @@ namespace Library.Application.Categories.Commands.UpdateCategory
         public UpdateCategoryCommandValidator()
         {
             RuleFor(x => x.Id).NotEmpty();
-            RuleFor(x => x.Name).Length(50).NotEmpty();
+            RuleFor(x => x.Name)
+                .MinimumLength(3)
+                .MaximumLength(50)
+                .NotEmpty();
         }
     }
 }

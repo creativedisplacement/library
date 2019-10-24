@@ -8,13 +8,13 @@ namespace Library.Common.Book.Queries.GetBooks
         public IEnumerable<GetBookModel> Books { get; set; }
     }
 
-    public class GetBookModel : BaseModelTitleItem
+    public class GetBookModel : BaseTitleItem
     {
         public IEnumerable<GetBookModelCategory> Categories { get; set; } = new List<GetBookModelCategory>();
         public GetPersonBookModel Lender { get; set; }
     }
 
-    public class GetBookModelCategory : BaseModelNameItem
+    public class GetBookModelCategory : BaseNameItem
     {
     }
 }

@@ -7,7 +7,10 @@ namespace Library.Application.People.Commands.UpdatePerson
         public UpdatePersonCommandValidator()
         {
             RuleFor(x => x.Id).NotEmpty();
-            RuleFor(x => x.Name).Length(20).NotEmpty();
+            RuleFor(x => x.Name)
+                .MinimumLength(3)
+                .MaximumLength(20)
+                .NotEmpty();
             RuleFor(x => x.Email)
                 .NotEmpty()
                 .WithMessage("Email address cannot be empty")

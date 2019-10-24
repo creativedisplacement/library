@@ -1,11 +1,9 @@
-﻿using MediatR;
+﻿using Library.Common;
+using MediatR;
 
 namespace Library.Application.People.Commands.CreatePerson
 {
-    public class CreatePersonCommand : IRequest
+    public class CreatePersonCommand : BasePersonItem, IRequest
     {
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public bool IsAdmin { get; set; }
     }
 }

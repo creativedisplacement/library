@@ -1,11 +1,11 @@
-﻿using MediatR;
+﻿using Library.Common;
+using MediatR;
 using System;
 
 namespace Library.Application.Books.Commands.LendBook
 {
-    public class LendBookCommand : IRequest
+    public class LendBookCommand : BaseItem, IRequest
     {
-        public Guid Id { get; set; }
         public Guid LenderId { get; set; }
     }
 }

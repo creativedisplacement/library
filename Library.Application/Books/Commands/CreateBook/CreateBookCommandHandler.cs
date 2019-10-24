@@ -1,9 +1,7 @@
-﻿using Library.Common.Book.Commands.CreateBook;
-using Library.Common.Book.Queries.GetBook;
+﻿using Library.Common.Book.Queries.GetBook;
 using Library.Domain.Entities;
 using Library.Persistence;
 using MediatR;
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,28 +19,15 @@ namespace Library.Application.Books.Commands.CreateBook
 
         public async Task<GetBookModel> Handle(CreateBookCommand request, CancellationToken cancellationToken)
         {
-            var book = new Book(request.Title, request.Categories.Select(c => new BookCategory{ CategoryId = c.Id}).ToList());
+            var book = new Book(request.Title, request.Categories.Select(c => new BookCategory{ CategoryId = c.Id, Category = new Category(c.Name)}).ToList());
             SetDomainState(book);
             await _context.SaveChangesAsync(cancellationToken);
-            try
-            {
-                var x = new CreateBookModel
-                {
-                    Id = book.Id,
-                    Title = book.Title,
-                    //Categories = book.BookCategories.Select(c => new CreateBookModelCategory { Id = c.CategoryId, Name = c.Category.Name }).ToList()
-                };
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+
             return new GetBookModel
             {
                 Id = book.Id,
                 Title = book.Title,
-                //Categories = book.BookCategories.Select(c => new CreateBookModelCategory { Id = c.CategoryId, Name = c.Category.Name }).ToList()
+                Categories = book.BookCategories.Select(c => new GetBookModelCategory { Id = c.CategoryId, Name = c.Category.Name}).ToList()
             };
         }
     }

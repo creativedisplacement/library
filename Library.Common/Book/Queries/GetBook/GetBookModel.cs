@@ -2,12 +2,12 @@
 
 namespace Library.Common.Book.Queries.GetBook
 {
-    public class GetBookModel : BaseModelTitleItem
+    public class GetBookModel : BaseTitleItem
     {
-        public virtual ICollection<GetBookModelCategory> Categories { get; set; } = new List<GetBookModelCategory>();
+        public virtual ICollection<GetBookModelCategory> Categories { get; set; }
     }
 
-    public class GetBookModelCategory : BaseModelNameItem
+    public class GetBookModelCategory : BaseNameItem
     { 
     }
 }

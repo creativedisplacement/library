@@ -2,7 +2,7 @@
 
 namespace Library.Common
 {
-    public abstract class BaseModelItem 
+    public abstract class BaseItem 
     {
         public Guid Id { get; set; }
 

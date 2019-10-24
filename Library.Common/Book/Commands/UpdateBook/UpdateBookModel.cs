@@ -2,12 +2,12 @@
 
 namespace Library.Common.Book.Commands.UpdateBook
 {
-    public class UpdateBookModel : BaseModelTitleItem
+    public class UpdateBookModel : BaseTitleItem
     {
         public virtual ICollection<UpdateBookModelCategory> Categories { get; set; } = new List<UpdateBookModelCategory>();
     }
 
-    public class UpdateBookModelCategory : BaseModelNameItem
+    public class UpdateBookModelCategory : BaseNameItem
     {
     }
 }

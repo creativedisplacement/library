@@ -1,11 +1,10 @@
-﻿using Library.Common.Categories.Queries.GetCategory;
+﻿using Library.Common;
+using Library.Common.Categories.Queries.GetCategory;
 using MediatR;
-using System;
 
 namespace Library.Application.Categories.Queries.GetCategory
 {
-    public class GetCategoryQuery : IRequest<GetCategoryModel>
+    public class GetCategoryQuery : BaseItem, IRequest<GetCategoryModel>
     {
-        public Guid Id { get; set; }
     }
 }

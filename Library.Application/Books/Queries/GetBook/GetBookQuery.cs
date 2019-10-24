@@ -1,11 +1,10 @@
-﻿using Library.Common.Book.Queries.GetBook;
+﻿using Library.Common;
+using Library.Common.Book.Queries.GetBook;
 using MediatR;
-using System;
 
 namespace Library.Application.Books.Queries.GetBook
 {
-    public class GetBookQuery : IRequest<GetBookModel>
+    public class GetBookQuery : BaseTitleItem, IRequest<GetBookModel>
     {
-        public Guid Id { get; set; }
     }
 }

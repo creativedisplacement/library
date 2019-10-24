@@ -2,12 +2,12 @@
 
 namespace Library.Common.People.Queries.GetPerson
 {
-    public class GetPersonModel : BaseModelPersonItem
+    public class GetPersonModel : BasePersonItem
     {
         public ICollection<GetPersonBookModel> Books { get; set; }
     }
 
-    public class GetPersonBookModel : BaseModelTitleItem
+    public class GetPersonBookModel : BaseTitleItem
     {
     }
 }

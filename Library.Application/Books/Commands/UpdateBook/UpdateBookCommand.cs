@@ -1,15 +1,12 @@
-﻿using Library.Common.Book.Commands.UpdateBook;
-using Library.Domain.Entities;
+﻿using Library.Common;
+using Library.Common.Book.Queries.GetBook;
 using MediatR;
-using System;
 using System.Collections.Generic;
 
 namespace Library.Application.Books.Commands.UpdateBook
 {
-    public class UpdateBookCommand : IRequest<UpdateBookModel>
+    public class UpdateBookCommand : BaseTitleItem, IRequest<GetBookModel>
     {
-        public Guid Id { get; set; }
-        public string Title { get; set; }
-        public ICollection<BookCategory> Categories { get; set; }
+        public ICollection<GetBookModelCategory> Categories { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Library.Common
 {
-    public abstract class BaseModelTitleItem : BaseModelItem
+    public abstract class BaseTitleItem : BaseItem
     {
         public string Title { get; set; }
     }

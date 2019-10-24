@@ -1,11 +1,10 @@
-﻿using MediatR;
-using System;
+﻿using Library.Common;
 using Library.Common.People.Queries.GetPerson;
+using MediatR;
 
 namespace Library.Application.People.Queries.GetPerson
 {
-    public class GetPersonQuery : IRequest<GetPersonModel>
+    public class GetPersonQuery : BaseItem, IRequest<GetPersonModel>
     {
-        public Guid Id { get; set; }
     }
 }

@@ -7,10 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Library.Common.Book.Queries.GetBook;
 
 namespace Library.Application.Books.Commands.UpdateBook
 {
-    public class UpdateBookCommandHandler : BaseCommandHandler, IRequestHandler<UpdateBookCommand, UpdateBookModel>
+    public class UpdateBookCommandHandler : BaseCommandHandler, IRequestHandler<UpdateBookCommand, GetBookModel>
     {
         private readonly LibraryDbContext _context;
 
@@ -19,7 +20,7 @@ namespace Library.Application.Books.Commands.UpdateBook
             _context = context;
         }
 
-        public async Task<UpdateBookModel> Handle(UpdateBookCommand request, CancellationToken cancellationToken)
+        public async Task<GetBookModel> Handle(UpdateBookCommand request, CancellationToken cancellationToken)
         {
             var book = await _context.Books.SingleAsync(c => c.Id == request.Id, cancellationToken);
 
@@ -28,14 +29,14 @@ namespace Library.Application.Books.Commands.UpdateBook
                 throw new NotFoundException(nameof(Book), request.Id);
             }
 
-            book.UpdateBook(request.Title, request.Categories.ToList());
+            book.UpdateBook(request.Title, request.Categories.Select(c => new BookCategory { CategoryId = c.Id, Category = new Category(c.Name) }).ToList());
             SetDomainState(book);
             await _context.SaveChangesAsync(cancellationToken);
-            return new UpdateBookModel
+            return new GetBookModel
             {
                 Id = book.Id,
                 Title = book.Title,
-                Categories = book.BookCategories.Select(c => new UpdateBookModelCategory { Id = c.CategoryId, Name = c.Category.Name }).ToList()
+                Categories = book.BookCategories.Select(c => new GetBookModelCategory { Id = c.CategoryId, Name = c.Category.Name }).ToList()
             };
         }
     }
