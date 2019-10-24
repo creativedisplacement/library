@@ -1,13 +1,9 @@
 ﻿using Library.Application.Books.Commands.CreateBook;
 using Library.Application.Books.Commands.DeleteBook;
-using Library.Application.Books.Commands.LendBook;
-using Library.Application.Books.Commands.ReturnBook;
 using Library.Application.Books.Commands.UpdateBook;
 using Library.Application.Books.Queries.GetBook;
-using Library.Application.Books.Queries.GetBooks;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -16,13 +12,6 @@ namespace Library.WebApi.Controllers
     [Route("api/v1/[controller]")]
     public class BookController : BaseController
     {
-        [HttpGet]
-        //[ProducesResponseType(typeof(IEnumerable<GetBooksModel>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetAll(string title, List<Guid>categoryIds, Guid lenderId, bool? isAvailable)
-        {
-            return Ok(await Mediator.Send(new GetBooksQuery{ Title = title, CategoryIds = categoryIds, LenderId = lenderId, IsAvailable = isAvailable}));
-        }
-
         [HttpGet("{id}", Name = "test")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetBook(Guid id)
@@ -55,22 +44,6 @@ namespace Library.WebApi.Controllers
             {
                 return NotFound();
             }
-        }
-
-        [HttpPut("lend/{id}")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> LendBook(Guid id, [FromBody]LendBookCommand command)
-        {
-            await Mediator.Send(command);
-            return Ok();
-        }
-
-        [HttpPut("return/{id}")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> LendBook(Guid id, [FromBody]ReturnBookCommand command)
-        {
-            await Mediator.Send(command);
-            return Ok();
         }
 
         [HttpDelete("{id}")]
