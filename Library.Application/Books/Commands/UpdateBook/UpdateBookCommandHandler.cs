@@ -1,5 +1,5 @@
 ﻿using Library.Application.Exceptions;
-using Library.Common.Book.Commands.UpdateBook;
+using Library.Common.Book.Queries.GetBook;
 using Library.Domain.Entities;
 using Library.Persistence;
 using MediatR;
@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Library.Common.Book.Queries.GetBook;
 
 namespace Library.Application.Books.Commands.UpdateBook
 {

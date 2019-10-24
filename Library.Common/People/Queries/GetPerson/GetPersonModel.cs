@@ -7,7 +7,8 @@ namespace Library.Common.People.Queries.GetPerson
         public ICollection<GetPersonBookModel> Books { get; set; }
     }
 
-    public class GetPersonBookModel : BaseTitleItem
+    public class GetPersonBookModel : BasePersonItem
     {
+        public new bool? IsAdmin { get; set; }
     }
 }

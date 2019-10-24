@@ -1,4 +1,5 @@
-﻿using Library.Domain.Entities;
+﻿using Library.Common.Categories.Queries.GetCategory;
+using Library.Domain.Entities;
 using Library.Persistence;
 using MediatR;
 using System.Threading;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Library.Application.Categories.Commands.CreateCategory
 {
-    public class CreateCategoryCommandHandler : BaseCommandHandler, IRequestHandler<CreateCategoryCommand, Unit>
+    public class CreateCategoryCommandHandler : BaseCommandHandler, IRequestHandler<CreateCategoryCommand, GetCategoryModel>
     {
         private readonly LibraryDbContext _context;
 
@@ -15,13 +16,17 @@ namespace Library.Application.Categories.Commands.CreateCategory
             _context = context;
         }
 
-        public async Task<Unit> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<GetCategoryModel> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {
             var category = new Category(request.Name);
             SetDomainState(category);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
+            return new GetCategoryModel
+            {
+                Id = category.Id,
+                Name = category.Name
+            };
         }
     }
 }

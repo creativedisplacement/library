@@ -6,10 +6,11 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
+using Library.Common.Categories.Queries.GetCategory;
 
 namespace Library.Application.Categories.Commands.UpdateCategory
 {
-    public class UpdateCategoryCommandHandler : BaseCommandHandler, IRequestHandler<UpdateCategoryCommand, Unit>
+    public class UpdateCategoryCommandHandler : BaseCommandHandler, IRequestHandler<UpdateCategoryCommand, GetCategoryModel>
     {
         private readonly LibraryDbContext _context;
 
@@ -18,7 +19,7 @@ namespace Library.Application.Categories.Commands.UpdateCategory
             _context = context;
         }
 
-        public async Task<Unit> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<GetCategoryModel> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
             var category = await _context.Categories.SingleAsync(c => c.Id == request.Id, cancellationToken);
 
@@ -31,7 +32,11 @@ namespace Library.Application.Categories.Commands.UpdateCategory
             SetDomainState(category);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
+            return new GetCategoryModel
+            {
+                Id = category.Id,
+                Name = category.Name
+            };
         }
     }
 }
