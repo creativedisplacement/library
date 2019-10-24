@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace Library.WebApi.Controllers
@@ -11,10 +10,24 @@ namespace Library.WebApi.Controllers
     public class BooksController : BaseController
     {
         [HttpGet]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetAll(string title, List<Guid> categoryIds, Guid lenderId, bool? isAvailable)
         {
-            return Ok(await Mediator.Send(new GetBooksQuery { Title = title, CategoryIds = categoryIds, LenderId = lenderId, IsAvailable = isAvailable }));
+            try
+            {
+                var books = await Mediator.Send(new GetBooksQuery
+                {
+                    Title = title,
+                    CategoryIds = categoryIds,
+                    LenderId = lenderId,
+                    IsAvailable = isAvailable
+                });
+
+                return new ObjectResult(books);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
+            }
         }
     }
 }

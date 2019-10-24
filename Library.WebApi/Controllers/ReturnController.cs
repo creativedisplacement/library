@@ -10,11 +10,17 @@ namespace Library.WebApi.Controllers
     public class ReturnController : BaseController
     {
         [HttpPut("{id}")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> LendBook(Guid id, [FromBody]ReturnBookCommand command)
         {
-            await Mediator.Send(command);
-            return Ok();
+            try
+            {
+                var returnedBook = await Mediator.Send(command);
+                return new ObjectResult(returnedBook);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
+            }
         }
     }
 }

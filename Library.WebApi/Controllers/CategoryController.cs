@@ -1,14 +1,9 @@
 ﻿using Library.Application.Categories.Commands.CreateCategory;
 using Library.Application.Categories.Commands.DeleteCategory;
 using Library.Application.Categories.Commands.UpdateCategory;
-using Library.Application.Categories.Queries.GetCategories;
 using Library.Application.Categories.Queries.GetCategory;
-using Library.Common.Categories.Queries.GetCategories;
-using Library.Common.Categories.Queries.GetCategory;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace Library.WebApi.Controllers
@@ -16,38 +11,49 @@ namespace Library.WebApi.Controllers
     [Route("api/v1/[controller]")]
     public class CategoryController : BaseController
     {
-        [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<GetCategoriesModel>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetAll()
-        {
-            return Ok(await Mediator.Send(new GetCategoriesQuery()));
-        }
-
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(GetCategoryModel), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetCategory(Guid id)
         {
-            return Ok(await Mediator.Send(new GetCategoryQuery { Id = id }));
+            try
+            {
+                var category = await Mediator.Send(new GetCategoryQuery {Id = id});
+                return new ObjectResult(category);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
+            }
         }
 
         [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.Created)]
         public async Task<IActionResult> Create([FromBody]CreateCategoryCommand command)
         {
-            await Mediator.Send(command);
-            return Ok();
+            try
+            {
+                var category = await Mediator.Send(command);
+                return CreatedAtRoute("GetCategory", new { id = category.Id }, category);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
+            }
         }
 
         [HttpPut("{id}")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> Update(Guid id, [FromBody]UpdateCategoryCommand command)
         {
-            await Mediator.Send(command);
-            return Ok();
+            try
+            {
+                var category = await Mediator.Send(command);
+                return new ObjectResult(category);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
+            }
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         public async Task<IActionResult> Delete(Guid id)
         {
             try

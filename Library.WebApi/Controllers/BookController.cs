@@ -4,7 +4,6 @@ using Library.Application.Books.Commands.UpdateBook;
 using Library.Application.Books.Queries.GetBook;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace Library.WebApi.Controllers

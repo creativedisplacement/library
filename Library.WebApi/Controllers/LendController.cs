@@ -13,8 +13,16 @@ namespace Library.WebApi.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> LendBook(Guid id, [FromBody]LendBookCommand command)
         {
-            await Mediator.Send(command);
-            return Ok();
+            try
+            {
+                var lendBook = await Mediator.Send(command);
+
+                return new ObjectResult(lendBook);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
+            }
         }
     }
 }
