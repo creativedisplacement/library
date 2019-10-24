@@ -5,6 +5,7 @@ using MediatR;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Library.Application.Books.Commands.CreateBook
 {
@@ -18,8 +19,11 @@ namespace Library.Application.Books.Commands.CreateBook
         }
 
         public async Task<GetBookModel> Handle(CreateBookCommand request, CancellationToken cancellationToken)
-        {
-            var book = new Book(request.Title, request.Categories.Select(c => new BookCategory{ CategoryId = c.Id, Category = new Category(c.Name)}).ToList());
+        { 
+            var bookCategories = await _context.Categories.Where(bc => request.Categories.Select(c => c.Id).Contains(bc.Id))
+                .Select(c => new BookCategory { CategoryId = c.Id, Category = c }).ToListAsync(cancellationToken: cancellationToken);
+
+            var book = new Book(request.Title, bookCategories);
             SetDomainState(book);
             await _context.SaveChangesAsync(cancellationToken);
 
@@ -27,7 +31,7 @@ namespace Library.Application.Books.Commands.CreateBook
             {
                 Id = book.Id,
                 Title = book.Title,
-                Categories = book.BookCategories.Select(c => new GetBookModelCategory { Id = c.CategoryId, Name = c.Category.Name}).ToList()
+                Categories = book.BookCategories.Select(c => new GetBookModelCategory { Id = c.CategoryId, Name = c.Category.Name }).ToList()
             };
         }
     }
