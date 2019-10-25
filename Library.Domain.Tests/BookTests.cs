@@ -89,6 +89,15 @@ namespace Library.Domain.Tests
         }
 
         [Fact]
+        public void Remove_Categories()
+        {
+            var book = new Book(_id, _title, _categories, _lender);
+            book.RemoveCategories();
+
+            Assert.Equal(0, book.BookCategories.Count);
+        }
+
+        [Fact]
         public void Check_Lend_Book_To()
         {
             var book = new Book(_title, _categories);

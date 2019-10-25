@@ -65,8 +65,8 @@ namespace Library.Application.Tests.People.Queries
             var result = await queryHandler.Handle(new GetPeopleQuery {IsAdmin = true}, CancellationToken.None);
 
             Assert.IsType<GetPeopleModel>(result);
-            Assert.Equal(_context.Persons.Count(p => p.IsAdmin), result.People.Count());
-            Assert.Equal(_context.Persons.First(p => p.IsAdmin).Name, result.People.First().Name);
+            Assert.Equal(_context.Persons.Count(p => p.IsAdmin.Value), result.People.Count());
+            Assert.Equal(_context.Persons.First(p => p.IsAdmin.Value).Name, result.People.First().Name);
         }
 
         [Fact]
@@ -76,8 +76,8 @@ namespace Library.Application.Tests.People.Queries
             var result = await queryHandler.Handle(new GetPeopleQuery {IsAdmin = false}, CancellationToken.None);
 
             Assert.IsType<GetPeopleModel>(result);
-            Assert.Equal(_context.Persons.Count(p => !p.IsAdmin), result.People.Count());
-            Assert.Equal(_context.Persons.First(p => !p.IsAdmin).Name, result.People.First().Name);
+            Assert.Equal(_context.Persons.Count(p => !p.IsAdmin.Value), result.People.Count());
+            Assert.Equal(_context.Persons.First(p => !p.IsAdmin.Value).Name, result.People.First().Name);
         }
     }
 }
