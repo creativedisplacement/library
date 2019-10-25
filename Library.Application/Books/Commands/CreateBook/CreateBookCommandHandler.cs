@@ -21,7 +21,7 @@ namespace Library.Application.Books.Commands.CreateBook
         public async Task<GetBookModel> Handle(CreateBookCommand request, CancellationToken cancellationToken)
         { 
             var bookCategories = await _context.Categories.Where(bc => request.Categories.Select(c => c.Id).Contains(bc.Id))
-                .Select(c => new BookCategory { CategoryId = c.Id, Category = c }).ToListAsync(cancellationToken: cancellationToken);
+                .Select(c => new BookCategory { CategoryId = c.Id, Category = c }).ToListAsync(cancellationToken);
 
             var book = new Book(request.Title, bookCategories);
             SetDomainState(book);

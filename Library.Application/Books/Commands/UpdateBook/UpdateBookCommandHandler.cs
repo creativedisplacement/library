@@ -28,7 +28,14 @@ namespace Library.Application.Books.Commands.UpdateBook
                 throw new NotFoundException(nameof(Book), request.Id);
             }
 
-            book.UpdateBook(request.Title, request.Categories.Select(c => new BookCategory { CategoryId = c.Id, Category = new Category(c.Name) }).ToList());
+            var bookCategories = await _context.Categories.Where(bc => request.Categories.Select(c => c.Id).Contains(bc.Id))
+                .Select(c => new BookCategory { CategoryId = c.Id, Category = c, BookId = book.Id}).ToListAsync(cancellationToken);
+
+            book.RemoveCategories();
+            SetDomainState(book);
+            await _context.SaveChangesAsync(cancellationToken);
+
+            book.UpdateBook(request.Title, bookCategories);
             SetDomainState(book);
             await _context.SaveChangesAsync(cancellationToken);
             return new GetBookModel

@@ -62,6 +62,12 @@ namespace Library.Domain.Entities
             Status = Status.Updated;
         }
 
+        public void RemoveCategories()
+        {
+            BookCategories = null;
+            Status = Status.Updated;
+        }
+
         public void RemoveBook()
         {
             Status = Status.Deleted;
