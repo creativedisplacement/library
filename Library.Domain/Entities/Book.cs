@@ -1,7 +1,7 @@
 ﻿using Library.Domain.Entities.Abstract;
+using Library.Domain.Enums;
 using System;
 using System.Collections.Generic;
-using Library.Domain.Enums;
 
 namespace Library.Domain.Entities
 {
@@ -64,7 +64,7 @@ namespace Library.Domain.Entities
 
         public void RemoveCategories()
         {
-            BookCategories = null;
+            BookCategories.Clear();
             Status = Status.Updated;
         }
 

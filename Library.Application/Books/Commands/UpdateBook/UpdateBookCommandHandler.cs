@@ -21,7 +21,9 @@ namespace Library.Application.Books.Commands.UpdateBook
 
         public async Task<GetBookModel> Handle(UpdateBookCommand request, CancellationToken cancellationToken)
         {
-            var book = await _context.Books.SingleAsync(c => c.Id == request.Id, cancellationToken);
+            var book = await _context.Books
+                .Include(c => c.BookCategories)
+                .SingleAsync(c => c.Id == request.Id, cancellationToken);
 
             if (book == null)
             {
@@ -31,9 +33,13 @@ namespace Library.Application.Books.Commands.UpdateBook
             var bookCategories = await _context.Categories.Where(bc => request.Categories.Select(c => c.Id).Contains(bc.Id))
                 .Select(c => new BookCategory { CategoryId = c.Id, Category = c, BookId = book.Id}).ToListAsync(cancellationToken);
 
-            book.RemoveCategories();
-            SetDomainState(book);
-            await _context.SaveChangesAsync(cancellationToken);
+            if (book.BookCategories.Any())
+            {
+                book.RemoveCategories();
+                SetDomainState(book);
+
+                await _context.SaveChangesAsync(cancellationToken);
+            }
 
             book.UpdateBook(request.Title, bookCategories);
             SetDomainState(book);
