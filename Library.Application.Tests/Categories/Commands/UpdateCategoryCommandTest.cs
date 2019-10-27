@@ -1,6 +1,5 @@
 ﻿using FluentValidation.TestHelper;
-using Library.Application.Categories.Commands.UpdateCategory;
-using Library.Domain.Entities;
+using Library.Application.Category.Commands.UpdateCategory;
 using Library.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -52,7 +51,7 @@ namespace Library.Application.Tests.Categories.Commands
         private LibraryDbContext InitAndGetDbContext()
         {
             var context = GetDbContext();
-            context.Categories.Add(new Category("Test1"));
+            context.Categories.Add(new Domain.Entities.Category("Test1"));
             context.SaveChanges();
             return context;
         }

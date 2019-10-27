@@ -47,9 +47,9 @@ namespace Library.Application.Tests.Infrastructure
             var lender = context.Persons.First();
             var books = new[]
             {
-                new Book("Docker on Windows", new List<BookCategory>(), lender),
-                new Book("Open"),
-                new Book("This is going to hurt")
+                new Domain.Entities.Book("Docker on Windows", new List<BookCategory>(), lender),
+                new Domain.Entities.Book("Open"),
+                new Domain.Entities.Book("This is going to hurt")
             };
             context.Books.AddRange(books);
             context.SaveChanges();
@@ -59,12 +59,12 @@ namespace Library.Application.Tests.Infrastructure
         {
             var categories = new[]
             {
-                new Category("Humour"),
-                new Category("Drama"),
-                new Category("Action"),
-                new Category("Thriller"),
-                new Category("Biographical"),
-                new Category("Technical"),
+                new Domain.Entities.Category("Humour"),
+                new Domain.Entities.Category("Drama"),
+                new Domain.Entities.Category("Action"),
+                new Domain.Entities.Category("Thriller"),
+                new Domain.Entities.Category("Biographical"),
+                new Domain.Entities.Category("Technical"),
             };
             context.Categories.AddRange(categories);
             context.SaveChanges();

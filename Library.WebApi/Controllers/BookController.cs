@@ -1,7 +1,7 @@
-﻿using Library.Application.Books.Commands.CreateBook;
-using Library.Application.Books.Commands.DeleteBook;
-using Library.Application.Books.Commands.UpdateBook;
-using Library.Application.Books.Queries.GetBook;
+﻿using Library.Application.Book.Commands.CreateBook;
+using Library.Application.Book.Commands.DeleteBook;
+using Library.Application.Book.Commands.UpdateBook;
+using Library.Application.Book.Queries.GetBook;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;

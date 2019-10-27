@@ -1,5 +1,5 @@
 ﻿using FluentValidation.TestHelper;
-using Library.Application.Books.Commands.LendBook;
+using Library.Application.Book.Commands.LendBook;
 using Library.Domain.Entities;
 using Library.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -56,7 +56,7 @@ namespace Library.Application.Tests.Books.Commands
         private LibraryDbContext InitAndGetDbContext()
         {
             var context = GetDbContext();
-            context.Books.Add(new Book("Title", new List<BookCategory> { new BookCategory { CategoryId = Guid.NewGuid() } }));
+            context.Books.Add(new Domain.Entities.Book("Title", new List<BookCategory> { new BookCategory { CategoryId = Guid.NewGuid() } }));
             context.Persons.Add(new Person("Test", "test@test.com", false));
             context.SaveChanges();
             return context;

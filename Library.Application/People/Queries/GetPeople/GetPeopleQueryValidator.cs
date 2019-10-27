@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Library.Application.Categories.Queries.GetCategory;
+using Library.Application.Category.Queries.GetCategory;
 
 namespace Library.Application.People.Queries.GetPeople
 {

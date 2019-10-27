@@ -1,4 +1,4 @@
-﻿using Library.Application.Books.Commands.LendBook;
+﻿using Library.Application.Book.Commands.LendBook;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;

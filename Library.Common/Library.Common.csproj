@@ -6,14 +6,8 @@
 
   <ItemGroup>
     <Folder Include="Book\Commands\DeleteBook\" />
-    <Folder Include="Categories\Commands\" />
-    <Folder Include="Categories\Commands\CreateCategory\" />
-    <Folder Include="Categories\Commands\DeleteCategory\" />
-    <Folder Include="Categories\Commands\UpdateCategory\" />
-    <Folder Include="People\Commands\" />
-    <Folder Include="People\Commands\CreatePerson\" />
+    <Folder Include="Category\Commands\DeleteCategory\" />
     <Folder Include="People\Commands\DeletePerson\" />
-    <Folder Include="People\Commands\UpdatePerson\" />
   </ItemGroup>
 
 </Project>

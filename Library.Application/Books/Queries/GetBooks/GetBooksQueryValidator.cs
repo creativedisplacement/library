@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Library.Application.Books.Queries.GetBook;
+using Library.Application.Book.Queries.GetBook;
 
 namespace Library.Application.Books.Queries.GetBooks
 {

@@ -1,0 +1,17 @@
+﻿using FluentValidation;
+
+namespace Library.Application.Book.Commands.UpdateBook
+{
+    public class UpdateBookCommandValidator : AbstractValidator<UpdateBookCommand>
+    {
+        public UpdateBookCommandValidator()
+        {
+            RuleFor(x => x.Id).NotEmpty();
+            RuleFor(x => x.Title)
+                .MinimumLength(3)
+                .MaximumLength(50)
+                .NotEmpty();
+            RuleFor(x => x.Categories).NotEmpty();
+        }
+    }
+}

@@ -1,5 +1,5 @@
 ﻿using FluentValidation.AspNetCore;
-using Library.Application.Books.Commands.CreateBook;
+using Library.Application.Book.Commands.CreateBook;
 using Library.Application.Categories.Queries.GetCategories;
 using Library.Application.Infrastructure;
 using Library.Application.Interfaces;

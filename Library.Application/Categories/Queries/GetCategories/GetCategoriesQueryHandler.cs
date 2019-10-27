@@ -1,6 +1,5 @@
 ﻿using Library.Application.Exceptions;
 using Library.Common.Categories.Queries.GetCategories;
-using Library.Domain.Entities;
 using Library.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

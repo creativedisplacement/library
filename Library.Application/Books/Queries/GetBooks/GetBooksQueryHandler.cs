@@ -1,5 +1,4 @@
-﻿using Library.Common.Book.Queries.GetBooks;
-using Library.Domain.Entities;
+﻿using Library.Common.Books.Queries.GetBooks;
 using Library.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +20,7 @@ namespace Library.Application.Books.Queries.GetBooks
 
         public async Task<GetBooksModel> Handle(GetBooksQuery request, CancellationToken cancellationToken)
         {
-            IQueryable<Book> books = _context.Books
+            IQueryable<Domain.Entities.Book> books = _context.Books
                 .Include(i => i.BookCategories)
                 .ThenInclude(c => c.Category);
 

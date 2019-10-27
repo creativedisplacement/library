@@ -1,6 +1,6 @@
 ﻿using Library.Application.Books.Queries.GetBooks;
 using Library.Application.Tests.Infrastructure;
-using Library.Common.Book.Queries.GetBooks;
+using Library.Common.Books.Queries.GetBooks;
 using Library.Persistence;
 using System;
 using System.Collections.Generic;

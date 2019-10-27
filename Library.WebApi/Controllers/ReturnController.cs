@@ -1,7 +1,6 @@
-﻿using Library.Application.Books.Commands.ReturnBook;
+﻿using Library.Application.Book.Commands.ReturnBook;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace Library.WebApi.Controllers

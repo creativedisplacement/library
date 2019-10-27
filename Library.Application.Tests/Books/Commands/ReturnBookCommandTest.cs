@@ -1,5 +1,5 @@
 ﻿using FluentValidation.TestHelper;
-using Library.Application.Books.Commands.ReturnBook;
+using Library.Application.Book.Commands.ReturnBook;
 using Library.Domain.Entities;
 using Library.Persistence;
 using System;
@@ -48,7 +48,7 @@ namespace Library.Application.Tests.Books.Commands
         private LibraryDbContext InitAndGetDbContext()
         {
             var context = GetDbContext();
-            context.Books.Add(new Book("Title", new List<BookCategory> { new BookCategory { CategoryId = Guid.NewGuid() } }, new Person("Test", "test@test.com", false)));
+            context.Books.Add(new Domain.Entities.Book("Title", new List<BookCategory> { new BookCategory { CategoryId = Guid.NewGuid() } }, new Person("Test", "test@test.com", false)));
             context.SaveChanges();
             return context;
         }

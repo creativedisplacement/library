@@ -1,5 +1,6 @@
 ﻿using FluentValidation.TestHelper;
-using Library.Application.Books.Commands.UpdateBook;
+using Library.Application.Book.Commands.UpdateBook;
+using Library.Common.Book.Queries.GetBook;
 using Library.Domain.Entities;
 using Library.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Library.Common.Book.Queries.GetBook;
 using Xunit;
 
 namespace Library.Application.Tests.Books.Commands
@@ -67,7 +67,7 @@ namespace Library.Application.Tests.Books.Commands
         private LibraryDbContext InitAndGetDbContext()
         {
             var context = GetDbContext();
-            context.Books.Add(new Book("Title", new List<BookCategory> { new BookCategory { CategoryId = Guid.NewGuid() } }));
+            context.Books.Add(new Domain.Entities.Book("Title", new List<BookCategory> { new BookCategory { CategoryId = Guid.NewGuid() } }));
             context.SaveChanges();
             return context;
         }

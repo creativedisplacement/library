@@ -1,7 +1,7 @@
-﻿using Library.Application.Categories.Commands.CreateCategory;
-using Library.Application.Categories.Commands.DeleteCategory;
-using Library.Application.Categories.Commands.UpdateCategory;
-using Library.Application.Categories.Queries.GetCategory;
+﻿using Library.Application.Category.Commands.CreateCategory;
+using Library.Application.Category.Commands.DeleteCategory;
+using Library.Application.Category.Commands.UpdateCategory;
+using Library.Application.Category.Queries.GetCategory;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;

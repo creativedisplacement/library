@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Library.Common.People.Queries.GetPerson;
+﻿using Library.Common.People.Queries.GetPerson;
+using System.Collections.Generic;
 
 namespace Library.Common.People.Queries.GetPeople
 {

@@ -1,4 +1,4 @@
-﻿using Library.Application.Books.Queries.GetBook;
+﻿using Library.Application.Book.Queries.GetBook;
 using Library.Application.Tests.Infrastructure;
 using Library.Common.Book.Queries.GetBook;
 using Library.Persistence;

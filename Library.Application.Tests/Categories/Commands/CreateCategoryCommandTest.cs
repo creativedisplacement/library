@@ -1,5 +1,5 @@
 ﻿using FluentValidation.TestHelper;
-using Library.Application.Categories.Commands.CreateCategory;
+using Library.Application.Category.Commands.CreateCategory;
 using Library.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;
