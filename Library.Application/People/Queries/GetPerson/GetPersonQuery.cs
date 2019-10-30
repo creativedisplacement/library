@@ -1,5 +1,5 @@
 ﻿using Library.Common;
-using Library.Common.People.Queries.GetPerson;
+using Library.Common.Models.Person;
 using MediatR;
 
 namespace Library.Application.People.Queries.GetPerson

@@ -1,7 +1,6 @@
 ﻿using Library.Application.Exceptions;
-using Library.Common.Book.Commands.LendBook;
-using Library.Common.Book.Queries.GetBook;
-using Library.Common.People.Queries.GetPerson;
+using Library.Common.Models.Book;
+using Library.Common.Models.Person;
 using Library.Domain.Entities;
 using Library.Persistence;
 using MediatR;

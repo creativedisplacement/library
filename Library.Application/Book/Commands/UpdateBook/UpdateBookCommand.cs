@@ -1,5 +1,5 @@
 ﻿using Library.Common;
-using Library.Common.Book.Queries.GetBook;
+using Library.Common.Models.Book;
 using MediatR;
 using System.Collections.Generic;
 

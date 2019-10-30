@@ -1,7 +1,5 @@
 ﻿using Library.Application.Category.Queries.GetCategory;
-using Library.Application.Tests.Infrastructure;
-using Library.Common.Category.Queries.GetCategory;
-using Library.Persistence;
+using Library.Common.Models.Category;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,27 +7,22 @@ using Xunit;
 
 namespace Library.Application.Tests.Categories.Queries
 {
-
-    public class GetCategoryQueryHandlerTests
+    public class GetCategoryQueryHandlerTests : TestBase
     {
-        private readonly LibraryDbContext _context;
-
-        public GetCategoryQueryHandlerTests()
-        {
-            _context = new QueryTestFixture().Context;
-        }
-
         [Fact]
         public async Task Get_Category()
         {
-            var queryHandler = new GetCategoryQueryHandler(_context);
-            var category = _context.Categories.First();
+            using (var context = GetContextWithData())
+            {
+                var handler = new GetCategoryQueryHandler(context);
+                var category = context.Categories.First();
 
-            var result = await queryHandler.Handle(new GetCategoryQuery{ Id = category.Id}, CancellationToken.None);
+                var result = await handler.Handle(new GetCategoryQuery {Id = category.Id}, CancellationToken.None);
 
-            Assert.IsType<GetCategoryModel>(result);
-            Assert.Equal(result.Id, category.Id);
-            Assert.Equal(result.Name, category.Name);
+                Assert.IsType<GetCategoryModel>(result);
+                Assert.Equal(result.Id, category.Id);
+                Assert.Equal(result.Name, category.Name);
+            }
         }
     }
 }

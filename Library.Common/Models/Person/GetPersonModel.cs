@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Library.Common.People.Queries.GetPerson
+namespace Library.Common.Models.Person
 {
     public class GetPersonModel : BasePersonItem
     {

@@ -1,11 +1,11 @@
-﻿using Library.Common.Books.Queries.GetBooks;
-using Library.Persistence;
+﻿using Library.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Library.Common.Models.Books;
 
 namespace Library.Application.Books.Queries.GetBooks
 {
@@ -42,7 +42,7 @@ namespace Library.Application.Books.Queries.GetBooks
 
             if (request.IsAvailable.HasValue)
             {
-                books = books.Where(b => b.IsAvailable == request.IsAvailable.Value);
+                books = books.Where(bb => bb.IsAvailable == request.IsAvailable);
             }
 
             return new GetBooksModel

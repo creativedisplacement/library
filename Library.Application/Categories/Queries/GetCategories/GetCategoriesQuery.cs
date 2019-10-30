@@ -1,4 +1,4 @@
-﻿using Library.Common.Categories.Queries.GetCategories;
+﻿using Library.Common.Models.Categories;
 using MediatR;
 
 namespace Library.Application.Categories.Queries.GetCategories

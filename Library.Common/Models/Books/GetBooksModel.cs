@@ -1,7 +1,7 @@
-﻿using Library.Common.People.Queries.GetPerson;
+﻿using Library.Common.Models.Person;
 using System.Collections.Generic;
 
-namespace Library.Common.Books.Queries.GetBooks
+namespace Library.Common.Models.Books
 {
     public class GetBooksModel
     {

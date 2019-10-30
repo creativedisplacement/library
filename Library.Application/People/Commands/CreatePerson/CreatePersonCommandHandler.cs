@@ -1,4 +1,4 @@
-﻿using Library.Common.People.Queries.GetPerson;
+﻿using Library.Common.Models.Person;
 using Library.Domain.Entities;
 using Library.Persistence;
 using MediatR;

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Library.Common.Book.Commands.UpdateBook
+namespace Library.Common.Models.Book
 {
     public class UpdateBookModel : BaseTitleItem
     {

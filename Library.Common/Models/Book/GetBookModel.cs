@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Library.Common.Book.Queries.GetBook
+namespace Library.Common.Models.Book
 {
     public class GetBookModel : BaseTitleItem
     {

@@ -1,8 +1,8 @@
 ﻿using Library.Common;
-using Library.Common.Books.Queries.GetBooks;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using Library.Common.Models.Books;
 
 namespace Library.Application.Books.Queries.GetBooks
 {

@@ -1,5 +1,5 @@
 ﻿using Library.Common;
-using Library.Common.Book.Commands.ReturnBook;
+using Library.Common.Models.Book;
 using MediatR;
 
 namespace Library.Application.Book.Commands.ReturnBook

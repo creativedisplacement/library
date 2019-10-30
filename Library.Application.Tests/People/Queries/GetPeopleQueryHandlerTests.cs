@@ -1,7 +1,5 @@
 ﻿using Library.Application.People.Queries.GetPeople;
-using Library.Application.Tests.Infrastructure;
-using Library.Common.People.Queries.GetPeople;
-using Library.Persistence;
+using Library.Common.Models.People;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,75 +7,82 @@ using Xunit;
 
 namespace Library.Application.Tests.People.Queries
 {
-
-    public class GetPeopleQueryHandlerTests
+    public class GetPeopleQueryHandlerTests : TestBase
     {
-        private readonly LibraryDbContext _context;
-
-        public GetPeopleQueryHandlerTests()
-        {
-            _context = new QueryTestFixture().Context;
-        }
-
         [Fact]
         public async Task Get_All_People()
         {
-            var queryHandler = new GetPeopleQueryHandler(_context);
-            var result = await queryHandler.Handle(new GetPeopleQuery(), CancellationToken.None);
+            using (var context = GetContextWithData())
+            {
+                var handler = new GetPeopleQueryHandler(context);
+                var result = await handler.Handle(new GetPeopleQuery(), CancellationToken.None);
 
-            Assert.IsType<GetPeopleModel>(result);
-            Assert.Equal(_context.Persons.Count(), result.People.Count());
+                Assert.IsType<GetPeopleModel>(result);
+                Assert.Equal(context.Persons.Count(), result.People.Count());
+            }
         }
 
         [Fact]
         public async Task Get_People_By_Name()
         {
-            const string name = "Victor";
-            var queryHandler = new GetPeopleQueryHandler(_context);
-            var result = await queryHandler.Handle(new GetPeopleQuery {Name = name }, CancellationToken.None);
+            using (var context = GetContextWithData())
+            {
+                const string name = "Victor";
+                var handler = new GetPeopleQueryHandler(context);
+                var result = await handler.Handle(new GetPeopleQuery {Name = name}, CancellationToken.None);
 
-            Assert.IsType<GetPeopleModel>(result);
+                Assert.IsType<GetPeopleModel>(result);
 
-            var person = _context.Persons.First(p => p.Name == name);
-            Assert.Equal(person.Name, result.People.First().Name);
-            Assert.Equal(person.Email, result.People.First().Email);
+                var person = context.Persons.First(p => p.Name == name);
+                Assert.Equal(person.Name, result.People.First().Name);
+                Assert.Equal(person.Email, result.People.First().Email);
+            }
         }
 
         [Fact]
         public async Task Get_People_By_Email()
         {
-            const string email = "victor@shodimeji.com";
+            using (var context = GetContextWithData())
+            {
+                const string email = "v@v.com";
 
-            var queryHandler = new GetPeopleQueryHandler(_context);
-            var result = await queryHandler.Handle(new GetPeopleQuery {Email = email },
-                CancellationToken.None);
+                var handler = new GetPeopleQueryHandler(context);
+                var result = await handler.Handle(new GetPeopleQuery {Email = email},
+                    CancellationToken.None);
 
-            Assert.IsType<GetPeopleModel>(result);
-            var person = _context.Persons.First(p => p.Email == email);
-            Assert.Equal(person.Name, result.People.First().Name);
-            Assert.Equal(person.Email, result.People.First().Email);
+                Assert.IsType<GetPeopleModel>(result);
+                var person = context.Persons.First(p => p.Email == email);
+                Assert.Equal(person.Name, result.People.First().Name);
+                Assert.Equal(person.Email, result.People.First().Email);
+            }
         }
 
         [Fact]
         public async Task Get_People_That_Are_Admins()
         {
-            var queryHandler = new GetPeopleQueryHandler(_context);
-            var result = await queryHandler.Handle(new GetPeopleQuery {IsAdmin = true}, CancellationToken.None);
+            using (var context = GetContextWithData())
+            {
+                var handler = new GetPeopleQueryHandler(context);
+                var result = await handler.Handle(new GetPeopleQuery {IsAdmin = true}, CancellationToken.None);
 
-            Assert.IsType<GetPeopleModel>(result);
-            Assert.Equal(_context.Persons.Count(p => p.IsAdmin.Value), result.People.Count());
-            Assert.Equal(_context.Persons.First(p => p.IsAdmin.Value).Name, result.People.First().Name);
+                Assert.IsType<GetPeopleModel>(result);
+                Assert.Equal(context.Persons.Count(p => p.IsAdmin.Value), result.People.Count());
+                Assert.Equal(context.Persons.First(p => p.IsAdmin.Value).Name, result.People.First().Name);
+            }
         }
 
         [Fact]
         public async Task Get_People_That_Are_Not_Admins()
         {
-            var queryHandler = new GetPeopleQueryHandler(_context);
-            var result = await queryHandler.Handle(new GetPeopleQuery {IsAdmin = false}, CancellationToken.None);
+            using (var context = GetContextWithData())
+            {
+                var handler = new GetPeopleQueryHandler(context);
+                var result = await handler.Handle(new GetPeopleQuery {IsAdmin = false}, CancellationToken.None);
 
-            Assert.IsType<GetPeopleModel>(result);
-            Assert.Equal(_context.Persons.Count(p => !p.IsAdmin.Value), result.People.Count());
-            Assert.Equal(_context.Persons.First(p => !p.IsAdmin.Value).Name, result.People.First().Name);
+                Assert.IsType<GetPeopleModel>(result);
+                Assert.Equal(context.Persons.Count(p => !p.IsAdmin.Value), result.People.Count());
+                Assert.Equal(context.Persons.First(p => !p.IsAdmin.Value).Name, result.People.First().Name);
+            }
         }
     }
 }

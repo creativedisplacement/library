@@ -4,10 +4,4 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Book\Commands\DeleteBook\" />
-    <Folder Include="Category\Commands\DeleteCategory\" />
-    <Folder Include="People\Commands\DeletePerson\" />
-  </ItemGroup>
-
 </Project>

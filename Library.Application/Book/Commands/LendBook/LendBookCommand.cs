@@ -1,5 +1,5 @@
 ﻿using Library.Common;
-using Library.Common.Book.Commands.LendBook;
+using Library.Common.Models.Book;
 using MediatR;
 using System;
 

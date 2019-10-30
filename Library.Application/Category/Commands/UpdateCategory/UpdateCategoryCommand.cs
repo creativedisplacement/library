@@ -1,5 +1,5 @@
 ﻿using Library.Common;
-using Library.Common.Category.Queries.GetCategory;
+using Library.Common.Models.Category;
 using MediatR;
 
 namespace Library.Application.Category.Commands.UpdateCategory

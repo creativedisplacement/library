@@ -1,37 +1,30 @@
 ﻿using FluentValidation.TestHelper;
 using Library.Application.People.Commands.DeletePerson;
-using Library.Domain.Entities;
-using Library.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace Library.Application.Tests.People.Commands
 {
-
-    public class DeletePersonCommandTest : TestBase, IDisposable
+    public class DeletePersonCommandTest : TestBase
     {
-        private readonly LibraryDbContext _context;
-        private readonly DeletePersonCommandHandler _commandHandler;
-
-        public DeletePersonCommandTest()
-        {
-            _context = InitAndGetDbContext();
-            _commandHandler = new DeletePersonCommandHandler(_context);
-        }
-
         [Fact]
         public async Task Delete_Person()
         {
-            var command = new DeletePersonCommand
+            using (var context = GetContextWithData())
             {
-                Id = (await _context.Persons.FirstOrDefaultAsync()).Id
-            };
+                var handler = new DeletePersonCommandHandler(context);
+                var command = new DeletePersonCommand
+                {
+                    Id = (await context.Persons.Skip(1).Take(1).FirstOrDefaultAsync()).Id
+                };
 
-            await _commandHandler.Handle(command, CancellationToken.None);
-            Assert.Null(await _context.Persons.FindAsync(command.Id));
+                await handler.Handle(command, CancellationToken.None);
+                Assert.Null(await context.Persons.FindAsync(command.Id));
+            }
         }
 
         [Fact]
@@ -39,19 +32,6 @@ namespace Library.Application.Tests.People.Commands
         {
             var validator = new DeletePersonCommandValidator();
             validator.ShouldHaveValidationErrorFor(x => x.Id, Guid.Empty);
-        }
-
-        private LibraryDbContext InitAndGetDbContext()
-        {
-            var context = GetDbContext();
-            context.Persons.Add(new Person("Name", "email@mail.com", false));
-            context.SaveChanges();
-            return context;
-        }
-
-        public void Dispose()
-        {
-            _context.Dispose();
         }
     }
 }

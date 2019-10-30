@@ -1,6 +1,5 @@
 ﻿using Library.Application.Exceptions;
-using Library.Common.Book.Commands.ReturnBook;
-using Library.Common.Book.Queries.GetBook;
+using Library.Common.Models.Book;
 using Library.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

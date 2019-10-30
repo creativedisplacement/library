@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Library.Common.Book.Commands.CreateBook
+namespace Library.Common.Models.Book
 {
     public class CreateBookModel : BaseTitleItem
     {

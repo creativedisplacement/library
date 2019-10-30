@@ -1,4 +1,4 @@
-﻿using Library.Common.Book.Queries.GetBook;
+﻿using Library.Common.Models.Book;
 using Library.Domain.Entities;
 using Library.Persistence;
 using MediatR;

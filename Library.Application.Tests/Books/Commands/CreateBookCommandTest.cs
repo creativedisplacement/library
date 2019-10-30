@@ -1,7 +1,6 @@
 ﻿using FluentValidation.TestHelper;
 using Library.Application.Book.Commands.CreateBook;
-using Library.Common.Book.Commands.CreateBook;
-using Library.Persistence;
+using Library.Common.Models.Book;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,33 +11,32 @@ using Xunit;
 
 namespace Library.Application.Tests.Books.Commands
 {
-
-    public class CreateBookCommandTest : TestBase, IDisposable
+    public class CreateBookCommandTest : TestBase
     {
-        private readonly LibraryDbContext _context;
-        private readonly CreateBookCommandHandler _commandHandler;
-
-        public CreateBookCommandTest()
-        {
-            _context = InitAndGetDbContext();
-            _commandHandler = new CreateBookCommandHandler(_context);
-        }
-
         [Fact]
         public async Task Create_New_Book()
         {
-            var command = new CreateBookCommand
+            using (var context = GetContextWithData())
             {
-                Title = "Title",
-                Categories = new List<CreateBookModelCategory> { new CreateBookModelCategory { Id = Guid.NewGuid()} }
-            };
+                var handler = new CreateBookCommandHandler(context);
+                var categoryId = Guid.NewGuid();
 
-            await _commandHandler.Handle(command, CancellationToken.None);
-            var book = await _context.Books.SingleOrDefaultAsync(c => c.Title == command.Title);
+                await AddCategory(context, categoryId, "nothing");
 
-            Assert.Equal(command.Title, book.Title);
-            Assert.Equal(command.Categories.ToList().Count, book.BookCategories.ToList().Count);
-            Assert.Equal(command.Categories.FirstOrDefault()?.Id, book.BookCategories.FirstOrDefault()?.CategoryId);
+                var command = new CreateBookCommand
+                {
+                    Title = "Title",
+                    Categories = new List<CreateBookModelCategory> {new CreateBookModelCategory {Id = categoryId}}
+                };
+
+                await handler.Handle(command, CancellationToken.None);
+
+                var book = await context.Books.SingleOrDefaultAsync(c => c.Title == command.Title);
+
+                Assert.Equal(command.Title, book.Title);
+                Assert.Equal(command.Categories.ToList().Count, book.BookCategories.ToList().Count);
+                Assert.Equal(command.Categories.FirstOrDefault()?.Id, book.BookCategories.FirstOrDefault()?.CategoryId);
+            }
         }
 
         [Fact]
@@ -53,17 +51,6 @@ namespace Library.Application.Tests.Books.Commands
         {
             var validator = new CreateBookCommandValidator();
             validator.ShouldHaveValidationErrorFor(x => x.Categories, new List<CreateBookModelCategory>());
-        }
-
-        private LibraryDbContext InitAndGetDbContext()
-        {
-            var context = GetDbContext();
-            return context;
-        }
-
-        public void Dispose()
-        {
-            _context.Dispose();
         }
     }
 }

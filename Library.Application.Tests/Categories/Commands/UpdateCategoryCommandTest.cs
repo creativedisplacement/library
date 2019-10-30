@@ -1,6 +1,5 @@
 ﻿using FluentValidation.TestHelper;
 using Library.Application.Category.Commands.UpdateCategory;
-using Library.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
@@ -9,29 +8,23 @@ using Xunit;
 
 namespace Library.Application.Tests.Categories.Commands
 {
-
-    public class UpdateCategoryCommandTest : TestBase, IDisposable
+    public class UpdateCategoryCommandTest : TestBase
     {
-        private readonly LibraryDbContext _context;
-        private readonly UpdateCategoryCommandHandler _commandHandler;
-
-        public UpdateCategoryCommandTest()
-        {
-            _context = InitAndGetDbContext();
-            _commandHandler = new UpdateCategoryCommandHandler(_context);
-        }
-
         [Fact]
         public async Task Update_Category()
         {
-            var command = new UpdateCategoryCommand
+            using (var context = GetContextWithData())
             {
-                Id = (await _context.Categories.FirstOrDefaultAsync()).Id,
-                Name = "Test2"
-            };
+                var handler = new UpdateCategoryCommandHandler(context);
+                var command = new UpdateCategoryCommand
+                {
+                    Id = (await context.Categories.FirstOrDefaultAsync()).Id,
+                    Name = "Test2"
+                };
 
-            await _commandHandler.Handle(command, CancellationToken.None);
-            Assert.Equal(command.Name, (await _context.Categories.FindAsync(command.Id)).Name);
+                await handler.Handle(command, CancellationToken.None);
+                Assert.Equal(command.Name, (await context.Categories.FindAsync(command.Id)).Name);
+            }
         }
 
         [Fact]
@@ -46,19 +39,6 @@ namespace Library.Application.Tests.Categories.Commands
         {
             var validator = new UpdateCategoryCommandValidator();
             validator.ShouldHaveValidationErrorFor(x => x.Name, string.Empty);
-        }
-
-        private LibraryDbContext InitAndGetDbContext()
-        {
-            var context = GetDbContext();
-            context.Categories.Add(new Domain.Entities.Category("Test1"));
-            context.SaveChanges();
-            return context;
-        }
-
-        public void Dispose()
-        {
-            _context.Dispose();
         }
     }
 }

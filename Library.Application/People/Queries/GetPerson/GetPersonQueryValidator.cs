@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Library.Common.People.Queries.GetPerson;
+using Library.Common.Models.Person;
 
 namespace Library.Application.People.Queries.GetPerson
 {
