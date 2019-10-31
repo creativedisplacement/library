@@ -42,15 +42,41 @@ namespace Library.Application.Tests.Books.Commands
         [Fact]
         public void Create_Book_With_No_Title_Throws_Exception()
         {
-            var validator = new CreateBookCommandValidator();
-            validator.ShouldHaveValidationErrorFor(x => x.Title, string.Empty);
+            using (var context = GetContextWithData())
+            {
+                var validator = new CreateBookCommandValidator(context);
+                validator.ShouldHaveValidationErrorFor(x => x.Title, string.Empty);
+            }
         }
 
         [Fact]
         public void Create_Book_With_No_Categories_Throws_Exception()
         {
-            var validator = new CreateBookCommandValidator();
-            validator.ShouldHaveValidationErrorFor(x => x.Categories, new List<CreateBookModelCategory>());
+            using (var context = GetContextWithData())
+            {
+                var validator = new CreateBookCommandValidator(context);
+                validator.ShouldHaveValidationErrorFor(x => x.Categories, new List<CreateBookModelCategory>());
+            }
+        }
+
+        [Fact]
+        public void Create_Book_With_Title_That_Already_Exists_Throws_Exception()
+        {
+            using (var context = GetContextWithData())
+            {
+                var validator = new CreateBookCommandValidator(context);
+                validator.ShouldHaveValidationErrorFor(x => x.Title, context.Books.FirstOrDefault()?.Title);
+            }
+        }
+
+        [Fact]
+        public void Create_Book_With_Title_That_Does_Not_Already_Exists()
+        {
+            using (var context = GetContextWithData())
+            {
+                var validator = new CreateBookCommandValidator(context);
+                validator.ShouldNotHaveValidationErrorFor(x => x.Title, "Title9");
+            }
         }
     }
 }
