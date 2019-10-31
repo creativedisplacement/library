@@ -56,7 +56,7 @@ namespace Library.Application.Tests.Books.Commands
         {
             using (var context = GetContextWithData())
             {
-                var validator = new UpdateBookCommandValidator(context, Guid.Empty);
+                var validator = new UpdateBookCommandValidator(context);
                 validator.ShouldHaveValidationErrorFor(x => x.Id, Guid.Empty);
             }
         }
@@ -66,7 +66,7 @@ namespace Library.Application.Tests.Books.Commands
         {
             using (var context = GetContextWithData())
             {
-                var validator = new UpdateBookCommandValidator(context, Guid.Empty);
+                var validator = new UpdateBookCommandValidator(context);
                 validator.ShouldHaveValidationErrorFor(x => x.Title, string.Empty);
             }
         }
@@ -76,7 +76,7 @@ namespace Library.Application.Tests.Books.Commands
         {
             using (var context = GetContextWithData())
             {
-                var validator = new UpdateBookCommandValidator(context, Guid.Empty);
+                var validator = new UpdateBookCommandValidator(context);
                 validator.ShouldHaveValidationErrorFor(x => x.Categories, new List<GetBookModelCategory>());
             }
         }
@@ -92,7 +92,7 @@ namespace Library.Application.Tests.Books.Commands
                 {
                     book.UpdateBook("Docker for Windows", null);
 
-                    var validator = new UpdateBookCommandValidator(context, book.Id);
+                    var validator = new UpdateBookCommandValidator(context);
                     validator.ShouldHaveValidationErrorFor(x => x.Title, book.Title);
                 }
             }
