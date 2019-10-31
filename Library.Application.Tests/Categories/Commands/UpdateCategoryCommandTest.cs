@@ -2,6 +2,8 @@
 using Library.Application.Category.Commands.UpdateCategory;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -30,15 +32,38 @@ namespace Library.Application.Tests.Categories.Commands
         [Fact]
         public void Update_Category_With_No_Id_Throws_Exception()
         {
-            var validator = new UpdateCategoryCommandValidator();
-            validator.ShouldHaveValidationErrorFor(x => x.Id, Guid.Empty);
+            using (var context = GetContextWithData())
+            {
+                var validator = new UpdateCategoryCommandValidator(context, Guid.Empty);
+                validator.ShouldHaveValidationErrorFor(x => x.Id, Guid.Empty);
+            }
         }
 
         [Fact]
         public void Update_Category_With_No_Name_Throws_Exception()
         {
-            var validator = new UpdateCategoryCommandValidator();
-            validator.ShouldHaveValidationErrorFor(x => x.Name, string.Empty);
+            using (var context = GetContextWithData())
+            {
+                var validator = new UpdateCategoryCommandValidator(context, Guid.Empty);
+                validator.ShouldHaveValidationErrorFor(x => x.Name, string.Empty);
+            }
+        }
+
+        [Fact]
+        public void Update_Category_With_Title_That_Already_Exists_Throws_Exception()
+        {
+            using (var context = GetContextWithData())
+            {
+                var category = context.Categories.FirstOrDefault(b => b.Name == "Action");
+
+                if (category != null)
+                {
+                    category.UpdateCategory("Technical");
+
+                    var validator = new UpdateCategoryCommandValidator(context, category.Id);
+                    validator.ShouldHaveValidationErrorFor(x => x.Id, category.Id);
+                }
+            }
         }
     }
 }

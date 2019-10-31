@@ -54,22 +54,48 @@ namespace Library.Application.Tests.Books.Commands
         [Fact]
         public void Update_Book_With_No_Id_Throws_Exception()
         {
-            var validator = new UpdateBookCommandValidator();
-            validator.ShouldHaveValidationErrorFor(x => x.Id, Guid.Empty);
+            using (var context = GetContextWithData())
+            {
+                var validator = new UpdateBookCommandValidator(context, Guid.Empty);
+                validator.ShouldHaveValidationErrorFor(x => x.Id, Guid.Empty);
+            }
         }
 
         [Fact]
         public void Update_Book_With_No_Title_Throws_Exception()
         {
-            var validator = new UpdateBookCommandValidator();
-            validator.ShouldHaveValidationErrorFor(x => x.Title, string.Empty);
+            using (var context = GetContextWithData())
+            {
+                var validator = new UpdateBookCommandValidator(context, Guid.Empty);
+                validator.ShouldHaveValidationErrorFor(x => x.Title, string.Empty);
+            }
         }
 
         [Fact]
         public void Update_Book_With_No_Categories_Throws_Exception()
         {
-            var validator = new UpdateBookCommandValidator();
-            validator.ShouldHaveValidationErrorFor(x => x.Categories, new List<GetBookModelCategory>());
+            using (var context = GetContextWithData())
+            {
+                var validator = new UpdateBookCommandValidator(context, Guid.Empty);
+                validator.ShouldHaveValidationErrorFor(x => x.Categories, new List<GetBookModelCategory>());
+            }
+        }
+
+        [Fact]
+        public void Update_Book_With_Title_That_Already_Exists_Throws_Exception()
+        {
+            using (var context = GetContextWithData())
+            {
+                var book = context.Books.FirstOrDefault(b => b.Title == "Open");
+
+                if (book != null)
+                {
+                    book.UpdateBook("Docker for Windows", null);
+
+                    var validator = new UpdateBookCommandValidator(context, book.Id);
+                    validator.ShouldHaveValidationErrorFor(x => x.Title, book.Title);
+                }
+            }
         }
     }
 }

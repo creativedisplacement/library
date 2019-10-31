@@ -30,8 +30,31 @@ namespace Library.Application.Tests.Categories.Commands
         [Fact]
         public void Create_Category_With_No_Name_Throws_Exception()
         {
-            var validator = new CreateCategoryCommandValidator();
-            validator.ShouldHaveValidationErrorFor(x => x.Name, string.Empty);
+            using (var context = GetContextWithData())
+            {
+                var validator = new CreateCategoryCommandValidator(context);
+                validator.ShouldHaveValidationErrorFor(x => x.Name, string.Empty);
+            }
+        }
+
+        [Fact]
+        public void Create_Category_With_Name_That_Already_Exists_Throws_Exception()
+        {
+            using (var context = GetContextWithData())
+            {
+                var validator = new CreateCategoryCommandValidator(context);
+                validator.ShouldHaveValidationErrorFor(x => x.Name, "Action");
+            }
+        }
+
+        [Fact]
+        public void Create_Category_With_Name_That_Does_Not_Already_Exist()
+        {
+            using (var context = GetContextWithData())
+            {
+                var validator = new CreateCategoryCommandValidator(context);
+                validator.ShouldNotHaveValidationErrorFor(x => x.Name, "New category");
+            }
         }
     }
 }
