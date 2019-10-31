@@ -34,7 +34,7 @@ namespace Library.Application.Tests.Categories.Commands
         {
             using (var context = GetContextWithData())
             {
-                var validator = new UpdateCategoryCommandValidator(context, Guid.Empty);
+                var validator = new UpdateCategoryCommandValidator(context);
                 validator.ShouldHaveValidationErrorFor(x => x.Id, Guid.Empty);
             }
         }
@@ -44,7 +44,7 @@ namespace Library.Application.Tests.Categories.Commands
         {
             using (var context = GetContextWithData())
             {
-                var validator = new UpdateCategoryCommandValidator(context, Guid.Empty);
+                var validator = new UpdateCategoryCommandValidator(context);
                 validator.ShouldHaveValidationErrorFor(x => x.Name, string.Empty);
             }
         }
@@ -60,8 +60,13 @@ namespace Library.Application.Tests.Categories.Commands
                 {
                     category.UpdateCategory("Technical");
 
-                    var validator = new UpdateCategoryCommandValidator(context, category.Id);
-                    validator.ShouldHaveValidationErrorFor(x => x.Id, category.Id);
+                    var validator = new UpdateCategoryCommandValidator(context);
+                    var result = validator.TestValidate(new UpdateCategoryCommand
+                    {
+                       Id = category.Id,
+                       Name = category.Name
+                    });
+                    result.ShouldHaveValidationErrorFor(x => x);
                 }
             }
         }

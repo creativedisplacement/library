@@ -1,4 +1,6 @@
-﻿using FluentValidation.TestHelper;
+﻿using System;
+using System.Linq;
+using FluentValidation.TestHelper;
 using Library.Application.People.Commands.CreatePerson;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
@@ -68,7 +70,14 @@ namespace Library.Application.Tests.People.Commands
             using (var context = GetContextWithData())
             {
                 var validator = new CreatePersonCommandValidator(context);
-                validator.ShouldHaveValidationErrorFor(x => x.Name, "Victor");
+                var result = validator.TestValidate(new CreatePersonCommand
+                {
+                    Id = new Guid(),
+                    Name = context.Persons.FirstOrDefault()?.Name,
+                    Email = "f@f.com",
+                    IsAdmin = false
+                });
+                result.ShouldHaveValidationErrorFor(x => x);
             }
         }
 
@@ -78,7 +87,14 @@ namespace Library.Application.Tests.People.Commands
             using (var context = GetContextWithData())
             {
                 var validator = new CreatePersonCommandValidator(context);
-                validator.ShouldNotHaveValidationErrorFor(x => x.Name, "Julia");
+                var result = validator.TestValidate(new CreatePersonCommand
+                {
+                    Id = new Guid(),
+                    Name = "Julia",
+                    Email = "f@f.com",
+                    IsAdmin = false
+                });
+                result.ShouldNotHaveValidationErrorFor(x => x);
             }
         }
 
@@ -88,7 +104,14 @@ namespace Library.Application.Tests.People.Commands
             using (var context = GetContextWithData())
             {
                 var validator = new CreatePersonCommandValidator(context);
-                validator.ShouldHaveValidationErrorFor(x => x.Email, "v@v.com");
+                var result = validator.TestValidate(new CreatePersonCommand
+                {
+                    Id = new Guid(),
+                    Name = "Vincent",
+                    Email = context.Persons.FirstOrDefault()?.Email,
+                    IsAdmin = false
+                });
+                result.ShouldHaveValidationErrorFor(x => x);
             }
         }
 
@@ -98,7 +121,13 @@ namespace Library.Application.Tests.People.Commands
             using (var context = GetContextWithData())
             {
                 var validator = new CreatePersonCommandValidator(context);
-                validator.ShouldNotHaveValidationErrorFor(x => x.Email, "j@j.com");
+                var result = validator.TestValidate(new CreatePersonCommand
+                {
+                    Id = new Guid(),
+                    Name = "Vincent",
+                    Email = "j@j.com",
+                    IsAdmin = false
+                });
             }
         }
     }

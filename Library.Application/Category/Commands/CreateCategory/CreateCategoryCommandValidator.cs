@@ -1,20 +1,19 @@
 ﻿using FluentValidation;
 using Library.Persistence;
-using System.Linq;
 
 namespace Library.Application.Category.Commands.CreateCategory
 {
-    public class CreateCategoryCommandValidator : AbstractValidator<CreateCategoryCommand>
+    public class CreateCategoryCommandValidator : BaseCategoryCommandValidator<CreateCategoryCommand>
     {
-        public CreateCategoryCommandValidator(LibraryDbContext context)
+        public CreateCategoryCommandValidator(LibraryDbContext context) : base(context)
         {
             RuleFor(x => x.Name)
                 .MinimumLength(3)
                 .MaximumLength(50)
                 .NotEmpty();
 
-            RuleFor(x => x.Name).Must(name => context.Categories.Count(b => b.Name == name) == 0)
-                .WithMessage("The category already exists in the database.");
+            RuleFor(x => x).Must(category => CategoryNameExists(category.Name, category.Id))
+                .WithMessage("The name for this category already exists in the database.");
         }
     }
 }

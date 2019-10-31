@@ -40,7 +40,7 @@ namespace Library.Application.Tests.People.Commands
         {
             using (var context = GetContextWithData())
             {
-                var validator = new UpdatePersonCommandValidator(context, Guid.Empty);
+                var validator = new UpdatePersonCommandValidator(context);
                 validator.ShouldHaveValidationErrorFor(x => x.Id, Guid.Empty);
             }
         }
@@ -50,7 +50,7 @@ namespace Library.Application.Tests.People.Commands
         {
             using (var context = GetContextWithData())
             {
-                var validator = new UpdatePersonCommandValidator(context, Guid.Empty);
+                var validator = new UpdatePersonCommandValidator(context);
                 validator.ShouldHaveValidationErrorFor(x => x.Name, string.Empty);
             }
         }
@@ -60,7 +60,7 @@ namespace Library.Application.Tests.People.Commands
         {
             using (var context = GetContextWithData())
             {
-                var validator = new UpdatePersonCommandValidator(context, Guid.Empty);
+                var validator = new UpdatePersonCommandValidator(context);
                 validator.ShouldHaveValidationErrorFor(x => x.Email, string.Empty);
             }
         }
@@ -70,7 +70,7 @@ namespace Library.Application.Tests.People.Commands
         {
             using (var context = GetContextWithData())
             {
-                var validator = new UpdatePersonCommandValidator(context, Guid.Empty);
+                var validator = new UpdatePersonCommandValidator(context);
                 validator.ShouldHaveValidationErrorFor(x => x.Email, "111");
             }
         }
@@ -86,7 +86,7 @@ namespace Library.Application.Tests.People.Commands
                 {
                     person.UpdateName("Tunde");
 
-                    var validator = new UpdatePersonCommandValidator(context, person.Id);
+                    var validator = new UpdatePersonCommandValidator(context);
                     var result = validator.TestValidate(new UpdatePersonCommand
                     {
                         Name = person.Name,
@@ -95,7 +95,7 @@ namespace Library.Application.Tests.People.Commands
                         IsAdmin = person.IsAdmin
                     });
 
-                    result.ShouldHaveValidationErrorFor(x => x.Name);
+                    result.ShouldHaveValidationErrorFor(x => x);
                 }
             }
         }
@@ -111,7 +111,7 @@ namespace Library.Application.Tests.People.Commands
                 {
                     person.UpdateName("John");
 
-                    var validator = new UpdatePersonCommandValidator(context, person.Id);
+                    var validator = new UpdatePersonCommandValidator(context);
                     var result = validator.TestValidate(new UpdatePersonCommand
                     {
                         Name = person.Name,
@@ -136,7 +136,7 @@ namespace Library.Application.Tests.People.Commands
                 {
                     person.UpdateEmail("t@t.com");
 
-                    var validator = new UpdatePersonCommandValidator(context, person.Id);
+                    var validator = new UpdatePersonCommandValidator(context);
                     var result = validator.TestValidate(new UpdatePersonCommand
                     {
                         Name = person.Name,
@@ -145,7 +145,7 @@ namespace Library.Application.Tests.People.Commands
                         IsAdmin = person.IsAdmin
                     });
 
-                    result.ShouldHaveValidationErrorFor(x => x.Email);
+                    result.ShouldHaveValidationErrorFor(x => x);
                 }
             }
         }
@@ -161,7 +161,7 @@ namespace Library.Application.Tests.People.Commands
                 {
                     person.UpdateEmail("y@y.com");
 
-                    var validator = new UpdatePersonCommandValidator(context, person.Id);
+                    var validator = new UpdatePersonCommandValidator(context);
                     var result = validator.TestValidate(new UpdatePersonCommand
                     {
                         Name = person.Name,

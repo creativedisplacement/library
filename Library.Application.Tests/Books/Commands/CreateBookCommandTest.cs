@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -65,7 +66,14 @@ namespace Library.Application.Tests.Books.Commands
             using (var context = GetContextWithData())
             {
                 var validator = new CreateBookCommandValidator(context);
-                validator.ShouldHaveValidationErrorFor(x => x.Title, context.Books.FirstOrDefault()?.Title);
+                var result = validator.TestValidate(new CreateBookCommand
+                {
+                    Id = new Guid(),
+                    Title = context.Books.FirstOrDefault()?.Title,
+                    Categories = context.BookCategories.Select(c => new CreateBookModelCategory{ Id = c.Category.Id, Name = c.Category.Name}).ToList()
+                });
+                result.ShouldHaveValidationErrorFor(x => x);
+                
             }
         }
 

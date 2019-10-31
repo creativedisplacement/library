@@ -1,6 +1,8 @@
 ﻿using FluentValidation.TestHelper;
 using Library.Application.Category.Commands.CreateCategory;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -43,7 +45,12 @@ namespace Library.Application.Tests.Categories.Commands
             using (var context = GetContextWithData())
             {
                 var validator = new CreateCategoryCommandValidator(context);
-                validator.ShouldHaveValidationErrorFor(x => x.Name, "Action");
+                var result = validator.TestValidate(new CreateCategoryCommand
+                {
+                   Id = new Guid(),
+                   Name = context.Categories.FirstOrDefault()?.Name
+                });
+                result.ShouldHaveValidationErrorFor(x => x);
             }
         }
 
@@ -53,7 +60,12 @@ namespace Library.Application.Tests.Categories.Commands
             using (var context = GetContextWithData())
             {
                 var validator = new CreateCategoryCommandValidator(context);
-                validator.ShouldNotHaveValidationErrorFor(x => x.Name, "New category");
+                var result = validator.TestValidate(new CreateCategoryCommand
+                {
+                    Id = new Guid(),
+                    Name = "New category"
+                });
+                result.ShouldNotHaveValidationErrorFor(x => x);
             }
         }
     }

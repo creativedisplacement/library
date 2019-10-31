@@ -90,10 +90,17 @@ namespace Library.Application.Tests.Books.Commands
 
                 if (book != null)
                 {
-                    book.UpdateBook("Docker for Windows", null);
+                    book.UpdateBook("Docker on Windows", book.BookCategories);
 
                     var validator = new UpdateBookCommandValidator(context);
-                    validator.ShouldHaveValidationErrorFor(x => x.Title, book.Title);
+                    var result = validator.TestValidate(new UpdateBookCommand
+                    {
+                        
+                        Id = book.Id,
+                        Title = book.Title,
+                        Categories = book.BookCategories.Select(c => new GetBookModelCategory{ Id = c.Category.Id, Name = c.Category.Name}).ToList()
+                    });
+                    result.ShouldHaveValidationErrorFor(x => x);
                 }
             }
         }

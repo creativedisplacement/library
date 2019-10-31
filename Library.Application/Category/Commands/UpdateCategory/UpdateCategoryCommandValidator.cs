@@ -1,13 +1,11 @@
 ﻿using FluentValidation;
 using Library.Persistence;
-using System;
-using System.Linq;
 
 namespace Library.Application.Category.Commands.UpdateCategory
 {
-    public class UpdateCategoryCommandValidator : AbstractValidator<UpdateCategoryCommand>
+    public class UpdateCategoryCommandValidator : BaseCategoryCommandValidator<UpdateCategoryCommand>
     {
-        public UpdateCategoryCommandValidator(LibraryDbContext context, Guid categoryId)
+        public UpdateCategoryCommandValidator(LibraryDbContext context) : base(context)
         {
             RuleFor(x => x.Id).NotEmpty();
             RuleFor(x => x.Name)
@@ -15,7 +13,7 @@ namespace Library.Application.Category.Commands.UpdateCategory
                 .MaximumLength(50)
                 .NotEmpty();
 
-            RuleFor(x => x.Id).Must(id => context.Categories.Count(c => c.Id == id && c.Id == categoryId) == 0)
+            RuleFor(x => x).Must(category => CategoryNameExists(category.Name, category.Id))
                 .WithMessage("The name for this category already exists in the database.");
         }
     }
