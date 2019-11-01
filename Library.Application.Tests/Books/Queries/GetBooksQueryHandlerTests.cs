@@ -63,7 +63,7 @@ namespace Library.Application.Tests.Books.Queries
             using (var context = GetContextWithData())
             {
                 var handler = new GetBooksQueryHandler(context);
-                var lenderId = context.Persons.First().Id;
+                var lenderId = context.Persons.First(p => p.Name == "Hamed").Id;
                 var result = await handler.Handle(new GetBooksQuery {LenderId = lenderId}, CancellationToken.None);
 
                 Assert.IsType<GetBooksModel>(result);
@@ -71,6 +71,7 @@ namespace Library.Application.Tests.Books.Queries
             }
         }
 
+        //TODO: Some strangeness with IQueryable and the boolean comparison for is available. Converted to list seems to work but not ideal
         [Fact]
         public async Task Get_Books_By_Are_Available()
         {
@@ -80,10 +81,11 @@ namespace Library.Application.Tests.Books.Queries
                 var result = await handler.Handle(new GetBooksQuery {IsAvailable = true}, CancellationToken.None);
 
                 Assert.IsType<GetBooksModel>(result);
-                Assert.Equal(context.Books.First(b => b.IsAvailable).Title, result.Books.First().Title);
+                Assert.Equal(context.Books.OrderBy(b => b.Title).ToList().First(b => b.IsAvailable).Title, result.Books.First().Title);
             }
         }
 
+        //TODO: Some strangeness with IQueryable and the boolean comparison for is available. Converted to list seems to work but not ideal
         [Fact]
         public async Task Get_Books_By_Are_Not_Available()
         {
@@ -93,7 +95,7 @@ namespace Library.Application.Tests.Books.Queries
                 var result = await handler.Handle(new GetBooksQuery {IsAvailable = false}, CancellationToken.None);
 
                 Assert.IsType<GetBooksModel>(result);
-                Assert.Equal(context.Books.First(b => !b.IsAvailable).Title, result.Books.First().Title);
+                Assert.Equal(context.Books.OrderBy(b => b.Title).ToList().First(b => !b.IsAvailable).Title, result.Books.First().Title);
             }
         }
     }

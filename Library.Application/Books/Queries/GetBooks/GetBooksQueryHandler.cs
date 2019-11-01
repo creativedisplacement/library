@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,7 +21,8 @@ namespace Library.Application.Books.Queries.GetBooks
 
         public async Task<GetBooksModel> Handle(GetBooksQuery request, CancellationToken cancellationToken)
         {
-            IQueryable<Domain.Entities.Book> books = _context.Books
+            //TODO: IQueryable call seems to fail on the isavailable step, investigate further
+            IEnumerable<Domain.Entities.Book> books = _context.Books
                 .Include(i => i.BookCategories)
                 .ThenInclude(c => c.Category);
 
@@ -37,20 +39,20 @@ namespace Library.Application.Books.Queries.GetBooks
 
             if (request.LenderId != Guid.Empty)
             {
-                books = books.Where(b => b.Lender.Id == request.LenderId);
+                books = books.Where(b => b.Lender != null && b.Lender.Id == request.LenderId);
             }
 
             if (request.IsAvailable.HasValue)
             {
-                books = books.Where(bb => bb.IsAvailable == request.IsAvailable);
+                books = request.IsAvailable.Value ? books.Where(bb => bb.IsAvailable) : books.Where(bb => bb.IsAvailable == false);
             }
 
             return new GetBooksModel
             {
-                Books = await books
+                Books = books
                     .Select(b => new GetBookModel {Id = b.Id, Title = b.Title, Categories = b.BookCategories.Select(c => new GetBookModelCategory{ Id = c.CategoryId, Name = c.Category.Name})})
                     .OrderBy(b => b.Title)
-                    .ToListAsync(cancellationToken)
+                    .ToList()
             };
         }
     }
