@@ -71,7 +71,6 @@ namespace Library.Application.Tests.Books.Queries
             }
         }
 
-        //TODO: Some strangeness with IQueryable and the boolean comparison for is available. Converted to list seems to work but not ideal
         [Fact]
         public async Task Get_Books_By_Are_Available()
         {
@@ -85,7 +84,6 @@ namespace Library.Application.Tests.Books.Queries
             }
         }
 
-        //TODO: Some strangeness with IQueryable and the boolean comparison for is available. Converted to list seems to work but not ideal
         [Fact]
         public async Task Get_Books_By_Are_Not_Available()
         {
