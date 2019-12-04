@@ -21,10 +21,11 @@ namespace Library.Application.Books.Queries.GetBooks
 
         public async Task<GetBooksModel> Handle(GetBooksQuery request, CancellationToken cancellationToken)
         {
-            //TODO: IQueryable call seems to fail on the isavailable step, investigate further
-            IEnumerable<Domain.Entities.Book> books = _context.Books
+            //TODO: IQueryable call seems to fail on the isavailable step, changed to IList for now and need to investigate further
+            IEnumerable<Domain.Entities.Book> books = await _context.Books
                 .Include(i => i.BookCategories)
-                .ThenInclude(c => c.Category);
+                .ThenInclude(c => c.Category)
+                .ToListAsync(cancellationToken);
 
             if (!string.IsNullOrEmpty(request.Title))
             {
