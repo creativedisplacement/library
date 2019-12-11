@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Library.Server
+namespace Library.Server.Services
 {
     public class BooksService :  Books.BooksBase
     {
@@ -21,39 +21,31 @@ namespace Library.Server
 
         public override async Task<BooksReply> GetBooks(GetBooksRequest request, ServerCallContext context)
         {
-            //Get books back
-            //mediator 
-            //
-            try
-            {
-                var books = await _mediator.Send(new GetBooksQuery
+            var books = await _mediator.Send(new GetBooksQuery
                 {
                     Title = request.Title,
-                    //CategoryIds = new List<Guid>(request.CategoryIds.Select(s => new Guid(s)).AsEnumerable()),
-                    //LenderId = new Guid(request.LenderId),
+                    CategoryIds = request.CategoryIds.Count > 0 ? request.CategoryIds.Select(s => new Guid(s)).ToList() : new List<Guid>{},
+                    LenderId = !string.IsNullOrEmpty(request.LenderId) ? new Guid(request.LenderId) : Guid.Empty,
                     IsAvailable = request.IsAvailable
                 });
 
-                var x = books.Books.Select(b => new BookReply
-                {
-                    Id = b.Id.ToString(),
-                    Title = b.Title,
-                    
-                });
+                var bookReplyList = new List<BookReply>();
 
-                return new BooksReply
+                foreach (var book in books.Books)
                 {
-                    Books = { x.ToList() }
-                };
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-           
+                    var bookReply = new BookReply
+                    {
+                        Id = book.Id.ToString(),
+                        Title = book.Title,
+                        Lender = null
+                    };
+                    bookReply.CategoryIds.Add(book.Categories.Select(s => new CategoryReply{ Id = s.Id.ToString(), Name = s.Name})); 
+                    bookReplyList.Add(bookReply);
+                }
 
-            
+                var booksReply = new BooksReply();
+                booksReply.Books.AddRange(bookReplyList);
+                return booksReply;
         }
     }
 }

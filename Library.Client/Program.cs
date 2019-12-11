@@ -20,6 +20,10 @@ namespace Library.Client
             {
                 Console.WriteLine($"Item id:{item.Id}");
                 Console.WriteLine($"Item Title:{item.Title}");
+                foreach (var category in item.CategoryIds)
+                {
+                    Console.WriteLine($"Category Id:{category}");
+                }
             }
             
             Console.WriteLine("Press any key to exit...");
