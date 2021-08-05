@@ -9,7 +9,7 @@ using System.Reflection;
 
 namespace Library.WebApi.Configuration
 {
-    public static class DIConfigurationExtension
+    public static class DiConfigurationExtension
     {
         public static void AddDependencyInjectionConfig(this IServiceCollection services)
         {

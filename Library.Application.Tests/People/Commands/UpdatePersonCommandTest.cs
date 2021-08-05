@@ -14,164 +14,146 @@ namespace Library.Application.Tests.People.Commands
         [Fact]
         public async Task Update_Person()
         {
-            using (var context = GetContextWithData())
+            using var context = GetContextWithData();
+            var handler = new UpdatePersonCommandHandler(context);
+            var command = new UpdatePersonCommand
             {
-                var handler = new UpdatePersonCommandHandler(context);
-                var command = new UpdatePersonCommand
-                {
-                    Id = (await context.Persons.FirstOrDefaultAsync()).Id,
-                    Name = "Name2",
-                    Email = "email2@mail.com",
-                    IsAdmin = true
-                };
+                Id = (await context.Persons.FirstOrDefaultAsync()).Id,
+                Name = "Name2",
+                Email = "email2@mail.com",
+                IsAdmin = true
+            };
 
-                await handler.Handle(command, CancellationToken.None);
+            await handler.Handle(command, CancellationToken.None);
 
-                var person = await context.Persons.FindAsync(command.Id);
+            var person = await context.Persons.FindAsync(command.Id);
 
-                Assert.Equal(command.Name, person.Name);
-                Assert.Equal(command.Email, person.Email);
-                Assert.Equal(command.IsAdmin, person.IsAdmin);
-            }
+            Assert.Equal(command.Name, person.Name);
+            Assert.Equal(command.Email, person.Email);
+            Assert.Equal(command.IsAdmin, person.IsAdmin);
         }
 
         [Fact]
         public void Update_Person_With_No_Id_Throws_Exception()
         {
-            using (var context = GetContextWithData())
-            {
-                var validator = new UpdatePersonCommandValidator(context);
-                validator.ShouldHaveValidationErrorFor(x => x.Id, Guid.Empty);
-            }
+            using var context = GetContextWithData();
+            var validator = new UpdatePersonCommandValidator(context);
+            validator.ShouldHaveValidationErrorFor(x => x.Id, Guid.Empty);
         }
 
         [Fact]
         public void Update_Person_With_No_Name_Throws_Exception()
         {
-            using (var context = GetContextWithData())
-            {
-                var validator = new UpdatePersonCommandValidator(context);
-                validator.ShouldHaveValidationErrorFor(x => x.Name, string.Empty);
-            }
+            using var context = GetContextWithData();
+            var validator = new UpdatePersonCommandValidator(context);
+            validator.ShouldHaveValidationErrorFor(x => x.Name, string.Empty);
         }
 
         [Fact]
         public void Update_Person_With_No_Email_Throws_Exception()
         {
-            using (var context = GetContextWithData())
-            {
-                var validator = new UpdatePersonCommandValidator(context);
-                validator.ShouldHaveValidationErrorFor(x => x.Email, string.Empty);
-            }
+            using var context = GetContextWithData();
+            var validator = new UpdatePersonCommandValidator(context);
+            validator.ShouldHaveValidationErrorFor(x => x.Email, string.Empty);
         }
 
         [Fact]
         public void Update_Person_With_Invalid_Email_Throws_Exception()
         {
-            using (var context = GetContextWithData())
-            {
-                var validator = new UpdatePersonCommandValidator(context);
-                validator.ShouldHaveValidationErrorFor(x => x.Email, "111");
-            }
+            using var context = GetContextWithData();
+            var validator = new UpdatePersonCommandValidator(context);
+            validator.ShouldHaveValidationErrorFor(x => x.Email, "111");
         }
 
         [Fact]
         public void Update_Person_With_Name_That_Already_Exists_Throws_Exception()
         {
-            using (var context = GetContextWithData())
+            using var context = GetContextWithData();
+            var person = context.Persons.FirstOrDefault(b => b.Name == "Victor");
+
+            if (person != null)
             {
-                var person = context.Persons.FirstOrDefault(b => b.Name == "Victor");
+                person.UpdateName("Tunde");
 
-                if (person != null)
+                var validator = new UpdatePersonCommandValidator(context);
+                var result = validator.TestValidate(new UpdatePersonCommand
                 {
-                    person.UpdateName("Tunde");
+                    Name = person.Name,
+                    Email = person.Email,
+                    Id = person.Id,
+                    IsAdmin = person.IsAdmin
+                });
 
-                    var validator = new UpdatePersonCommandValidator(context);
-                    var result = validator.TestValidate(new UpdatePersonCommand
-                    {
-                        Name = person.Name,
-                        Email = person.Email,
-                        Id = person.Id,
-                        IsAdmin = person.IsAdmin
-                    });
-
-                    result.ShouldHaveValidationErrorFor(x => x);
-                }
+                result.ShouldHaveValidationErrorFor(x => x);
             }
         }
 
         [Fact]
         public void Update_Person_With_Name_That_Does_Not_Already_Exist()
         {
-            using (var context = GetContextWithData())
+            using var context = GetContextWithData();
+            var person = context.Persons.FirstOrDefault(b => b.Name == "Victor");
+
+            if (person != null)
             {
-                var person = context.Persons.FirstOrDefault(b => b.Name == "Victor");
+                person.UpdateName("John");
 
-                if (person != null)
+                var validator = new UpdatePersonCommandValidator(context);
+                var result = validator.TestValidate(new UpdatePersonCommand
                 {
-                    person.UpdateName("John");
+                    Name = person.Name,
+                    Email = person.Email,
+                    Id = person.Id,
+                    IsAdmin = person.IsAdmin
+                });
 
-                    var validator = new UpdatePersonCommandValidator(context);
-                    var result = validator.TestValidate(new UpdatePersonCommand
-                    {
-                        Name = person.Name,
-                        Email = person.Email,
-                        Id = person.Id,
-                        IsAdmin = person.IsAdmin
-                    });
-
-                    result.ShouldNotHaveValidationErrorFor(x => x.Name);
-                }
+                result.ShouldNotHaveValidationErrorFor(x => x.Name);
             }
         }
 
         [Fact]
         public void Update_Person_With_Email_That_Already_Exists_Throws_Exception()
         {
-            using (var context = GetContextWithData())
+            using var context = GetContextWithData();
+            var person = context.Persons.FirstOrDefault(b => b.Name == "Victor");
+
+            if (person != null)
             {
-                var person = context.Persons.FirstOrDefault(b => b.Name == "Victor");
+                person.UpdateEmail("t@t.com");
 
-                if (person != null)
+                var validator = new UpdatePersonCommandValidator(context);
+                var result = validator.TestValidate(new UpdatePersonCommand
                 {
-                    person.UpdateEmail("t@t.com");
+                    Name = person.Name,
+                    Email = person.Email,
+                    Id = person.Id,
+                    IsAdmin = person.IsAdmin
+                });
 
-                    var validator = new UpdatePersonCommandValidator(context);
-                    var result = validator.TestValidate(new UpdatePersonCommand
-                    {
-                        Name = person.Name,
-                        Email = person.Email,
-                        Id = person.Id,
-                        IsAdmin = person.IsAdmin
-                    });
-
-                    result.ShouldHaveValidationErrorFor(x => x);
-                }
+                result.ShouldHaveValidationErrorFor(x => x);
             }
         }
 
         [Fact]
         public void Update_Person_With_Email_That_Does_Not_Already_Exist()
         {
-            using (var context = GetContextWithData())
+            using var context = GetContextWithData();
+            var person = context.Persons.FirstOrDefault(b => b.Name == "Victor");
+
+            if (person != null)
             {
-                var person = context.Persons.FirstOrDefault(b => b.Name == "Victor");
+                person.UpdateEmail("y@y.com");
 
-                if (person != null)
+                var validator = new UpdatePersonCommandValidator(context);
+                var result = validator.TestValidate(new UpdatePersonCommand
                 {
-                    person.UpdateEmail("y@y.com");
+                    Name = person.Name,
+                    Email = person.Email,
+                    Id = person.Id,
+                    IsAdmin = person.IsAdmin
+                });
 
-                    var validator = new UpdatePersonCommandValidator(context);
-                    var result = validator.TestValidate(new UpdatePersonCommand
-                    {
-                        Name = person.Name,
-                        Email = person.Email,
-                        Id = person.Id,
-                        IsAdmin = person.IsAdmin
-                    });
-
-                    result.ShouldNotHaveValidationErrorFor(x => x.Email);
-                }
+                result.ShouldNotHaveValidationErrorFor(x => x.Email);
             }
         }
     }

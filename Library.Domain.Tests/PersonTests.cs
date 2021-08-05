@@ -1,6 +1,5 @@
 ﻿using Library.Domain.Entities;
 using Library.Domain.Enums;
-using System;
 using Xunit;
 
 namespace Library.Domain.Tests

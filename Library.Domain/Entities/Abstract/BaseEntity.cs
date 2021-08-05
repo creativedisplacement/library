@@ -1,7 +1,7 @@
 ﻿using System;
 using Library.Domain.Enums;
 
-namespace Library.Domain.Entities
+namespace Library.Domain.Entities.Abstract
 {
     public abstract class BaseEntity
     {

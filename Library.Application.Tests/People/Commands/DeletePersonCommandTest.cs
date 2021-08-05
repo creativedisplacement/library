@@ -14,17 +14,15 @@ namespace Library.Application.Tests.People.Commands
         [Fact]
         public async Task Delete_Person()
         {
-            using (var context = GetContextWithData())
+            using var context = GetContextWithData();
+            var handler = new DeletePersonCommandHandler(context);
+            var command = new DeletePersonCommand
             {
-                var handler = new DeletePersonCommandHandler(context);
-                var command = new DeletePersonCommand
-                {
-                    Id = (await context.Persons.Skip(1).Take(1).FirstOrDefaultAsync()).Id
-                };
+                Id = (await context.Persons.Skip(1).Take(1).FirstOrDefaultAsync()).Id
+            };
 
-                await handler.Handle(command, CancellationToken.None);
-                Assert.Null(await context.Persons.FindAsync(command.Id));
-            }
+            await handler.Handle(command, CancellationToken.None);
+            Assert.Null(await context.Persons.FindAsync(command.Id));
         }
 
         [Fact]

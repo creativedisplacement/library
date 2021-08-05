@@ -1,13 +1,12 @@
-﻿using FluentValidation.TestHelper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using FluentValidation.TestHelper;
 using Library.Application.Book.Commands.CreateBook;
 using Library.Common.Models.Book;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mime;
-using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Library.Application.Tests.Books.Commands

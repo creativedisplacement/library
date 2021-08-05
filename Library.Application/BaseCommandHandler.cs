@@ -1,4 +1,4 @@
-﻿using Library.Domain.Entities;
+﻿using Library.Domain.Entities.Abstract;
 using Library.Domain.Enums;
 using Library.Persistence;
 
@@ -13,7 +13,7 @@ namespace Library.Application
             _context = context;
         }
 
-        public void SetDomainState(BaseEntity entity)
+        protected void SetDomainState(BaseEntity entity)
         {
             switch (entity.Status)
             {
