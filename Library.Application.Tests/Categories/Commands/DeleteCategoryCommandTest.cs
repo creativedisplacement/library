@@ -15,24 +15,24 @@ namespace Library.Application.Tests.Categories.Commands
         [Fact]
         public async Task Delete_Category()
         {
-            using (var context = GetContextWithData())
+            await using var context = GetContextWithData();
+            var handler = new DeleteCategoryCommandHandler(context);
+            var command = new DeleteCategoryCommand
             {
-                var handler = new DeleteCategoryCommandHandler(context);
-                var command = new DeleteCategoryCommand
-                {
-                    Id = (await context.Categories.Skip(6).Take(1).FirstOrDefaultAsync()).Id
-                };
+                Id = (await context.Categories.Skip(6).Take(1).FirstOrDefaultAsync()).Id
+            };
 
-                await handler.Handle(command, CancellationToken.None);
-                Assert.Null(await context.Categories.FindAsync(command.Id));
-            }
+            await handler.Handle(command, CancellationToken.None);
+            Assert.Null(await context.Categories.FindAsync(command.Id));
         }
 
         [Fact]
         public void Delete_Category_With_No_Id_Throws_Exception()
         {
+            var model = new DeleteCategoryCommand {Id = Guid.Empty};
             var validator = new DeleteCategoryCommandValidator();
-            validator.ShouldHaveValidationErrorFor(x => x.Id, Guid.Empty);
+            var result = validator.TestValidate(model);
+            result.ShouldHaveValidationErrorFor(x => x.Id);
         }
     }
 }

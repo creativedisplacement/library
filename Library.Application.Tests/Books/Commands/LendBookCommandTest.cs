@@ -13,35 +13,37 @@ namespace Library.Application.Tests.Books.Commands
         [Fact]
         public async Task Lend_Book()
         {
-            using (var context = GetContextWithData())
+            await using var context = GetContextWithData();
+            var handler = new LendBookCommandHandler(context);
+            var command = new LendBookCommand
             {
-                var handler = new LendBookCommandHandler(context);
-                var command = new LendBookCommand
-                {
-                    Id = (await context.Books.FirstOrDefaultAsync()).Id,
-                    LenderId = (await context.Persons.FirstOrDefaultAsync()).Id
-                };
+                Id = (await context.Books.FirstOrDefaultAsync()).Id,
+                LenderId = (await context.Persons.FirstOrDefaultAsync()).Id
+            };
 
-                await handler.Handle(command, CancellationToken.None);
+            await handler.Handle(command, CancellationToken.None);
 
-                var book = await context.Books.FindAsync(command.Id);
+            var book = await context.Books.FindAsync(command.Id);
 
-                Assert.NotNull(book.Lender);
-            }
+            Assert.NotNull(book.Lender);
         }
 
         [Fact]
         public void Lend_Book_With_No_Id_Throws_Exception()
         {
+            var model = new LendBookCommand {Id = Guid.Empty};
             var validator = new LendBookCommandValidator();
-            validator.ShouldHaveValidationErrorFor(x => x.Id, Guid.Empty);
+            var result = validator.TestValidate(model);
+            result.ShouldHaveValidationErrorFor(x => x.Id);
         }
 
         [Fact]
         public void Lend_Book_With_No_Lender_Id_Throws_Exception()
         {
+            var model = new LendBookCommand {LenderId = Guid.Empty};
             var validator = new LendBookCommandValidator();
-            validator.ShouldHaveValidationErrorFor(x => x.LenderId, Guid.Empty);
+            var result = validator.TestValidate(model);
+            result.ShouldHaveValidationErrorFor(x => x.LenderId);
         }
     }
 }

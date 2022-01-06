@@ -14,7 +14,7 @@ namespace Library.Application.Tests.People.Commands
         [Fact]
         public async Task Delete_Person()
         {
-            using var context = GetContextWithData();
+            await using var context = GetContextWithData();
             var handler = new DeletePersonCommandHandler(context);
             var command = new DeletePersonCommand
             {
@@ -28,8 +28,10 @@ namespace Library.Application.Tests.People.Commands
         [Fact]
         public void Delete_Person_With_No_Id_Throws_Exception()
         {
+            var model = new DeletePersonCommand {Id = Guid.Empty};
             var validator = new DeletePersonCommandValidator();
-            validator.ShouldHaveValidationErrorFor(x => x.Id, Guid.Empty);
+            var result = validator.TestValidate(model);
+            result.ShouldHaveValidationErrorFor(x => x.Id);
         }
     }
 }

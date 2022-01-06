@@ -14,60 +14,54 @@ namespace Library.Application.Tests.Categories.Commands
         [Fact]
         public async Task Update_Category()
         {
-            using (var context = GetContextWithData())
+            await using var context = GetContextWithData();
+            var handler = new UpdateCategoryCommandHandler(context);
+            var command = new UpdateCategoryCommand
             {
-                var handler = new UpdateCategoryCommandHandler(context);
-                var command = new UpdateCategoryCommand
-                {
-                    Id = (await context.Categories.FirstOrDefaultAsync()).Id,
-                    Name = "Test2"
-                };
+                Id = (await context.Categories.FirstOrDefaultAsync()).Id,
+                Name = "Test2"
+            };
 
-                await handler.Handle(command, CancellationToken.None);
-                Assert.Equal(command.Name, (await context.Categories.FindAsync(command.Id)).Name);
-            }
+            await handler.Handle(command, CancellationToken.None);
+            Assert.Equal(command.Name, (await context.Categories.FindAsync(command.Id)).Name);
         }
 
         [Fact]
         public void Update_Category_With_No_Id_Throws_Exception()
         {
-            using (var context = GetContextWithData())
-            {
-                var validator = new UpdateCategoryCommandValidator(context);
-                validator.ShouldHaveValidationErrorFor(x => x.Id, Guid.Empty);
-            }
+            using var context = GetContextWithData();
+            var model = new UpdateCategoryCommand {Id = Guid.Empty};
+            var validator = new UpdateCategoryCommandValidator(context);
+            var result = validator.TestValidate(model);
+            result.ShouldHaveValidationErrorFor(x => x.Id);
         }
 
         [Fact]
         public void Update_Category_With_No_Name_Throws_Exception()
         {
-            using (var context = GetContextWithData())
-            {
-                var validator = new UpdateCategoryCommandValidator(context);
-                validator.ShouldHaveValidationErrorFor(x => x.Name, string.Empty);
-            }
+            using var context = GetContextWithData();
+            var model = new UpdateCategoryCommand {Name = null};
+            var validator = new UpdateCategoryCommandValidator(context);
+            var result = validator.TestValidate(model);
+            result.ShouldHaveValidationErrorFor(x => x.Name);
         }
 
         [Fact]
         public void Update_Category_With_Title_That_Already_Exists_Throws_Exception()
         {
-            using (var context = GetContextWithData())
+            using var context = GetContextWithData();
+            var category = context.Categories.FirstOrDefault(b => b.Name == "Action");
+
+            if (category == null) return;
+            category.UpdateCategory("Technical");
+
+            var validator = new UpdateCategoryCommandValidator(context);
+            var result = validator.TestValidate(new UpdateCategoryCommand
             {
-                var category = context.Categories.FirstOrDefault(b => b.Name == "Action");
-
-                if (category != null)
-                {
-                    category.UpdateCategory("Technical");
-
-                    var validator = new UpdateCategoryCommandValidator(context);
-                    var result = validator.TestValidate(new UpdateCategoryCommand
-                    {
-                       Id = category.Id,
-                       Name = category.Name
-                    });
-                    result.ShouldHaveValidationErrorFor(x => x);
-                }
-            }
+                Id = category.Id,
+                Name = category.Name
+            });
+            result.ShouldHaveValidationErrorFor(x => x);
         }
     }
 }

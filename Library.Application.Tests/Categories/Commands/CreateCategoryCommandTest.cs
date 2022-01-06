@@ -14,59 +14,53 @@ namespace Library.Application.Tests.Categories.Commands
         [Fact]
         public async Task Create_New_Category()
         {
-            using (var context = GetContextWithData())
+            await using var context = GetContextWithData();
+            var handler = new CreateCategoryCommandHandler(context);
+            var command = new CreateCategoryCommand
             {
-                var handler = new CreateCategoryCommandHandler(context);
-                var command = new CreateCategoryCommand
-                {
-                    Name = "Test1"
-                };
+                Name = "Test1"
+            };
 
-                await handler.Handle(command, CancellationToken.None);
-                var category = await context.Categories.SingleOrDefaultAsync(c => c.Name == command.Name);
+            await handler.Handle(command, CancellationToken.None);
+            var category = await context.Categories.SingleOrDefaultAsync(c => c.Name == command.Name);
 
-                Assert.Equal(command.Name, category.Name);
-            }
+            Assert.Equal(command.Name, category.Name);
         }
 
         [Fact]
         public void Create_Category_With_No_Name_Throws_Exception()
         {
-            using (var context = GetContextWithData())
-            {
-                var validator = new CreateCategoryCommandValidator(context);
-                validator.ShouldHaveValidationErrorFor(x => x.Name, string.Empty);
-            }
+            using var context = GetContextWithData();
+            var model = new CreateCategoryCommand {Name = null};
+            var validator = new CreateCategoryCommandValidator(context);
+            var result = validator.TestValidate(model);
+            result.ShouldHaveValidationErrorFor(x => x.Name);
         }
 
         [Fact]
         public void Create_Category_With_Name_That_Already_Exists_Throws_Exception()
         {
-            using (var context = GetContextWithData())
+            using var context = GetContextWithData();
+            var validator = new CreateCategoryCommandValidator(context);
+            var result = validator.TestValidate(new CreateCategoryCommand
             {
-                var validator = new CreateCategoryCommandValidator(context);
-                var result = validator.TestValidate(new CreateCategoryCommand
-                {
-                   Id = new Guid(),
-                   Name = context.Categories.FirstOrDefault()?.Name
-                });
-                result.ShouldHaveValidationErrorFor(x => x);
-            }
+                Id = new Guid(),
+                Name = context.Categories.FirstOrDefault()?.Name
+            });
+            result.ShouldHaveValidationErrorFor(x => x);
         }
 
         [Fact]
         public void Create_Category_With_Name_That_Does_Not_Already_Exist()
         {
-            using (var context = GetContextWithData())
+            using var context = GetContextWithData();
+            var validator = new CreateCategoryCommandValidator(context);
+            var result = validator.TestValidate(new CreateCategoryCommand
             {
-                var validator = new CreateCategoryCommandValidator(context);
-                var result = validator.TestValidate(new CreateCategoryCommand
-                {
-                    Id = new Guid(),
-                    Name = "New category"
-                });
-                result.ShouldNotHaveValidationErrorFor(x => x);
-            }
+                Id = new Guid(),
+                Name = "New category"
+            });
+            result.ShouldNotHaveValidationErrorFor(x => x);
         }
     }
 }

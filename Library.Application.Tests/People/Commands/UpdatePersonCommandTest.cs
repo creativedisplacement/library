@@ -14,7 +14,7 @@ namespace Library.Application.Tests.People.Commands
         [Fact]
         public async Task Update_Person()
         {
-            using var context = GetContextWithData();
+            await using var context = GetContextWithData();
             var handler = new UpdatePersonCommandHandler(context);
             var command = new UpdatePersonCommand
             {
@@ -37,32 +37,40 @@ namespace Library.Application.Tests.People.Commands
         public void Update_Person_With_No_Id_Throws_Exception()
         {
             using var context = GetContextWithData();
+            var model = new UpdatePersonCommand {Id = Guid.Empty};
             var validator = new UpdatePersonCommandValidator(context);
-            validator.ShouldHaveValidationErrorFor(x => x.Id, Guid.Empty);
+            var result = validator.TestValidate(model);
+            result.ShouldHaveValidationErrorFor(x => x.Id);
         }
 
         [Fact]
         public void Update_Person_With_No_Name_Throws_Exception()
         {
             using var context = GetContextWithData();
+            var model = new UpdatePersonCommand {Name = null};
             var validator = new UpdatePersonCommandValidator(context);
-            validator.ShouldHaveValidationErrorFor(x => x.Name, string.Empty);
+            var result = validator.TestValidate(model);
+            result.ShouldHaveValidationErrorFor(x => x.Name);
         }
 
         [Fact]
         public void Update_Person_With_No_Email_Throws_Exception()
         {
             using var context = GetContextWithData();
+            var model = new UpdatePersonCommand {Email = null};
             var validator = new UpdatePersonCommandValidator(context);
-            validator.ShouldHaveValidationErrorFor(x => x.Email, string.Empty);
+            var result = validator.TestValidate(model);
+            result.ShouldHaveValidationErrorFor(x => x.Email);
         }
 
         [Fact]
         public void Update_Person_With_Invalid_Email_Throws_Exception()
         {
             using var context = GetContextWithData();
+            var model = new UpdatePersonCommand {Email = "111"};
             var validator = new UpdatePersonCommandValidator(context);
-            validator.ShouldHaveValidationErrorFor(x => x.Email, "111");
+            var result = validator.TestValidate(model);
+            result.ShouldHaveValidationErrorFor(x => x.Email);
         }
 
         [Fact]
@@ -71,21 +79,19 @@ namespace Library.Application.Tests.People.Commands
             using var context = GetContextWithData();
             var person = context.Persons.FirstOrDefault(b => b.Name == "Victor");
 
-            if (person != null)
+            if (person == null) return;
+            person.UpdateName("Tunde");
+
+            var validator = new UpdatePersonCommandValidator(context);
+            var result = validator.TestValidate(new UpdatePersonCommand
             {
-                person.UpdateName("Tunde");
+                Name = person.Name,
+                Email = person.Email,
+                Id = person.Id,
+                IsAdmin = person.IsAdmin
+            });
 
-                var validator = new UpdatePersonCommandValidator(context);
-                var result = validator.TestValidate(new UpdatePersonCommand
-                {
-                    Name = person.Name,
-                    Email = person.Email,
-                    Id = person.Id,
-                    IsAdmin = person.IsAdmin
-                });
-
-                result.ShouldHaveValidationErrorFor(x => x);
-            }
+            result.ShouldHaveValidationErrorFor(x => x);
         }
 
         [Fact]
@@ -94,21 +100,19 @@ namespace Library.Application.Tests.People.Commands
             using var context = GetContextWithData();
             var person = context.Persons.FirstOrDefault(b => b.Name == "Victor");
 
-            if (person != null)
+            if (person == null) return;
+            person.UpdateName("John");
+
+            var validator = new UpdatePersonCommandValidator(context);
+            var result = validator.TestValidate(new UpdatePersonCommand
             {
-                person.UpdateName("John");
+                Name = person.Name,
+                Email = person.Email,
+                Id = person.Id,
+                IsAdmin = person.IsAdmin
+            });
 
-                var validator = new UpdatePersonCommandValidator(context);
-                var result = validator.TestValidate(new UpdatePersonCommand
-                {
-                    Name = person.Name,
-                    Email = person.Email,
-                    Id = person.Id,
-                    IsAdmin = person.IsAdmin
-                });
-
-                result.ShouldNotHaveValidationErrorFor(x => x.Name);
-            }
+            result.ShouldNotHaveValidationErrorFor(x => x.Name);
         }
 
         [Fact]
@@ -117,21 +121,19 @@ namespace Library.Application.Tests.People.Commands
             using var context = GetContextWithData();
             var person = context.Persons.FirstOrDefault(b => b.Name == "Victor");
 
-            if (person != null)
+            if (person == null) return;
+            person.UpdateEmail("t@t.com");
+
+            var validator = new UpdatePersonCommandValidator(context);
+            var result = validator.TestValidate(new UpdatePersonCommand
             {
-                person.UpdateEmail("t@t.com");
+                Name = person.Name,
+                Email = person.Email,
+                Id = person.Id,
+                IsAdmin = person.IsAdmin
+            });
 
-                var validator = new UpdatePersonCommandValidator(context);
-                var result = validator.TestValidate(new UpdatePersonCommand
-                {
-                    Name = person.Name,
-                    Email = person.Email,
-                    Id = person.Id,
-                    IsAdmin = person.IsAdmin
-                });
-
-                result.ShouldHaveValidationErrorFor(x => x);
-            }
+            result.ShouldHaveValidationErrorFor(x => x);
         }
 
         [Fact]
@@ -140,21 +142,19 @@ namespace Library.Application.Tests.People.Commands
             using var context = GetContextWithData();
             var person = context.Persons.FirstOrDefault(b => b.Name == "Victor");
 
-            if (person != null)
+            if (person == null) return;
+            person.UpdateEmail("y@y.com");
+
+            var validator = new UpdatePersonCommandValidator(context);
+            var result = validator.TestValidate(new UpdatePersonCommand
             {
-                person.UpdateEmail("y@y.com");
+                Name = person.Name,
+                Email = person.Email,
+                Id = person.Id,
+                IsAdmin = person.IsAdmin
+            });
 
-                var validator = new UpdatePersonCommandValidator(context);
-                var result = validator.TestValidate(new UpdatePersonCommand
-                {
-                    Name = person.Name,
-                    Email = person.Email,
-                    Id = person.Id,
-                    IsAdmin = person.IsAdmin
-                });
-
-                result.ShouldNotHaveValidationErrorFor(x => x.Email);
-            }
+            result.ShouldNotHaveValidationErrorFor(x => x.Email);
         }
     }
 }

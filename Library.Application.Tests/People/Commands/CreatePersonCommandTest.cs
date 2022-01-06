@@ -35,8 +35,10 @@ namespace Library.Application.Tests.People.Commands
         public void Create_New_Person_With_No_Email_Throws_Exception()
         {
             using var context = GetContextWithData();
+            var model = new CreatePersonCommand {Email = null};
             var validator = new CreatePersonCommandValidator(context);
-            validator.ShouldHaveValidationErrorFor(x => x.Email, string.Empty);
+            var result = validator.TestValidate(model);
+            result.ShouldHaveValidationErrorFor(x => x.Email);
         }
 
 
@@ -44,16 +46,20 @@ namespace Library.Application.Tests.People.Commands
         public void Create_New_Person_With_Invalid_Email_Throws_Exception()
         {
             using var context = GetContextWithData();
+            var model = new CreatePersonCommand {Email = "111"};
             var validator = new CreatePersonCommandValidator(context);
-            validator.ShouldHaveValidationErrorFor(x => x.Email, "111");
+            var result = validator.TestValidate(model);
+            result.ShouldHaveValidationErrorFor(x => x.Email);
         }
 
         [Fact]
         public void Create_New_Person_With_No_Name_Throws_Exception()
         {
             using var context = GetContextWithData();
+            var model = new CreatePersonCommand {Name = null};
             var validator = new CreatePersonCommandValidator(context);
-            validator.ShouldHaveValidationErrorFor(x => x.Name, string.Empty);
+            var result = validator.TestValidate(model);
+            result.ShouldHaveValidationErrorFor(x => x.Name);
         }
 
         [Fact]

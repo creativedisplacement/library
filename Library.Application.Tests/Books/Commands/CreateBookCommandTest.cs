@@ -16,74 +16,69 @@ namespace Library.Application.Tests.Books.Commands
         [Fact]
         public async Task Create_New_Book()
         {
-            using (var context = GetContextWithData())
+            await using var context = GetContextWithData();
+            var handler = new CreateBookCommandHandler(context);
+            var categoryId = Guid.NewGuid();
+
+            await AddCategory(context, categoryId, "nothing");
+
+            var command = new CreateBookCommand
             {
-                var handler = new CreateBookCommandHandler(context);
-                var categoryId = Guid.NewGuid();
+                Title = "Title",
+                Categories = new List<CreateBookModelCategory> {new CreateBookModelCategory {Id = categoryId}}
+            };
 
-                await AddCategory(context, categoryId, "nothing");
+            await handler.Handle(command, CancellationToken.None);
 
-                var command = new CreateBookCommand
-                {
-                    Title = "Title",
-                    Categories = new List<CreateBookModelCategory> {new CreateBookModelCategory {Id = categoryId}}
-                };
+            var book = await context.Books.SingleOrDefaultAsync(c => c.Title == command.Title);
 
-                await handler.Handle(command, CancellationToken.None);
-
-                var book = await context.Books.SingleOrDefaultAsync(c => c.Title == command.Title);
-
-                Assert.Equal(command.Title, book.Title);
-                Assert.Equal(command.Categories.ToList().Count, book.BookCategories.ToList().Count);
-                Assert.Equal(command.Categories.FirstOrDefault()?.Id, book.BookCategories.FirstOrDefault()?.CategoryId);
-            }
+            Assert.Equal(command.Title, book.Title);
+            Assert.Equal(command.Categories.ToList().Count, book.BookCategories.ToList().Count);
+            Assert.Equal(command.Categories.FirstOrDefault()?.Id, book.BookCategories.FirstOrDefault()?.CategoryId);
         }
 
         [Fact]
         public void Create_Book_With_No_Title_Throws_Exception()
         {
-            using (var context = GetContextWithData())
-            {
-                var validator = new CreateBookCommandValidator(context);
-                validator.ShouldHaveValidationErrorFor(x => x.Title, string.Empty);
-            }
+            using var context = GetContextWithData();
+            var model = new CreateBookCommand {Title = null};
+            var validator = new CreateBookCommandValidator(context);
+            var result = validator.TestValidate(model);
+            result.ShouldHaveValidationErrorFor(x => x.Title);
         }
 
         [Fact]
         public void Create_Book_With_No_Categories_Throws_Exception()
         {
-            using (var context = GetContextWithData())
-            {
-                var validator = new CreateBookCommandValidator(context);
-                validator.ShouldHaveValidationErrorFor(x => x.Categories, new List<CreateBookModelCategory>());
-            }
+            using var context = GetContextWithData();
+            var model = new CreateBookCommand {Categories = new List<CreateBookModelCategory>()};
+            var validator = new CreateBookCommandValidator(context);
+            var result = validator.TestValidate(model);
+            result.ShouldHaveValidationErrorFor(x => x.Categories);
         }
 
         [Fact]
         public void Create_Book_With_Title_That_Already_Exists_Throws_Exception()
         {
-            using (var context = GetContextWithData())
+            using var context = GetContextWithData();
+            var validator = new CreateBookCommandValidator(context);
+            var result = validator.TestValidate(new CreateBookCommand
             {
-                var validator = new CreateBookCommandValidator(context);
-                var result = validator.TestValidate(new CreateBookCommand
-                {
-                    Id = new Guid(),
-                    Title = context.Books.FirstOrDefault()?.Title,
-                    Categories = context.BookCategories.Select(c => new CreateBookModelCategory{ Id = c.Category.Id, Name = c.Category.Name}).ToList()
-                });
-                result.ShouldHaveValidationErrorFor(x => x);
-                
-            }
+                Id = new Guid(),
+                Title = context.Books.FirstOrDefault()?.Title,
+                Categories = context.BookCategories.Select(c => new CreateBookModelCategory{ Id = c.Category.Id, Name = c.Category.Name}).ToList()
+            });
+            result.ShouldHaveValidationErrorFor(x => x);
         }
 
         [Fact]
         public void Create_Book_With_Title_That_Does_Not_Already_Exists()
         {
-            using (var context = GetContextWithData())
-            {
-                var validator = new CreateBookCommandValidator(context);
-                validator.ShouldNotHaveValidationErrorFor(x => x.Title, "Title9");
-            }
+            using var context = GetContextWithData();
+            var model = new CreateBookCommand {Title = "Title9"};
+            var validator = new CreateBookCommandValidator(context);
+            var result = validator.TestValidate(model);
+            result.ShouldNotHaveValidationErrorFor(x => x.Title);
         }
     }
 }

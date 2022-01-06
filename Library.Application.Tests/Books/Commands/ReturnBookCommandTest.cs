@@ -13,25 +13,25 @@ namespace Library.Application.Tests.Books.Commands
         [Fact]
         public async Task Return_Book()
         {
-            using (var context = GetContextWithData())
+            await using var context = GetContextWithData();
+            var handler = new ReturnBookCommandHandler(context);
+            var command = new ReturnBookCommand
             {
-                var handler = new ReturnBookCommandHandler(context);
-                var command = new ReturnBookCommand
-                {
-                    Id = context.Books.First().Id
-                };
+                Id = context.Books.First().Id
+            };
 
-                var returnedBook = await handler.Handle(command, CancellationToken.None);
+            var returnedBook = await handler.Handle(command, CancellationToken.None);
 
-                Assert.Null(returnedBook.Lender);
-            }
+            Assert.Null(returnedBook.Lender);
         }
 
         [Fact]
         public void Return_Book_With_No_Id_Throws_Exception()
         {
+            var model = new ReturnBookCommand {Id = Guid.Empty};
             var validator = new ReturnBookCommandValidator();
-            validator.ShouldHaveValidationErrorFor(x => x.Id, Guid.Empty);
+            var result = validator.TestValidate(model);
+            result.ShouldHaveValidationErrorFor(x => x.Id);
         }
     }
 }
