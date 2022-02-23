@@ -1,38 +1,38 @@
-﻿using Library.Application.Exceptions;
-using Library.Persistence;
-using MediatR;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using Library.Application.Exceptions;
+using Library.Persistence;
 
-namespace Library.Application.Book.Commands.DeleteBook
+namespace Library.Application.Book.Commands.DeleteBook;
+
+public class DeleteBookCommandHandler : BaseCommandHandler, IRequestHandler<DeleteBookCommand>
 {
-    public class DeleteBookCommandHandler : BaseCommandHandler, IRequestHandler<DeleteBookCommand>
+    private readonly LibraryDbContext _context;
+
+    public DeleteBookCommandHandler(LibraryDbContext context) : base(context)
     {
-        private readonly LibraryDbContext _context;
+        _context = context;
+    }
 
-        public DeleteBookCommandHandler(LibraryDbContext context) : base(context)
+    public async Task<Unit> Handle(DeleteBookCommand request, CancellationToken cancellationToken)
+    {
+        var book = await _context.Books.FindAsync(request.Id, cancellationToken);
+
+        if (book == null)
         {
-            _context = context;
+            throw new NotFoundException(nameof(Book), request.Id);
         }
 
-        public async Task<Unit> Handle(DeleteBookCommand request, CancellationToken cancellationToken)
+        if (!book.IsAvailable)
         {
-            var book = await _context.Books.FindAsync(request.Id);
-
-            if (book == null)
-            {
-                throw new NotFoundException(nameof(Book), request.Id);
-            }
-
-            if (!book.IsAvailable)
-            {
-                throw new DeleteFailureException(nameof(Book), request.Id, "This book has been lent to someone and cannot be deleted.");
-            }
-            book.RemoveBook();
-            SetDomainState(book);
-            await _context.SaveChangesAsync(cancellationToken);
-
-            return Unit.Value;
+            throw new DeleteFailureException(nameof(Book), request.Id,
+                "This book has been lent to someone and cannot be deleted.");
         }
+
+        book.RemoveBook();
+        SetDomainState(book);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return Unit.Value;
     }
 }

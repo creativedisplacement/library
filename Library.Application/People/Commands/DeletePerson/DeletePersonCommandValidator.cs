@@ -1,12 +1,11 @@
 ﻿using FluentValidation;
 
-namespace Library.Application.People.Commands.DeletePerson
+namespace Library.Application.People.Commands.DeletePerson;
+
+public class DeletePersonCommandValidator : AbstractValidator<DeletePersonCommand>
 {
-    public class DeletePersonCommandValidator : AbstractValidator<DeletePersonCommand>
+    public DeletePersonCommandValidator()
     {
-        public DeletePersonCommandValidator()
-        {
-            RuleFor(x => x.Id).NotEmpty();
-        }
+        RuleFor(x => x.Id).NotEmpty();
     }
 }

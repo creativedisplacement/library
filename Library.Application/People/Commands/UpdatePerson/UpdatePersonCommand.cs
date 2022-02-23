@@ -1,10 +1,7 @@
-﻿using Library.Common;
-using Library.Common.Models.Person;
-using MediatR;
+﻿using Library.Common.Models.Person;
 
-namespace Library.Application.People.Commands.UpdatePerson
+namespace Library.Application.People.Commands.UpdatePerson;
+
+public class UpdatePersonCommand : BasePersonItem, IRequest<GetPersonModel>
 {
-    public class UpdatePersonCommand : BasePersonItem, IRequest<GetPersonModel>
-    {
-    }
 }

@@ -1,36 +1,34 @@
-﻿using FluentValidation.Results;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
+using FluentValidation.Results;
 
-namespace Library.Application.Exceptions
+namespace Library.Application.Exceptions;
+
+public class ValidationException : Exception
 {
-    public class ValidationException : Exception
+    private ValidationException()
+        : base("One or more validation failures have occurred.")
     {
-        public ValidationException()
-            : base("One or more validation failures have occurred.")
-        {
-            Failures = new Dictionary<string, string[]>();
-        }
-
-        public ValidationException(List<ValidationFailure> failures)
-            : this()
-        {
-            var propertyNames = failures
-                .Select(e => e.PropertyName)
-                .Distinct();
-
-            foreach (var propertyName in propertyNames)
-            {
-                var propertyFailures = failures
-                    .Where(e => e.PropertyName == propertyName)
-                    .Select(e => e.ErrorMessage)
-                    .ToArray();
-
-                Failures.Add(propertyName, propertyFailures);
-            }
-        }
-
-        public IDictionary<string, string[]> Failures { get; }
+        Failures = new Dictionary<string, string[]>();
     }
+
+    public ValidationException(List<ValidationFailure> failures)
+        : this()
+    {
+        var propertyNames = failures
+            .Select(e => e.PropertyName)
+            .Distinct();
+
+        foreach (var propertyName in propertyNames)
+        {
+            var propertyFailures = failures
+                .Where(e => e.PropertyName == propertyName)
+                .Select(e => e.ErrorMessage)
+                .ToArray();
+
+            Failures.Add(propertyName, propertyFailures);
+        }
+    }
+
+    private IDictionary<string, string[]> Failures { get; }
 }

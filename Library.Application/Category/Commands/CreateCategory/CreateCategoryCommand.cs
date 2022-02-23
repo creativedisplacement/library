@@ -1,10 +1,7 @@
-﻿using Library.Common;
-using Library.Common.Models.Category;
-using MediatR;
+﻿using Library.Common.Models.Category;
 
-namespace Library.Application.Category.Commands.CreateCategory
+namespace Library.Application.Category.Commands.CreateCategory;
+
+public class CreateCategoryCommand : BaseNameItem, IRequest<GetCategoryModel>
 {
-    public class CreateCategoryCommand : BaseNameItem, IRequest<GetCategoryModel>
-    {
-    }
 }

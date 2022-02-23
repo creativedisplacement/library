@@ -1,18 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="10.3.6" />
-    <PackageReference Include="MediatR" Version="10.0.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="FluentValidation" Version="10.3.6"/>
+        <PackageReference Include="MediatR" Version="10.0.0"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Library.Common\Library.Common.csproj" />
-    <ProjectReference Include="..\Library.Domain\Library.Domain.csproj" />
-    <ProjectReference Include="..\Library.Persistence\Library.Persistence.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Library.Common\Library.Common.csproj"/>
+        <ProjectReference Include="..\Library.Domain\Library.Domain.csproj"/>
+        <ProjectReference Include="..\Library.Persistence\Library.Persistence.csproj"/>
+    </ItemGroup>
 
 </Project>

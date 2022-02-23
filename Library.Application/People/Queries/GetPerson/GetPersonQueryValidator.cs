@@ -1,13 +1,12 @@
 ﻿using FluentValidation;
 using Library.Common.Models.Person;
 
-namespace Library.Application.People.Queries.GetPerson
+namespace Library.Application.People.Queries.GetPerson;
+
+public class GetPersonQueryValidator : AbstractValidator<GetPersonModel>
 {
-    public class GetPersonQueryValidator : AbstractValidator<GetPersonModel>
+    public GetPersonQueryValidator()
     {
-        public GetPersonQueryValidator()
-        {
-            RuleFor(v => v.Id).NotEmpty();
-        }
+        RuleFor(v => v.Id).NotEmpty();
     }
 }

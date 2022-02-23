@@ -1,10 +1,7 @@
-﻿using Library.Common;
-using Library.Common.Models.Category;
-using MediatR;
+﻿using Library.Common.Models.Category;
 
-namespace Library.Application.Category.Commands.UpdateCategory
+namespace Library.Application.Category.Commands.UpdateCategory;
+
+public class UpdateCategoryCommand : BaseNameItem, IRequest<GetCategoryModel>
 {
-    public class UpdateCategoryCommand : BaseNameItem, IRequest<GetCategoryModel>
-    {
-    }
 }

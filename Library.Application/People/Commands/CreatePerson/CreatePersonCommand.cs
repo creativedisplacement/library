@@ -1,10 +1,7 @@
-﻿using Library.Common;
-using Library.Common.Models.Person;
-using MediatR;
+﻿using Library.Common.Models.Person;
 
-namespace Library.Application.People.Commands.CreatePerson
+namespace Library.Application.People.Commands.CreatePerson;
+
+public class CreatePersonCommand : BasePersonItem, IRequest<GetPersonModel>
 {
-    public class CreatePersonCommand : BasePersonItem, IRequest<GetPersonModel>
-    {
-    }
 }

@@ -1,10 +1,8 @@
-﻿using MediatR;
-using System;
+﻿using System;
 
-namespace Library.Application.Book.Commands.DeleteBook
+namespace Library.Application.Book.Commands.DeleteBook;
+
+public class DeleteBookCommand : IRequest
 {
-    public class DeleteBookCommand : IRequest
-    {
-        public Guid Id { get; set; }
-    }
+    public Guid Id { get; init; }
 }

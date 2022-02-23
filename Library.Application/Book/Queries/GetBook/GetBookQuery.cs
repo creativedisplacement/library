@@ -1,10 +1,7 @@
-﻿using Library.Common;
-using Library.Common.Models.Book;
-using MediatR;
+﻿using Library.Common.Models.Book;
 
-namespace Library.Application.Book.Queries.GetBook
+namespace Library.Application.Book.Queries.GetBook;
+
+public class GetBookQuery : BaseTitleItem, IRequest<GetBookModel>
 {
-    public class GetBookQuery : BaseTitleItem, IRequest<GetBookModel>
-    {
-    }
 }

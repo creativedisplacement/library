@@ -1,12 +1,9 @@
-﻿using Library.Common;
+﻿using System;
 using Library.Common.Models.Book;
-using MediatR;
-using System;
 
-namespace Library.Application.Book.Commands.LendBook
+namespace Library.Application.Book.Commands.LendBook;
+
+public class LendBookCommand : BaseItem, IRequest<LendBookModel>
 {
-    public class LendBookCommand : BaseItem, IRequest<LendBookModel>
-    {
-        public Guid LenderId { get; set; }
-    }
+    public Guid LenderId { get; init; }
 }

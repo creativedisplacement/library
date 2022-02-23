@@ -1,44 +1,42 @@
-﻿using Library.Application.Exceptions;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Library.Application.Exceptions;
 using Library.Common.Models.Person;
 using Library.Domain.Entities;
 using Library.Persistence;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace Library.Application.People.Commands.UpdatePerson
+namespace Library.Application.People.Commands.UpdatePerson;
+
+public class UpdatePersonCommandHandler : BaseCommandHandler, IRequestHandler<UpdatePersonCommand, GetPersonModel>
 {
-    public class UpdatePersonCommandHandler : BaseCommandHandler, IRequestHandler<UpdatePersonCommand, GetPersonModel>
+    private readonly LibraryDbContext _context;
+
+    public UpdatePersonCommandHandler(LibraryDbContext context) : base(context)
     {
-        private readonly LibraryDbContext _context;
+        _context = context;
+    }
 
-        public UpdatePersonCommandHandler(LibraryDbContext context) : base(context)
+    public async Task<GetPersonModel> Handle(UpdatePersonCommand request, CancellationToken cancellationToken)
+    {
+        var person = await _context.Persons.SingleAsync(c => c.Id == request.Id, cancellationToken);
+
+        if (person == null)
         {
-            _context = context;
+            throw new NotFoundException(nameof(Person), request.Id);
         }
 
-        public async Task<GetPersonModel> Handle(UpdatePersonCommand request, CancellationToken cancellationToken)
+        person.UpdatePerson(request.Name, request.Email, request.IsAdmin);
+        SetDomainState(person);
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return new GetPersonModel
         {
-            var person = await _context.Persons.SingleAsync(c => c.Id == request.Id, cancellationToken);
-
-            if (person == null)
-            {
-                throw new NotFoundException(nameof(Person), request.Id);
-            }
-
-            person.UpdatePerson(request.Name, request.Email, request.IsAdmin);
-            SetDomainState(person);
-
-            await _context.SaveChangesAsync(cancellationToken);
-
-           return new GetPersonModel
-            {
-                Id = person.Id,
-                Name = person.Name,
-                Email = person.Email,
-                IsAdmin = person.IsAdmin
-            };
-        }
+            Id = person.Id,
+            Name = person.Name,
+            Email = person.Email,
+            IsAdmin = person.IsAdmin
+        };
     }
 }

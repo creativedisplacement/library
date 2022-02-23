@@ -1,12 +1,11 @@
 ﻿using FluentValidation;
 
-namespace Library.Application.Book.Commands.ReturnBook
+namespace Library.Application.Book.Commands.ReturnBook;
+
+public class ReturnBookCommandValidator : AbstractValidator<ReturnBookCommand>
 {
-    public class ReturnBookCommandValidator : AbstractValidator<ReturnBookCommand>
+    public ReturnBookCommandValidator()
     {
-        public ReturnBookCommandValidator()
-        {
-            RuleFor(x => x.Id).NotEmpty();
-        }
+        RuleFor(x => x.Id).NotEmpty();
     }
 }

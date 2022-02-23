@@ -1,10 +1,9 @@
-﻿using Library.Application.Mailing.Models;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Library.Application.Mailing.Models;
 
-namespace Library.Application.Interfaces
+namespace Library.Application.Interfaces;
+
+public interface IMailingService
 {
-    public interface IMailingService
-    {
-        Task SendEmailAsync(Message message);
-    }
+    Task SendEmailAsync(Message message);
 }

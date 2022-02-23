@@ -1,10 +1,7 @@
-﻿using Library.Common;
-using Library.Common.Models.Book;
-using MediatR;
+﻿using Library.Common.Models.Book;
 
-namespace Library.Application.Book.Commands.ReturnBook
+namespace Library.Application.Book.Commands.ReturnBook;
+
+public class ReturnBookCommand : BaseItem, IRequest<ReturnBookModel>
 {
-    public class ReturnBookCommand : BaseItem, IRequest<ReturnBookModel>
-    {
-    }
 }

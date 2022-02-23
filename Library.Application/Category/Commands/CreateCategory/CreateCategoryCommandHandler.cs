@@ -1,31 +1,29 @@
-﻿using Library.Common.Models.Category;
-using Library.Persistence;
-using MediatR;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using Library.Common.Models.Category;
+using Library.Persistence;
 
-namespace Library.Application.Category.Commands.CreateCategory
+namespace Library.Application.Category.Commands.CreateCategory;
+
+public class CreateCategoryCommandHandler : BaseCommandHandler, IRequestHandler<CreateCategoryCommand, GetCategoryModel>
 {
-    public class CreateCategoryCommandHandler : BaseCommandHandler, IRequestHandler<CreateCategoryCommand, GetCategoryModel>
+    private readonly LibraryDbContext _context;
+
+    public CreateCategoryCommandHandler(LibraryDbContext context) : base(context)
     {
-        private readonly LibraryDbContext _context;
+        _context = context;
+    }
 
-        public CreateCategoryCommandHandler(LibraryDbContext context) : base(context)
+    public async Task<GetCategoryModel> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+    {
+        var category = new Domain.Entities.Category(request.Name);
+        SetDomainState(category);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return new GetCategoryModel
         {
-            _context = context;
-        }
-
-        public async Task<GetCategoryModel> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
-        {
-            var category = new Domain.Entities.Category(request.Name);
-            SetDomainState(category);
-            await _context.SaveChangesAsync(cancellationToken);
-
-            return new GetCategoryModel
-            {
-                Id = category.Id,
-                Name = category.Name
-            };
-        }
+            Id = category.Id,
+            Name = category.Name
+        };
     }
 }

@@ -1,10 +1,9 @@
-﻿namespace Library.Application.Mailing.Models
+﻿namespace Library.Application.Mailing.Models;
+
+public class Message
 {
-    public class Message
-    {
-        public string From { get; set; }
-        public string To { get; set; }
-        public string Subject { get; set; }
-        public string Body { get; set; }
-    }
+    public string From { get; set; }
+    public string To { get; set; }
+    public string Subject { get; set; }
+    public string Body { get; set; }
 }

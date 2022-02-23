@@ -1,43 +1,42 @@
-﻿using Library.Application.Exceptions;
-using Library.Domain.Entities;
-using Library.Persistence;
-using MediatR;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Library.Application.Exceptions;
+using Library.Domain.Entities;
+using Library.Persistence;
 
-namespace Library.Application.People.Commands.DeletePerson
+namespace Library.Application.People.Commands.DeletePerson;
+
+public class DeletePersonCommandHandler : BaseCommandHandler, IRequestHandler<DeletePersonCommand>
 {
-    public class DeletePersonCommandHandler : BaseCommandHandler, IRequestHandler<DeletePersonCommand>
+    private readonly LibraryDbContext _context;
+
+    public DeletePersonCommandHandler(LibraryDbContext context) : base(context)
     {
-        private readonly LibraryDbContext _context;
+        _context = context;
+    }
 
-        public DeletePersonCommandHandler(LibraryDbContext context) : base(context)
+    public async Task<Unit> Handle(DeletePersonCommand request, CancellationToken cancellationToken)
+    {
+        var person = await _context.Persons.FindAsync(request.Id, cancellationToken);
+
+        if (person == null)
         {
-            _context = context;
+            throw new NotFoundException(nameof(Person), request.Id);
         }
 
-        public async Task<Unit> Handle(DeletePersonCommand request, CancellationToken cancellationToken)
+        var personHasBooks = _context.Books.Any(b => b.Lender.Id == request.Id);
+        if (personHasBooks)
         {
-            var person = await _context.Persons.FindAsync(request.Id);
-
-            if (person == null)
-            {
-                throw new NotFoundException(nameof(Person), request.Id);
-            }
-
-            var personHasBooks = _context.Books.Any(b => b.Lender.Id == request.Id);
-            if (personHasBooks)
-            {
-                throw new DeleteFailureException(nameof(Person), request.Id, "This person has borrowed books and cannot be deleted.");
-            }
-
-            person.RemovePerson();
-            SetDomainState(person);
-
-            await _context.SaveChangesAsync(cancellationToken);
-
-            return Unit.Value;
+            throw new DeleteFailureException(nameof(Person), request.Id,
+                "This person has borrowed books and cannot be deleted.");
         }
+
+        person.RemovePerson();
+        SetDomainState(person);
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return Unit.Value;
     }
 }

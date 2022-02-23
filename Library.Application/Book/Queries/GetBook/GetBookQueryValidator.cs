@@ -1,12 +1,11 @@
 ﻿using FluentValidation;
 
-namespace Library.Application.Book.Queries.GetBook
+namespace Library.Application.Book.Queries.GetBook;
+
+public class GetBookQueryValidator : AbstractValidator<GetBookQuery>
 {
-    public class GetBookQueryValidator : AbstractValidator<GetBookQuery>
+    public GetBookQueryValidator()
     {
-        public GetBookQueryValidator()
-        {
-            RuleFor(v => v.Id).NotEmpty();
-        }
+        RuleFor(v => v.Id).NotEmpty();
     }
 }

@@ -1,10 +1,7 @@
-﻿using Library.Common;
-using Library.Common.Models.People;
-using MediatR;
+﻿using Library.Common.Models.People;
 
-namespace Library.Application.People.Queries.GetPeople
+namespace Library.Application.People.Queries.GetPeople;
+
+public class GetPeopleQuery : BasePersonItem, IRequest<GetPeopleModel>
 {
-    public class GetPeopleQuery : BasePersonItem, IRequest<GetPeopleModel>
-    {
-    }
 }

@@ -1,12 +1,11 @@
 ﻿using FluentValidation;
 
-namespace Library.Application.Category.Commands.DeleteCategory
+namespace Library.Application.Category.Commands.DeleteCategory;
+
+public class DeleteCategoryCommandValidator : AbstractValidator<DeleteCategoryCommand>
 {
-    public class DeleteCategoryCommandValidator : AbstractValidator<DeleteCategoryCommand>
+    public DeleteCategoryCommandValidator()
     {
-        public DeleteCategoryCommandValidator()
-        {
-            RuleFor(x => x.Id).NotEmpty();
-        }
+        RuleFor(x => x.Id).NotEmpty();
     }
 }
