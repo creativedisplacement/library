@@ -18,7 +18,7 @@ public class DeletePersonCommandHandler : BaseCommandHandler, IRequestHandler<De
 
     public async Task<Unit> Handle(DeletePersonCommand request, CancellationToken cancellationToken)
     {
-        var person = await _context.Persons.FindAsync(request.Id, cancellationToken);
+        var person = await _context.Persons.FindAsync(new object[] { request.Id }, cancellationToken);
 
         if (person == null)
         {
